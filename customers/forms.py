@@ -33,10 +33,15 @@ class CustomerForm(forms.ModelForm):
                 "placeholder": "Customer Name"
             }),
 
-            # Showing Owner Name, but using existing company_name field
             "company_name": forms.TextInput(attrs={
                 "class": "form-control",
                 "placeholder": "Owner Name"
+            }),
+
+            "phone": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Phone Number",
+                "maxlength": "10"
             }),
 
             "address": forms.Textarea(attrs={
@@ -50,13 +55,14 @@ class CustomerForm(forms.ModelForm):
                 "placeholder": "Email"
             }),
 
-            "gst_number": forms.TextInput(attrs={
-    "class": "form-control",
-    "placeholder": "GST Number",
-    "maxlength": "15"
-}),
+            "gst": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "GST Number",
+                "maxlength": "30"
+            }),
 
-            "location": forms.Select(attrs={
-                "class": "form-select"
+            "location": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Location"
             }),
         }
