@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="fa fa-eye"></i>
+                Stock Details
+            </h2>
+
+            <p class="text-muted mb-0">
+                View complete product stock information.
+            </p>
+        </div>
+
+        <a href="{% url 'stock_list' %}" class="btn btn-secondary">
+            <i class="fa fa-arrow-left"></i>
+            Back to Product Stock
+        </a>
+
+    </div>
+
+
+    <!-- STOCK DETAILS CARD -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white">
+            <h4 class="mb-0">
+                Product Details
+            </h4>
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <!-- CATEGORY -->
+                <div class="col-md-4">
+
+                    <strong>Category</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.product.category %}
+                            {{ stock.product.category.name }}
+                        {% else %}
+                            -
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- SUB CATEGORY -->
+                <div class="col-md-4">
+
+                    <strong>Sub Category</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.product.subcategory %}
+                            {{ stock.product.subcategory.name }}
+                        {% else %}
+                            -
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- PRODUCT -->
+                <div class="col-md-4">
+
+                    <strong>Product</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.product.product_name %}
+                            {{ stock.product.product_name }}
+                        {% else %}
+                            -
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- WIDTH -->
+                <div class="col-md-4">
+
+                    <strong>Width</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.product.width %}
+                            {{ stock.product.width }}
+                        {% else %}
+                            -
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- THICKNESS -->
+                <div class="col-md-4">
+
+                    <strong>Thickness</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.product.thickness %}
+                            {{ stock.product.thickness }}
+                        {% else %}
+                            -
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- COLOUR -->
+                <div class="col-md-4">
+
+                    <strong>Colour</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.product.colour %}
+                            {{ stock.product.colour }}
+                        {% else %}
+                            -
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- DESIGN -->
+                <div class="col-md-4">
+
+                    <strong>Design</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.product.design %}
+                            {{ stock.product.design }}
+                        {% else %}
+                            -
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- BRAND -->
+                <div class="col-md-4">
+
+                    <strong>Brand</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.product.brand %}
+                            {{ stock.product.brand }}
+                        {% else %}
+                            -
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STOCK DETAILS -->
+    <div class="card shadow-sm border-0 mt-4">
+
+        <div class="card-header bg-white">
+
+            <h4 class="mb-0">
+                Stock Details
+            </h4>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <!-- AVAILABLE LENGTH -->
+                <div class="col-md-4">
+
+                    <strong>Available Length</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.length_ft %}
+                            {{ stock.length_ft }} ft
+                        {% else %}
+                            0 ft
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- AVAILABLE QUANTITY -->
+                <div class="col-md-4">
+
+                    <strong>Available Quantity</strong>
+
+                    <p class="border rounded p-2 mt-2">
+
+                        {% if stock.quantity %}
+                            {{ stock.quantity }} Nos
+                        {% else %}
+                            0 Nos
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- STOCK STATUS -->
+                <div class="col-md-4">
+
+                    <strong>Stock Status</strong>
+
+                    <p class="mt-2">
+
+                        {% if stock.out_of_stock %}
+
+                            <span class="badge bg-danger p-2">
+                                Out of Stock
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-success p-2">
+                                Available
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

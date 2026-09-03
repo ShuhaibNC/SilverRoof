@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .delete-card {
+        max-width: 650px;
+        margin: 60px auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+    }
+
+    .delete-header {
+        background: #dc3545;
+        color: white;
+        padding: 22px 30px;
+    }
+
+    .delete-header h2 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 600;
+    }
+
+    .delete-body {
+        padding: 30px;
+    }
+
+    .warning-icon {
+        font-size: 55px;
+        color: #dc3545;
+        margin-bottom: 15px;
+    }
+
+    .product-details {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .product-details p {
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    .product-details strong {
+        color: #333;
+    }
+
+    .btn {
+        min-width: 130px;
+    }
+
+</style>
+
+
+<div class="container">
+
+    <div class="delete-card">
+
+        <!-- ================================= -->
+        <!-- HEADER -->
+        <!-- ================================= -->
+
+        <div class="delete-header">
+
+            <h2>
+                <i class="fa-solid fa-trash"></i>
+                Delete Product
+            </h2>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- BODY -->
+        <!-- ================================= -->
+
+        <div class="delete-body text-center">
+
+            <div class="warning-icon">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+            </div>
+
+
+            <h3>
+                Are you sure?
+            </h3>
+
+
+            <p class="text-muted">
+
+                Do you really want to delete this product?
+
+                <br>
+
+                This action cannot be undone.
+
+            </p>
+
+
+            <!-- ================================= -->
+            <!-- PRODUCT DETAILS -->
+            <!-- ================================= -->
+
+            <div class="product-details text-start">
+
+                <p>
+                    <strong>Category:</strong>
+
+                    {{ product.category }}
+                </p>
+
+
+                <p>
+
+                    <strong>Sub Category:</strong>
+
+                    {% if product.subcategory_text %}
+
+                        {{ product.subcategory_text }}
+
+                    {% elif product.subcategory %}
+
+                        {{ product.subcategory.name }}
+
+                    {% else %}
+
+                        No Sub Category
+
+                    {% endif %}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Brand:</strong>
+
+                    {{ product.brand }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Thickness:</strong>
+
+                    {% if product.thickness %}
+
+                        {{ product.thickness }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Colour:</strong>
+
+                    {{ product.colour }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Design:</strong>
+
+                    {{ product.design }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Length:</strong>
+
+                    {{ product.length_ft }} ft
+
+                </p>
+
+
+                <p>
+
+                    <strong>Width:</strong>
+
+                    {{ product.width_ft }} ft
+
+                </p>
+
+
+                <p>
+
+                    <strong>Stock:</strong>
+
+                    {{ product.stock }}
+
+                </p>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- DELETE FORM -->
+            <!-- ================================= -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <button
+                    type="submit"
+                    class="btn btn-danger btn-lg me-2"
+                >
+
+                    <i class="fa-solid fa-trash"></i>
+
+                    Yes, Delete
+
+                </button>
+
+
+                <a
+                    href="{% url 'product_list' %}"
+                    class="btn btn-secondary btn-lg"
+                >
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

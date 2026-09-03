@@ -1,0 +1,714 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .order-container {
+        padding: 10px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .page-header h2 {
+        color: #0B2D52;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .add-btn {
+        background: #198754;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .add-btn:hover {
+        background: #157347;
+        color: white;
+    }
+
+    .filter-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #0B2D52;
+        color: white;
+        padding: 14px;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 14px;
+        border-bottom: 1px solid #e5e5e5;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    tbody tr:hover {
+        background: #f5f9ff;
+    }
+
+    .status-pending {
+        background: #6c757d;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    .status-out {
+        background: #dc3545;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    .status-completed {
+        background: #198754;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    .dispatch-btn {
+        background: #198754;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .dispatch-btn:hover {
+        background: #157347;
+        color: white;
+    }
+
+    .edit-btn {
+        background: #ffc107;
+        color: #000;
+        padding: 8px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-right: 5px;
+    }
+
+    .delete-btn {
+        background: #dc3545;
+        color: white;
+        padding: 8px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .filter-btn {
+        background: #0B2D52;
+        color: white;
+        border: none;
+        padding: 9px 18px;
+        border-radius: 5px;
+    }
+
+    .clear-btn {
+        background: #6c757d;
+        color: white;
+        padding: 9px 18px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+</style>
+
+
+<div class="container-fluid mt-4 order-container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <h2>
+            <i class="fa fa-list"></i>
+            Orders
+        </h2>
+
+        <a
+            href="{% url 'add_order' %}"
+            class="add-btn"
+        >
+            <i class="fa fa-plus"></i>
+            Add Order
+        </a>
+
+        <a href="{% url 'export_orders_excel' %}"
+   class="export-btn">
+    <i class="fa fa-file-excel"></i>
+    Export Excel
+</a>
+
+    </div>
+
+
+    <!-- FILTER SECTION -->
+
+    <div class="filter-card">
+
+        <form method="GET">
+
+            <div class="row g-3">
+
+
+                <!-- LOCATION FILTER -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Location
+                    </label>
+
+                    <select
+                        name="location"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Locations
+                        </option>
+
+                        {% for location in locations %}
+
+                            <option
+                                value="{{ location }}"
+                                {% if selected_location == location %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ location }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- STATUS FILTER -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    <select
+                        name="status"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option
+                            value="Pending"
+                            {% if selected_status == "Pending" %}
+                                selected
+                            {% endif %}
+                        >
+                            Pending
+                        </option>
+
+                        <option
+                            value="Out of Stock"
+                            {% if selected_status == "Out of Stock" %}
+                                selected
+                            {% endif %}
+                        >
+                            Out of Stock
+                        </option>
+
+                        <option
+                            value="Completed"
+                            {% if selected_status == "Completed" %}
+                                selected
+                            {% endif %}
+                        >
+                            Completed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SALES MEMBER FILTER -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Sales Member
+                    </label>
+
+                    <select
+                        name="sales_member"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Sales Members
+                        </option>
+
+                        {% for member in sales_members %}
+
+                            <option
+                                value="{{ member.id }}"
+                                {% if selected_sales_member == member.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {% if member.first_name or member.last_name %}
+
+                                    {{ member.first_name }}
+                                    {{ member.last_name }}
+
+                                {% else %}
+
+                                    {{ member.username }}
+
+                                {% endif %}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="col-md-3 d-flex align-items-end gap-2">
+
+                    <button
+                        type="submit"
+                        class="filter-btn"
+                    >
+                        <i class="fa fa-filter"></i>
+                        Filter
+                    </button>
+
+
+                    <a
+                        href="{% url 'order_list' %}"
+                        class="clear-btn"
+                    >
+                        Clear
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ORDER TABLE -->
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>SL No</th>
+
+                    <th>Customer Name</th>
+
+                    <th>Location</th>
+
+                    <th>Product</th>
+
+                    <th>Thickness</th>
+
+                    <th>Design</th>
+
+                    <th>Colour</th>
+
+                    <th>Length</th>
+
+                    <th>Width</th>
+
+                    <th>Nos</th>
+
+                    <th>Order Taken By</th>
+
+                    <th>Loading From</th>
+
+                    <th>Status</th>
+
+                    <th>Dispatch</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for order in orders %}
+
+                <tr>
+
+
+                    <!-- SL NO -->
+
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+
+
+                    <!-- CUSTOMER NAME -->
+
+                    <td>
+                        {{ order.customer_name|default:"-" }}
+                    </td>
+
+
+                    <!-- LOCATION -->
+
+                    <td>
+
+                        <i class="fa fa-map-marker"></i>
+
+                        {{ order.location|default:"-" }}
+
+                    </td>
+
+
+                    <!-- PRODUCT -->
+
+                    <td>
+
+                        {% if order.product %}
+
+                            {{ order.product }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- THICKNESS -->
+
+                    <td>
+
+                        {% if order.thickness %}
+
+                            {{ order.thickness }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- DESIGN -->
+
+                    <td>
+
+                        {% if order.design %}
+
+                            {{ order.design }}
+
+                        {% elif order.design_text %}
+
+                            {{ order.design_text }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- COLOUR -->
+
+                    <td>
+
+                        {% if order.colour %}
+
+                            {{ order.colour }}
+
+                        {% elif order.colour_text %}
+
+                            {{ order.colour_text }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- LENGTH -->
+
+                    <td>
+                        {{ order.length_ft|default:"-" }}
+                    </td>
+
+
+                    <!-- WIDTH -->
+
+                    <td>
+                        {{ order.width_ft|default:"-" }}
+                    </td>
+
+
+                    <!-- NOS -->
+
+                    <td>
+
+                        {% if order.sheets %}
+
+                            {{ order.sheets }}
+
+                        {% else %}
+
+                            0
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ORDER TAKEN BY -->
+
+                    <td>
+
+                        {% if order.sales_member %}
+
+                            {% if order.sales_member.first_name or order.sales_member.last_name %}
+
+                                {{ order.sales_member.first_name }}
+                                {{ order.sales_member.last_name }}
+
+                            {% else %}
+
+                                {{ order.sales_member.username }}
+
+                            {% endif %}
+
+                        {% elif order.order_taken_by %}
+
+                            {% if order.order_taken_by.first_name or order.order_taken_by.last_name %}
+
+                                {{ order.order_taken_by.first_name }}
+                                {{ order.order_taken_by.last_name }}
+
+                            {% else %}
+
+                                {{ order.order_taken_by.username }}
+
+                            {% endif %}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- LOADING FROM -->
+
+                    <td>
+
+                        {% if order.loading_from %}
+
+                            {{ order.loading_from }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        {% if order.status == "Completed" %}
+
+                            <span class="status-completed">
+                                Completed
+                            </span>
+
+                        {% elif order.status == "Out of Stock" %}
+
+                            <span class="status-out">
+                                Out of Stock
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-pending">
+                                Pending
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- DISPATCH -->
+<td>
+
+    {% if request.user.is_superuser %}
+
+        {% if order.status == "Out of Stock" %}
+
+            <span class="status-out">
+                Not Dispatched
+            </span>
+
+        {% elif order.dispatch_status == "Dispatched" %}
+
+            <span class="status-completed">
+                <i class="fa fa-check"></i>
+                Dispatched
+            </span>
+
+        {% else %}
+
+            <a
+                href="{% url 'dispatch_order' order_id=order.id %}"
+                class="dispatch-btn"
+                onclick="return confirm('Are you sure you want to dispatch this order?');"
+            >
+                <i class="fa fa-truck"></i>
+                Dispatch
+            </a>
+
+        {% endif %}
+
+    {% else %}
+
+        -
+
+    {% endif %}
+
+</td>
+
+
+<!-- ACTIONS -->
+<td>
+
+    <!-- EDIT -->
+    <a
+        href="{% url 'edit_order' order.id %}"
+        class="edit-btn"
+    >
+        <i class="fa fa-edit"></i>
+    </a>
+
+
+    <!-- DELETE -->
+    <a
+        href="{% url 'delete_order' order.id %}"
+        class="delete-btn"
+        onclick="return confirm('Are you sure you want to delete this order?');"
+    >
+        <i class="fa fa-trash"></i>
+    </a>
+
+</td>
+
+</tr>
+
+
+{% empty %}
+
+<tr>
+
+    <td
+        colspan="15"
+        style="
+            text-align:center;
+            padding:30px;
+            color:#777;
+        "
+    >
+        No orders found.
+    </td>
+
+</tr>
+
+
+                {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

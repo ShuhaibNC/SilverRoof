@@ -1,0 +1,771 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            {% if edit %}
+
+                <h2>
+                    <i class="fa fa-edit"></i>
+                    Edit Stock
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Update available product stock.
+                </p>
+
+            {% else %}
+
+                <h2>
+                    <i class="fa fa-plus"></i>
+                    Add Stock
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Add available product stock.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <a
+            href="{% url 'stock_list' %}"
+            class="btn btn-secondary"
+        >
+
+            <i class="fa fa-arrow-left"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+
+            {% if form.errors %}
+
+                <div class="alert alert-danger">
+
+                    <strong>Please correct the errors below.</strong>
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- ====================================== -->
+                <!-- PRODUCT DETAILS -->
+                <!-- ====================================== -->
+
+                <div class="row g-3">
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+
+                            Category
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ stock.product.category.name|default:'' }}"
+                                readonly
+                            >
+
+                        {% else %}
+
+                            <select
+                                id="category"
+                                class="form-select"
+                            >
+
+                                <option value="">
+
+                                    Select Category
+
+                                </option>
+
+
+                                {% for category in categories %}
+
+                                    <option
+                                        value="{{ category.id }}"
+                                    >
+
+                                        {{ category.name }}
+
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- SUB CATEGORY -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+
+                            Sub Category
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ stock.product.subcategory.name|default:'' }}"
+                                readonly
+                            >
+
+                        {% else %}
+
+                            <select
+                                id="subcategory"
+                                class="form-select"
+                            >
+
+                                <option value="">
+
+                                    Select Sub Category
+
+                                </option>
+
+                            </select>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- PRODUCT -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+
+                            Product
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <!-- IMPORTANT:
+                                 Product field is product_name,
+                                 NOT product.name
+                            -->
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ stock.product.product_name }}"
+                                readonly
+                            >
+
+                            <input
+                                type="hidden"
+                                name="product"
+                                value="{{ stock.product.id }}"
+                            >
+
+                        {% else %}
+
+                            <select
+                                id="product"
+                                name="product"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+
+                                    Select Product
+
+                                </option>
+
+                            </select>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- THICKNESS -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+
+                            Thickness
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ stock.product.thickness|default:'' }}"
+                                readonly
+                            >
+
+                        {% else %}
+
+                            <input
+                                type="text"
+                                id="thickness"
+                                class="form-control"
+                                readonly
+                            >
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- COLOUR -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+
+                            Colour
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{% if stock.product.colour %}{{ stock.product.colour.name }}{% elif stock.product.colour_text %}{{ stock.product.colour_text }}{% endif %}"
+                                readonly
+                            >
+
+                        {% else %}
+
+                            <input
+                                type="text"
+                                id="colour"
+                                class="form-control"
+                                readonly
+                            >
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- DESIGN -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+
+                            Design
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{% if stock.product.design %}{{ stock.product.design.name }}{% elif stock.product.design_text %}{{ stock.product.design_text }}{% endif %}"
+                                readonly
+                            >
+
+                        {% else %}
+
+                            <input
+                                type="text"
+                                id="design"
+                                class="form-control"
+                                readonly
+                            >
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- BRAND -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+
+                            Brand
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{% if stock.product.brand %}{{ stock.product.brand.name }}{% elif stock.product.brand_text %}{{ stock.product.brand_text }}{% endif %}"
+                                readonly
+                            >
+
+                        {% else %}
+
+                            <input
+                                type="text"
+                                id="brand"
+                                class="form-control"
+                                readonly
+                            >
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- WIDTH -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+
+                            Width
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ stock.product.width_ft|default:'' }}"
+                                readonly
+                            >
+
+                        {% else %}
+
+                            <input
+                                type="text"
+                                id="width"
+                                class="form-control"
+                                readonly
+                            >
+
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+
+                <hr class="my-4">
+
+
+                <!-- ====================================== -->
+                <!-- STOCK INPUT -->
+                <!-- ====================================== -->
+
+                <div class="row g-3">
+
+
+                    <!-- LENGTH -->
+
+                    <div class="col-md-6">
+
+                        <label
+                            for="length_ft"
+                            class="form-label fw-bold"
+                        >
+
+                            Available Length (Feet)
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <input
+                                type="number"
+                                name="length_ft"
+                                id="length_ft"
+                                class="form-control"
+                                step="0.01"
+                                min="0"
+                                value="{{ stock.length_ft|default_if_none:'' }}"
+                            >
+
+                        {% else %}
+
+                            {{ form.length_ft }}
+
+                        {% endif %}
+
+
+                        {% if form.length_ft.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.length_ft.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- QUANTITY -->
+
+                    <div class="col-md-6">
+
+                        <label
+                            for="quantity"
+                            class="form-label fw-bold"
+                        >
+
+                            Available Quantity (Nos)
+
+                        </label>
+
+
+                        {% if edit %}
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                id="quantity"
+                                class="form-control"
+                                min="0"
+                                value="{{ stock.quantity|default_if_none:'0' }}"
+                            >
+
+                        {% else %}
+
+                            {{ form.quantity }}
+
+                        {% endif %}
+
+
+                        {% if form.quantity.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.quantity.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ====================================== -->
+                <!-- BUTTONS -->
+                <!-- ====================================== -->
+
+                <div class="mt-4 d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+
+                        <i class="fa fa-save"></i>
+
+                        {% if edit %}
+
+                            Update Stock
+
+                        {% else %}
+
+                            Save Stock
+
+                        {% endif %}
+
+                    </button>
+
+
+                    <a
+                        href="{% url 'stock_list' %}"
+                        class="btn btn-secondary"
+                    >
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% if not edit %}
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const categorySelect =
+            document.getElementById("category");
+
+        const subcategorySelect =
+            document.getElementById("subcategory");
+
+        const productSelect =
+            document.getElementById("product");
+
+
+        categorySelect.addEventListener(
+            "change",
+            function () {
+
+                const categoryId =
+                    this.value;
+
+
+                subcategorySelect.innerHTML =
+                    '<option value="">Select Sub Category</option>';
+
+
+                productSelect.innerHTML =
+                    '<option value="">Select Product</option>';
+
+
+                if (!categoryId) {
+
+                    return;
+
+                }
+
+
+                fetch(
+                    "{% url 'get_subcategories' %}?category_id="
+                    + categoryId
+                )
+
+                .then(
+                    response => response.json()
+                )
+
+                .then(
+                    data => {
+
+                        data.subcategories.forEach(
+                            function (subcategory) {
+
+                                const option =
+                                    document.createElement("option");
+
+                                option.value =
+                                    subcategory.id;
+
+                                option.textContent =
+                                    subcategory.name;
+
+                                subcategorySelect.appendChild(
+                                    option
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        subcategorySelect.addEventListener(
+            "change",
+            function () {
+
+                const categoryId =
+                    categorySelect.value;
+
+                const subcategoryId =
+                    this.value;
+
+
+                productSelect.innerHTML =
+                    '<option value="">Select Product</option>';
+
+
+                if (!categoryId) {
+
+                    return;
+
+                }
+
+
+                let url =
+                    "{% url 'get_products_by_category' %}?category_id="
+                    + categoryId;
+
+
+                if (subcategoryId) {
+
+                    url =
+                        "{% url 'get_products_by_subcategory' %}?subcategory_id="
+                        + subcategoryId;
+
+                }
+
+
+                fetch(url)
+
+                .then(
+                    response => response.json()
+                )
+
+                .then(
+                    data => {
+
+                        data.products.forEach(
+                            function (product) {
+
+                                const option =
+                                    document.createElement("option");
+
+                                option.value =
+                                    product.id;
+
+                                option.textContent =
+                                    product.product_name;
+
+                                productSelect.appendChild(
+                                    option
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        productSelect.addEventListener(
+            "change",
+            function () {
+
+                const productId =
+                    this.value;
+
+
+                if (!productId) {
+
+                    return;
+
+                }
+
+
+                fetch(
+                    "{% url 'get_product_details' %}?product_id="
+                    + productId
+                )
+
+                .then(
+                    response => response.json()
+                )
+
+                .then(
+                    data => {
+
+                        document.getElementById(
+                            "thickness"
+                        ).value =
+                            data.thickness || "";
+
+
+                        document.getElementById(
+                            "colour"
+                        ).value =
+                            data.colour || "";
+
+
+                        document.getElementById(
+                            "design"
+                        ).value =
+                            data.design || "";
+
+
+                        document.getElementById(
+                            "brand"
+                        ).value =
+                            data.brand || "";
+
+
+                        document.getElementById(
+                            "width"
+                        ).value =
+                            data.width_ft || "";
+
+                    }
+                );
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+{% endif %}
+
+{% endblock %}

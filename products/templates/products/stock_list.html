@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+    .page-title {
+        color: #0B2D52;
+        font-weight: 700;
+    }
+
+    .stock-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .table th {
+        background: #cfe2ff;
+        color: #000;
+        white-space: nowrap;
+    }
+
+    .table td {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .stock-good {
+        color: #198754;
+        font-weight: 700;
+    }
+
+    .stock-low {
+        color: #dc3545;
+        font-weight: 700;
+    }
+
+    .stock-number {
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+</style>
+
+
+<div class="container-fluid">
+
+
+    <!-- ================================================= -->
+    <!-- HEADER -->
+    <!-- ================================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="page-title">
+
+                <i class="fa fa-boxes-stacked me-2"></i>
+
+                Product Stock
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                View available product stock.
+
+            </p>
+
+        </div>
+
+
+        <div>
+
+            {% if user.is_staff %}
+
+                <a
+                    href="{% url 'add_stock' %}"
+                    class="btn btn-primary"
+                >
+
+                    <i class="fa fa-plus me-1"></i>
+
+                    Add Stock
+
+                </a>
+
+            {% endif %}
+
+
+            <a
+                href="{% url 'product_list' %}"
+                class="btn btn-secondary"
+            >
+
+                <i class="fa fa-box me-1"></i>
+
+                Products
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- STOCK TABLE -->
+    <!-- ================================================= -->
+
+    <div class="stock-card">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover mb-0">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Category</th>
+
+                        <th>Sub Category</th>
+
+                        <th>Product</th>
+
+                        <th>Thickness</th>
+
+                        <th>Colour</th>
+
+                        <th>Design</th>
+
+                        <th>Brand</th>
+
+                        <th>Width</th>
+
+                        <th>Available Length</th>
+
+                        <th>Quantity</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for stock in stocks %}
+
+                    <tr>
+
+
+                        <!-- NUMBER -->
+                        <td>
+
+                            {{ forloop.counter }}
+
+                        </td>
+
+
+                        <!-- CATEGORY -->
+                        <td>
+
+                            {% if stock.product.category %}
+
+                                {{ stock.product.category.name }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- SUB CATEGORY -->
+                        <td>
+
+                            {% if stock.product.subcategory %}
+
+                                {{ stock.product.subcategory.name }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- PRODUCT -->
+                        <td>
+
+                            <strong>
+
+                                {% if stock.product.product_name %}
+
+                                    {{ stock.product.product_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- THICKNESS -->
+                        <td>
+
+                            {% if stock.product.thickness %}
+
+                                {{ stock.product.thickness }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- COLOUR -->
+                        <td>
+
+                            {% if stock.product.colour %}
+
+                                {{ stock.product.colour.name }}
+
+                            {% elif stock.product.colour_text %}
+
+                                {{ stock.product.colour_text }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- DESIGN -->
+                        <td>
+
+                            {% if stock.product.design %}
+
+                                {{ stock.product.design.name }}
+
+                            {% elif stock.product.design_text %}
+
+                                {{ stock.product.design_text }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- BRAND -->
+                        <td>
+
+                            {% if stock.product.brand %}
+
+                                {{ stock.product.brand.name }}
+
+                            {% elif stock.product.brand_text %}
+
+                                {{ stock.product.brand_text }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- WIDTH -->
+                        <td>
+
+                            {% if stock.product.width_ft %}
+
+                                {{ stock.product.width_ft|floatformat:2 }} ft
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- AVAILABLE LENGTH -->
+                        <td>
+
+                            <span
+                                class="stock-number
+                                {% if stock.out_of_stock %}
+                                    stock-low
+                                {% else %}
+                                    stock-good
+                                {% endif %}"
+                            >
+
+                                {{ stock.length_ft|default:"0.00"|floatformat:2 }}
+
+                            </span>
+
+                            ft
+
+                        </td>
+
+
+                        <!-- QUANTITY -->
+                        <td>
+
+                            <span class="stock-number">
+
+                                {{ stock.quantity|default:"0" }}
+
+                            </span>
+
+                            Nos
+
+                        </td>
+
+
+                        <!-- STATUS -->
+                        <td>
+
+                            {% if stock.out_of_stock %}
+
+                                <span class="badge bg-danger">
+
+                                    Out of Stock
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-success">
+
+                                    Available
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTION -->
+                        <td>
+
+                            <!-- VIEW -->
+                            <a
+                                href="{% url 'stock_detail' stock.id %}"
+                                class="btn btn-sm btn-primary"
+                                title="View Details"
+                            >
+
+                                <i class="fa fa-eye"></i>
+
+                            </a>
+
+
+                            <!-- EDIT -->
+                            {% if user.is_staff %}
+
+                            <a
+                                href="{% url 'edit_stock' stock.id %}"
+                                class="btn btn-sm btn-warning"
+                                title="Edit Stock"
+                            >
+
+                                <i class="fa fa-edit"></i>
+
+                            </a>
+
+                            {% endif %}
+
+
+                            <!-- DELETE -->
+                            {% if user.is_staff %}
+
+                            <a
+                                href="{% url 'delete_stock' stock.id %}"
+                                class="btn btn-sm btn-danger"
+                                title="Delete Stock"
+                                onclick="return confirm('Are you sure you want to delete this stock?');"
+                            >
+
+                                <i class="fa fa-trash"></i>
+
+                            </a>
+
+                            {% endif %}
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% empty %}
+
+
+                    <tr>
+
+                        <td
+                            colspan="13"
+                            class="text-center py-5 text-muted"
+                        >
+
+                            <i class="fa fa-box-open fa-2x mb-3"></i>
+
+                            <br>
+
+                            No stock details found.
+
+
+                            {% if user.is_staff %}
+
+                                <br><br>
+
+                                <a
+                                    href="{% url 'add_stock' %}"
+                                    class="btn btn-primary"
+                                >
+
+                                    <i class="fa fa-plus me-1"></i>
+
+                                    Add Stock
+
+                                </a>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,620 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    body {
+        background: #f4f6f9;
+    }
+
+    .products-container {
+        padding: 25px;
+    }
+
+    /* ==================================================
+       PAGE HEADER
+    ================================================== */
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .page-header h1 {
+        font-size: 36px;
+        margin: 0;
+        color: #222;
+        font-weight: 600;
+    }
+
+    .add-btn {
+        background: #0d6efd;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .add-btn:hover {
+        background: #0b5ed7;
+        color: white;
+    }
+
+    /* ==================================================
+       STOCK BUTTON
+    ================================================== */
+
+    .stock-btn {
+        background: #198754;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        margin-right: 10px;
+    }
+
+    .stock-btn:hover {
+        background: #157347;
+        color: white;
+    }
+
+    /* ==================================================
+       TABLE CARD
+    ================================================== */
+
+    .table-card {
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1500px;
+    }
+
+    /* ==================================================
+       TABLE HEADER
+    ================================================== */
+
+    th {
+        background: #0d6efd;
+        color: white;
+        padding: 14px;
+        text-align: left;
+        white-space: nowrap;
+        font-weight: 600;
+    }
+
+    td {
+        padding: 13px;
+        border-bottom: 1px solid #ddd;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+    /* ==================================================
+       CATEGORY 2 GREEN ROW
+    ================================================== */
+
+    .category2-row {
+        background-color: #d1e7dd !important;
+    }
+
+    .category2-row td {
+        background-color: #d1e7dd !important;
+        font-weight: 500;
+    }
+
+    .category2-row:hover {
+        background-color: #b7dfc8 !important;
+    }
+
+    .category2-row:hover td {
+        background-color: #b7dfc8 !important;
+    }
+
+    /* ==================================================
+       PRODUCT NAME
+    ================================================== */
+
+    .product-name {
+        font-weight: 600;
+        color: #0d6efd;
+    }
+
+    /* ==================================================
+       STOCK
+    ================================================== */
+
+    .stock-available {
+        color: #198754;
+        font-weight: 700;
+    }
+
+    .stock-low {
+        color: #fd7e14;
+        font-weight: 700;
+    }
+
+    .stock-empty {
+        color: #dc3545;
+        font-weight: 700;
+    }
+
+    /* ==================================================
+       STATUS BADGES
+    ================================================== */
+
+    .badge {
+        padding: 6px 10px;
+        border-radius: 5px;
+        font-size: 13px;
+    }
+
+    .badge-success {
+        background: #198754;
+        color: white;
+    }
+
+    .badge-danger {
+        background: #dc3545;
+        color: white;
+    }
+
+    .badge-warning {
+        background: #fd7e14;
+        color: white;
+    }
+
+    /* ==================================================
+       BUTTONS
+    ================================================== */
+
+    .edit-btn {
+        background: #ffc107;
+        color: #000;
+        padding: 7px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-right: 5px;
+        font-weight: 500;
+    }
+
+    .edit-btn:hover {
+        background: #ffca2c;
+        color: #000;
+    }
+
+    .delete-btn {
+        background: #dc3545;
+        color: white;
+        padding: 7px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .delete-btn:hover {
+        background: #bb2d3b;
+        color: white;
+    }
+
+    /* ==================================================
+       EMPTY MESSAGE
+    ================================================== */
+
+    .empty-message {
+        text-align: center;
+        padding: 30px;
+        color: #777;
+        font-size: 18px;
+    }
+
+    /* ==================================================
+       INFO LABEL
+    ================================================== */
+
+    .info-label {
+        display: block;
+        font-size: 11px;
+        color: #777;
+        margin-top: 3px;
+    }
+
+</style>
+
+
+<div class="products-container">
+
+    <!-- ==================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <div class="page-header">
+
+        <h1>
+            Products
+        </h1>
+
+        {% if request.user.is_superuser %}
+
+            <div>
+
+                <!-- STOCK DETAILS -->
+
+                <a
+                    href="{% url 'stock_list' %}"
+                    class="stock-btn"
+                >
+
+                    <i class="fa-solid fa-warehouse"></i>
+
+                    Stock Details
+
+                </a>
+
+
+                <!-- ADD PRODUCT -->
+
+                <a
+                    href="{% url 'add_product' %}"
+                    class="add-btn"
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add Product
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ==================================================
+         PRODUCT TABLE
+    ================================================== -->
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Category</th>
+
+                    <th>Product Name</th>
+
+                    <th>Sub Category</th>
+
+                    <th>Width (Feet)</th>
+
+                    <th>Colour</th>
+
+                    <th>Brand</th>
+
+                    <th>Thickness</th>
+
+                    <th>Design</th>
+
+                    <th>Core Number</th>
+
+                    <th>SQT Rate</th>
+
+                    <th>Size</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for product in products %}
+
+                <!-- ==================================================
+                     CATEGORY 2 GREEN ROW
+                ================================================== -->
+
+                <tr
+                    {% if product.category.name|lower == "category 2" %}
+                        class="category2-row"
+                    {% endif %}
+                >
+
+                    <!-- ID -->
+
+                    <td>
+
+                        {{ product.id }}
+
+                    </td>
+
+
+                    <!-- CATEGORY -->
+
+                    <td>
+
+                        <strong>
+
+                            {{ product.category.name }}
+
+                        </strong>
+
+                    </td>
+
+
+                    <!-- PRODUCT NAME -->
+
+                    <td>
+
+                        <span class="product-name">
+
+                            {{ product.product_name }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- SUB CATEGORY -->
+
+                    <td>
+
+                        {% if product.subcategory_text %}
+
+                            {{ product.subcategory_text }}
+
+                        {% elif product.subcategory %}
+
+                            {{ product.subcategory.name }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                None
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- WIDTH -->
+
+                    <td>
+
+                        {{ product.width_ft }} ft
+
+                    </td>
+
+
+                    <!-- COLOUR -->
+
+                    <td>
+
+                        {% if product.colour %}
+
+                            {{ product.colour.name }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- BRAND -->
+
+                    <td>
+
+                        {% if product.brand %}
+
+                            {{ product.brand.name }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- THICKNESS -->
+
+                    <td>
+
+                        {% if product.thickness %}
+
+                            {{ product.thickness.name }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- DESIGN -->
+
+                    <td>
+
+                        {% if product.design %}
+
+                            {{ product.design.name }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- CORE NUMBER -->
+
+                    <td>
+
+                        {% if product.core_number %}
+
+                            {{ product.core_number }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- SQT RATE -->
+
+                    <td>
+
+                        {% if product.sqt_rate %}
+
+                            ₹{{ product.sqt_rate }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- SIZE -->
+
+                    <td>
+
+                        {% if product.size %}
+
+                            {{ product.size }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ACTION -->
+
+                    <td>
+
+                        {% if request.user.is_superuser %}
+
+                            <a
+                                href="{% url 'edit_product' product.id %}"
+                                class="edit-btn"
+                            >
+
+                                <i class="fa-solid fa-pen"></i>
+
+                                Edit
+
+                            </a>
+
+
+                            <a
+                                href="{% url 'delete_product' product.id %}"
+                                class="delete-btn"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                                Delete
+
+                            </a>
+
+                        {% else %}
+
+                            <span class="text-muted">
+
+                                View Only
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="13"
+                        class="empty-message"
+                    >
+
+                        <i class="fa-solid fa-box-open"></i>
+
+                        No products found.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

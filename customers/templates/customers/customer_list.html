@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+            <i class="fa fa-users text-primary"></i>
+            Customer Management
+        </h2>
+
+        <a href="{% url 'add_customer' %}" class="btn btn-primary">
+            <i class="fa fa-plus"></i>
+            Add Customer
+        </a>
+
+    </div>
+
+    <div class="card shadow border-0">
+
+        <div class="card-body">
+
+            <div class="mb-3">
+
+                <input type="text"
+                       id="searchCustomer"
+                       class="form-control"
+                       placeholder="Search Customer...">
+
+            </div>
+
+            <table class="table table-hover table-bordered align-middle" id="customerTable">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Customer Name</th>
+                        <th>Company</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Location</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for customer in customers %}
+
+                    <tr>
+
+                        <td>{{ customer.id }}</td>
+
+                        <td>{{ customer.customer_name }}</td>
+
+                        <td>{{ customer.company_name }}</td>
+
+                        <td>{{ customer.phone }}</td>
+
+                        <td>{{ customer.email }}</td>
+
+                        <td>{{ customer.location }}</td>
+
+                        <td>
+
+                            <a href="{% url 'edit_customer' customer.id %}"
+                               class="btn btn-success btn-sm">
+
+                                <i class="fa fa-pen"></i>
+
+                            </a>
+
+                            <a href="{% url 'delete_customer' customer.id %}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Delete this customer?')">
+
+                                <i class="fa fa-trash"></i>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="7" class="text-center">
+
+                            No Customers Found
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const searchInput = document.getElementById("searchCustomer");
+
+searchInput.addEventListener("keyup", function(){
+
+let filter = this.value.toLowerCase();
+
+let rows = document.querySelectorAll("#customerTable tbody tr");
+
+rows.forEach(function(row){
+
+let text = row.innerText.toLowerCase();
+
+row.style.display = text.includes(filter) ? "" : "none";
+
+});
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,360 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .sales-container {
+        padding: 30px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .page-header h2 {
+        color: #0B2D52;
+        font-weight: 700;
+        margin: 0;
+        font-size: 36px;
+    }
+
+    .add-btn {
+        background: #198754;
+        color: white;
+        padding: 14px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .add-btn:hover {
+        background: #157347;
+        color: white;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1100px;
+    }
+
+    th {
+        background: #0B2D52;
+        color: white;
+        padding: 18px;
+        text-align: center;
+        white-space: nowrap;
+        font-size: 18px;
+    }
+
+    td {
+        padding: 20px 16px;
+        border-bottom: 1px solid #e5e5e5;
+        vertical-align: middle;
+        font-size: 17px;
+        text-align: center;
+    }
+
+    tbody tr:hover {
+        background: #f5f9ff;
+    }
+
+    .member-cell,
+    .email-cell {
+        text-align: left;
+    }
+
+    .member-link {
+        text-decoration: none;
+    }
+
+    .member-name {
+        font-weight: 700;
+        color: #0B2D52;
+        font-size: 20px;
+    }
+
+    .member-link:hover .member-name {
+        color: #0d6efd;
+    }
+
+    .username {
+        color: #6c757d;
+        font-size: 16px;
+        margin-top: 5px;
+        display: block;
+    }
+
+
+    /* COUNT BADGES */
+
+    .badge-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 45px;
+        height: 45px;
+        padding: 0 14px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 1;
+    }
+
+    .pending-badge {
+        background: #ffc107;
+        color: #212529;
+    }
+
+    .dispatched-badge {
+        background: #198754;
+        color: white;
+    }
+
+    .out-stock-badge {
+        background: #dc3545;
+        color: white;
+    }
+
+
+    .sales-amount {
+        color: #198754;
+        font-weight: 700;
+        font-size: 20px;
+        white-space: nowrap;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .view-btn {
+        background: #0d6efd;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 7px;
+        text-decoration: none;
+        white-space: nowrap;
+        font-weight: 500;
+    }
+
+    .view-btn:hover {
+        background: #0b5ed7;
+        color: white;
+    }
+
+    .delete-btn {
+        background: #dc3545;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 7px;
+        text-decoration: none;
+        white-space: nowrap;
+        font-weight: 500;
+    }
+
+    .delete-btn:hover {
+        background: #bb2d3b;
+        color: white;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 40px;
+        color: #777;
+        font-size: 18px;
+    }
+
+</style>
+
+
+<div class="sales-container">
+
+    <div class="page-header">
+
+        <h2>
+            <i class="fa fa-user-group"></i>
+            Sales Members
+        </h2>
+
+        <a href="{% url 'add_sales_member' %}" class="add-btn">
+            <i class="fa fa-plus"></i>
+            Add Sales Member
+        </a>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Sales Member</th>
+                    <th>Email</th>
+                    <th>Pending Orders</th>
+                    <th>Dispatched Orders</th>
+                    <th>Out of Stock</th>
+                    <th>Total Sales</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+
+                {% for member in members %}
+
+                <tr>
+
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+
+
+                    <td class="member-cell">
+
+                        <a
+                            href="{% url 'sales_member_sales_detail' member.id %}"
+                            class="member-link"
+                        >
+
+                            <div class="member-name">
+
+                                {% if member.first_name or member.last_name %}
+                                    {{ member.first_name }} {{ member.last_name }}
+                                {% else %}
+                                    {{ member.username }}
+                                {% endif %}
+
+                            </div>
+
+                            <span class="username">
+                                @{{ member.username }}
+                            </span>
+
+                        </a>
+
+                    </td>
+
+
+                    <td class="email-cell">
+
+                        {% if member.email %}
+                            {{ member.email }}
+                        {% else %}
+                            <span class="text-muted">
+                                No email
+                            </span>
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- PENDING ORDERS -->
+                    <td>
+                        <span class="badge-count pending-badge">
+                            {{ member.pending_count|default:0 }}
+                        </span>
+                    </td>
+
+
+                    <!-- DISPATCHED ORDERS -->
+                    <td>
+                        <span class="badge-count dispatched-badge">
+                            {{ member.dispatched_count|default:0 }}
+                        </span>
+                    </td>
+
+
+                    <!-- OUT OF STOCK -->
+                    <td>
+                        <span class="badge-count out-stock-badge">
+                            {{ member.out_of_stock_count|default:0 }}
+                        </span>
+                    </td>
+
+
+                    <!-- TOTAL SALES -->
+                    <td>
+                        <span class="sales-amount">
+                            ₹{{ member.total_sales|default:0|floatformat:2 }}
+                        </span>
+                    </td>
+
+
+                    <!-- ACTION -->
+                    <td>
+
+                        <div class="action-buttons">
+
+                            <a
+                                href="{% url 'sales_member_sales_detail' member.id %}"
+                                class="view-btn"
+                            >
+                                <i class="fa fa-eye"></i>
+                                View Sales
+                            </a>
+
+
+                            <a
+                                href="{% url 'delete_sales_member' member.id %}"
+                                class="delete-btn"
+                                onclick="return confirm('Are you sure you want to delete this sales member?');"
+                            >
+                                <i class="fa fa-trash"></i>
+                                Delete
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="8" class="empty-message">
+
+                        <i class="fa fa-users fa-2x mb-2"></i>
+
+                        <br>
+
+                        No sales members found.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,841 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sales Admin Dashboard - Silver Roof ERP</title>
+
+    <!-- BOOTSTRAP -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- FONT AWESOME -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef4fa;
+        }
+
+
+        /* ==================================================
+           SIDEBAR
+        ================================================== */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: #0B2D52;
+            color: white;
+            padding-top: 20px;
+            overflow-y: auto;
+        }
+
+        .logo-area {
+            text-align: center;
+            padding: 10px 15px 30px;
+        }
+
+        .logo-area img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        .logo-title {
+            margin-top: 10px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 17px;
+            padding: 15px 20px;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #1565c0;
+        }
+
+        .sidebar a.active {
+            background: #1565c0;
+        }
+
+        .sidebar a i {
+            width: 28px;
+            margin-right: 8px;
+        }
+
+
+        /* ==================================================
+           MAIN CONTENT
+        ================================================== */
+
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+
+        /* ==================================================
+           WELCOME
+        ================================================== */
+
+        .welcome-title {
+            font-size: 38px;
+            font-weight: bold;
+            color: #172b45;
+            margin-bottom: 5px;
+        }
+
+        .system-title {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+
+        /* ==================================================
+           SUMMARY CARDS
+        ================================================== */
+
+        .summary-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            min-height: 150px;
+            box-shadow: 0 6px 20px rgba(0,0,0,.08);
+            transition: .2s;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .summary-icon {
+            font-size: 30px;
+            color: #1769e0;
+            margin-bottom: 10px;
+        }
+
+        .summary-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #1769e0;
+        }
+
+        .summary-label {
+            font-size: 18px;
+            color: #333;
+            margin-top: 5px;
+        }
+
+
+        /* ==================================================
+           QUICK ACTIONS
+        ================================================== */
+
+        .quick-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 6px 20px rgba(0,0,0,.08);
+        }
+
+        .quick-title {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .quick-action {
+            display: block;
+            text-decoration: none;
+            background: #f5f8fc;
+            border: 1px solid #e0e6ed;
+            border-radius: 12px;
+            padding: 22px;
+            height: 100%;
+            transition: .2s;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 5px 15px rgba(0,0,0,.1);
+        }
+
+        .quick-action i {
+            font-size: 32px;
+            color: #1769e0;
+            margin-bottom: 12px;
+        }
+
+        .quick-action h5 {
+            color: #172b45;
+            font-weight: bold;
+        }
+
+        .quick-action p {
+            color: #777;
+            margin-bottom: 0;
+        }
+
+
+        /* ==================================================
+           RECENT ORDERS
+        ================================================== */
+
+        .orders-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 6px 20px rgba(0,0,0,.08);
+        }
+
+        .orders-title {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table th {
+            background: #f4f6f8;
+            padding: 13px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .orders-table td {
+            padding: 13px;
+            border: 1px solid #ddd;
+        }
+
+
+        /* ==================================================
+           STATUS
+        ================================================== */
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .status-out {
+            background: #dc3545;
+            color: white;
+        }
+
+
+        /* ==================================================
+           MOBILE
+        ================================================== */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                padding: 20px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<div class="sidebar">
+
+
+    <!-- LOGO -->
+
+    <div class="logo-area">
+
+        <img
+            src="{% static 'images/logo.png' %}"
+            alt="Silver Roof Logo"
+        >
+
+        <div class="logo-title">
+            Silver Roof ERP
+        </div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <a
+        href="{% url 'sales_dashboard' %}"
+        class="active"
+    >
+
+        <i class="fa-solid fa-house"></i>
+
+        Dashboard
+
+    </a>
+
+
+    <!-- PRODUCTS -->
+
+    <a href="{% url 'product_list' %}">
+
+        <i class="fa-solid fa-box"></i>
+
+        Products
+
+    </a>
+
+
+    <!-- PRODUCT STOCK -->
+
+    <a href="{% url 'stock_list' %}">
+
+        <i class="fa-solid fa-boxes-stacked"></i>
+
+        Product Stock
+
+    </a>
+
+
+
+
+    <!-- CUSTOMERS -->
+
+    <a href="{% url 'customer_list' %}">
+
+        <i class="fa-solid fa-users"></i>
+
+        Customers
+
+    </a>
+
+
+    <!-- ORDERS -->
+
+    <a href="{% url 'order_list' %}">
+
+        <i class="fa-solid fa-cart-shopping"></i>
+
+        Orders
+
+    </a>
+
+
+    <!-- LOGOUT -->
+
+    <a href="{% url 'logout' %}">
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+        Logout
+
+    </a>
+
+
+</div>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<div class="main-content">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome-title">
+
+        Welcome {{ request.user.username }}
+
+    </div>
+
+    <div class="system-title">
+
+        Silver Roof Management System
+
+    </div>
+
+
+    <!-- =================================================
+         SUMMARY CARDS
+    ================================================== -->
+
+    <div class="row g-4">
+
+
+        <!-- ORDERS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                </div>
+
+                <div class="summary-number">
+
+                    {{ orders|default:0 }}
+
+                </div>
+
+                <div class="summary-label">
+
+                    Orders
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMERS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+                <div class="summary-number">
+
+                    {{ customers|default:0 }}
+
+                </div>
+
+                <div class="summary-label">
+
+                    Customers
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCTS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-box"></i>
+
+                </div>
+
+                <div class="summary-number">
+
+                    {{ products|default:0 }}
+
+                </div>
+
+                <div class="summary-label">
+
+                    Products
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL SALES -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                </div>
+
+                <div class="summary-number">
+
+                    ₹{{ total_sales|default:0|floatformat:2 }}
+
+                </div>
+
+                <div class="summary-label">
+
+                    Total Sales
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         QUICK ACTIONS
+    ================================================== -->
+
+    <div class="quick-card">
+
+        <div class="quick-title">
+
+            Quick Actions
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- PRODUCTS -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <a
+                    href="{% url 'product_list' %}"
+                    class="quick-action"
+                >
+
+                    <i class="fa-solid fa-box"></i>
+
+                    <h5>
+                        Products
+                    </h5>
+
+                    <p>
+                        View product details.
+                    </p>
+
+                </a>
+
+            </div>
+
+
+            <!-- PRODUCT STOCK -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <a
+                    href="{% url 'stock_list' %}"
+                    class="quick-action"
+                >
+
+                    <i class="fa-solid fa-boxes-stacked"></i>
+
+                    <h5>
+                        Product Stock
+                    </h5>
+
+                    <p>
+                        View available product stock.
+                    </p>
+
+                </a>
+
+            </div>
+
+
+            <!-- STOCK DETAILS -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <a
+                    href="{% url 'stock_list' %}"
+                    class="quick-action"
+                >
+
+                    <i class="fa-solid fa-eye"></i>
+
+                    <h5>
+                        Stock Details
+                    </h5>
+
+                    <p>
+                        View complete stock information.
+                    </p>
+
+                </a>
+
+            </div>
+
+
+            <!-- CUSTOMERS -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <a
+                    href="{% url 'customer_list' %}"
+                    class="quick-action"
+                >
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <h5>
+                        Customers
+                    </h5>
+
+                    <p>
+                        View customer details.
+                    </p>
+
+                </a>
+
+            </div>
+
+
+            <!-- ORDERS -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <a
+                    href="{% url 'order_list' %}"
+                    class="quick-action"
+                >
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <h5>
+                        Orders
+                    </h5>
+
+                    <p>
+                        View and manage orders.
+                    </p>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         RECENT ORDERS
+    ================================================== -->
+
+    <div class="orders-card">
+
+        <div class="orders-title">
+
+            Recent Orders
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="orders-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Customer</th>
+
+                        <th>Product</th>
+
+                        <th>Amount</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for order in recent_orders %}
+
+                    <tr>
+
+                        <td>
+                            {{ order.id }}
+                        </td>
+
+                        <td>
+                            {{ order.customer_name }}
+                        </td>
+
+                        <td>
+
+                            {% if order.product %}
+                                {{ order.product.product_name }}
+                            {% else %}
+                                -
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            ₹{{ order.amount|default:0|floatformat:2 }}
+
+                        </td>
+
+                        <td>
+
+                            {% if order.status == "Completed" %}
+
+                                <span class="status status-completed">
+                                    {{ order.status }}
+                                </span>
+
+                            {% elif order.status == "Cancelled" %}
+
+                                <span class="status status-cancelled">
+                                    {{ order.status }}
+                                </span>
+
+                            {% elif order.status == "Out of Stock" %}
+
+                                <span class="status status-out">
+                                    {{ order.status }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="status status-pending">
+                                    {{ order.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="text-center text-muted py-4"
+                        >
+
+                            No orders found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>
