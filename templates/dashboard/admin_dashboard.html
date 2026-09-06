@@ -61,7 +61,7 @@
 
             top: 0;
 
-            width: 260px;
+            width: 240px;
 
             height: 100vh;
 
@@ -154,12 +154,33 @@
 
 
         /* ==================================================
+           SIDEBAR SECTION TITLE
+        ================================================== */
+
+        .sidebar-section {
+
+            color: #9fc5e8;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            text-transform: uppercase;
+
+            padding: 18px 20px 7px;
+
+            letter-spacing: 0.5px;
+
+        }
+
+
+        /* ==================================================
            MAIN CONTENT
         ================================================== */
 
         .main-content {
 
-            margin-left: 260px;
+            margin-left: 240px;
 
             padding: 30px;
 
@@ -424,67 +445,47 @@
         }
 
 
+
         /* ==================================================
-           ORDERS
+           MODERN RECENT ORDERS
         ================================================== */
 
         .orders-card {
-
             background: white;
-
-            border-radius: 15px;
-
-            padding: 25px;
-
+            border-radius: 18px;
+            padding: 0;
             margin-top: 30px;
-
-            box-shadow:
-                0 6px 20px rgba(0,0,0,.08);
-
+            overflow: hidden;
+            border: 1px solid #e5ebf2;
+            box-shadow: 0 8px 28px rgba(20, 48, 76, 0.08);
         }
 
-
-        .orders-title {
-
-            font-size: 25px;
-
-            font-weight: bold;
-
-            margin-bottom: 20px;
-
+        .orders-card-top {
+            padding: 22px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #edf1f5;
         }
 
-
-        .orders-table {
-
-            width: 100%;
-
-            border-collapse: collapse;
-
-        }
-
-
-        .orders-table th {
-
-            background: #f4f6f8;
-
-            padding: 13px;
-
-            text-align: left;
-
-            border: 1px solid #ddd;
-
-        }
-
-
-        .orders-table td {
-
-            padding: 13px;
-
-            border: 1px solid #ddd;
-
-        }
-
+        .orders-heading { display: flex; align-items: center; gap: 12px; }
+        .orders-title { font-size: 22px; font-weight: 700; color: #172b45; margin: 0; }
+        .live-indicator { display: inline-flex; align-items: center; gap: 6px; background: #e8f7ee; color: #198754; font-size: 11px; font-weight: 700; padding: 6px 10px; border-radius: 20px; letter-spacing: .5px; }
+        .live-dot { width: 7px; height: 7px; background: #198754; border-radius: 50%; box-shadow: 0 0 0 4px rgba(25,135,84,.12); }
+        .view-orders-btn { color: #1769e0; font-weight: 600; text-decoration: none; white-space: nowrap; }
+        .view-orders-btn:hover { color: #0b4fa8; }
+        .orders-table-wrap { padding: 0 10px 10px; }
+        .orders-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 0; }
+        .orders-table th { background: #f7f9fc; color: #718096; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; padding: 14px 16px; text-align: left; border: none; }
+        .orders-table td { padding: 16px; border: none; border-bottom: 1px solid #edf1f5; color: #334155; vertical-align: middle; }
+        .orders-table tbody tr { transition: background .2s ease; }
+        .orders-table tbody tr:hover { background: #f8fbff; }
+        .orders-table tbody tr:last-child td { border-bottom: none; }
+        .order-id { display: inline-flex; min-width: 42px; padding: 5px 9px; background: #edf4ff; color: #1769e0; border-radius: 8px; font-weight: 700; }
+        .product-name { font-weight: 600; color: #172b45; }
+        .member-name { color: #64748b; font-size: 14px; }
+        .amount { font-weight: 700; color: #172b45; }
+        .orders-empty { padding: 35px !important; color: #94a3b8 !important; }
 
         /* ==================================================
            STATUS
@@ -635,11 +636,15 @@
     </div>
 
 
-    <!-- DASHBOARD -->
+    <!-- MAIN MENU -->
+
+    <div class="sidebar-section">
+        Main Menu
+    </div>
 
     <a
         href="{% url 'admin_dashboard' %}"
-        class="active"
+        class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}"
     >
 
         <i class="fa-solid fa-house"></i>
@@ -649,9 +654,10 @@
     </a>
 
 
-    <!-- PRODUCTS -->
-
-    <a href="{% url 'product_list' %}">
+    <a
+        href="{% url 'product_list' %}"
+        class="{% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'add_product' or request.resolver_match.url_name == 'edit_product' %}active{% endif %}"
+    >
 
         <i class="fa-solid fa-box"></i>
 
@@ -660,9 +666,10 @@
     </a>
 
 
-    <!-- PRODUCT STOCK -->
-
-    <a href="{% url 'stock_list' %}">
+    <a
+        href="{% url 'stock_list' %}"
+        class="{% if request.resolver_match.url_name == 'stock_list' or request.resolver_match.url_name == 'add_stock' or request.resolver_match.url_name == 'edit_stock' or request.resolver_match.url_name == 'stock_detail' %}active{% endif %}"
+    >
 
         <i class="fa-solid fa-boxes-stacked"></i>
 
@@ -671,20 +678,10 @@
     </a>
 
 
-    <!-- PRODUCT ORDER DETAILS -->
-
-    <a href="{% url 'order_list' %}">
-
-        <i class="fa-solid fa-file-invoice"></i>
-
-        Product Order Details
-
-    </a>
-
-
-    <!-- CUSTOMERS -->
-
-    <a href="{% url 'customer_list' %}">
+    <a
+        href="{% url 'customer_list' %}"
+        class="{% if request.resolver_match.url_name == 'customer_list' %}active{% endif %}"
+    >
 
         <i class="fa-solid fa-users"></i>
 
@@ -693,9 +690,29 @@
     </a>
 
 
-    <!-- SALES MEMBERS -->
+    <a
+        href="{% url 'order_list' %}"
+        class="{% if request.resolver_match.url_name == 'order_list' or request.resolver_match.url_name == 'add_order' or request.resolver_match.url_name == 'edit_order' %}active{% endif %}"
+    >
 
-    <a href="{% url 'sales_members' %}">
+        <i class="fa-solid fa-file-invoice"></i>
+
+        Product Order Details
+
+    </a>
+
+
+    <!-- ADMINISTRATION -->
+
+    <div class="sidebar-section">
+        Administration
+    </div>
+
+
+    <a
+        href="{% url 'sales_members' %}"
+        class="{% if request.resolver_match.url_name == 'sales_members' %}active{% endif %}"
+    >
 
         <i class="fa-solid fa-user-group"></i>
 
@@ -704,9 +721,10 @@
     </a>
 
 
-    <!-- ADD SALES MEMBER -->
-
-    <a href="{% url 'add_sales_member' %}">
+    <a
+        href="{% url 'add_sales_member' %}"
+        class="{% if request.resolver_match.url_name == 'add_sales_member' %}active{% endif %}"
+    >
 
         <i class="fa-solid fa-user-plus"></i>
 
@@ -715,7 +733,12 @@
     </a>
 
 
-    <!-- LOGOUT -->
+    <!-- ACCOUNT -->
+
+    <div class="sidebar-section">
+        Account
+    </div>
+
 
     <a href="{% url 'logout' %}">
 
@@ -724,7 +747,6 @@
         Logout
 
     </a>
-
 
 </div>
 
@@ -877,6 +899,117 @@
         </div>
 
     </div>
+
+
+    <!-- =================================================
+         RECENT ORDERS
+    ================================================== -->
+
+    <div class="orders-card">
+
+        <div class="orders-card-top">
+
+            <div class="orders-heading">
+                <div class="orders-title">Recent Product Orders</div>
+
+                <div class="live-indicator">
+                    <span class="live-dot"></span>
+                    LIVE
+                </div>
+            </div>
+
+            <a href="{% url 'order_list' %}" class="view-orders-btn">
+                View All <i class="fa-solid fa-arrow-right ms-1"></i>
+            </a>
+
+        </div>
+
+        <div class="table-responsive orders-table-wrap">
+
+            <table class="orders-table">
+
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Category</th>
+                        <th>Product</th>
+                        <th>Sales Member</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for order in recent_orders %}
+
+                    <tr>
+                        <td><span class="order-id">#{{ order.id }}</span></td>
+                        <td>{{ order.customer_name }}</td>
+
+                        <td>
+                            {% if order.category %}
+                                {{ order.category.name }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td class="product-name">
+                            {% if order.product %}
+                                {{ order.product.product_name }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td class="member-name">
+                            {% if order.sales_member %}
+                                <i class="fa-regular fa-user me-1"></i>{{ order.sales_member.username }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td class="amount">₹{{ order.amount|floatformat:2 }}</td>
+
+                        <td>
+                            {% if order.status == "Completed" %}
+                                <span class="status status-completed">{{ order.status }}</span>
+                            {% elif order.status == "Pending" %}
+                                <span class="status status-pending">{{ order.status }}</span>
+                            {% elif order.status == "Cancelled" %}
+                                <span class="status status-cancelled">{{ order.status }}</span>
+                            {% elif order.status == "Out of Stock" %}
+                                <span class="status status-out">{{ order.status }}</span>
+                            {% else %}
+                                <span class="status status-pending">{{ order.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="7" class="text-center orders-empty">
+                            <i class="fa-solid fa-box-open fs-4 d-block mb-2"></i>
+                            No Product Orders Found
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
 
 
 
@@ -1077,202 +1210,6 @@
                 View Sales Members
 
             </a>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =================================================
-         RECENT ORDERS
-    ================================================== -->
-
-    <div class="orders-card">
-
-        <div class="orders-title">
-
-            Recent Product Orders
-
-        </div>
-
-
-        <div class="table-responsive">
-
-            <table class="orders-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>Customer</th>
-
-                        <th>Category</th>
-
-                        <th>Product</th>
-
-                        <th>Sales Member</th>
-
-                        <th>Amount</th>
-
-                        <th>Status</th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-
-                    {% for order in recent_orders %}
-
-                    <tr>
-
-
-                        <td>
-
-                            {{ order.id }}
-
-                        </td>
-
-
-                        <td>
-
-                            {{ order.customer_name }}
-
-                        </td>
-
-
-                        <td>
-
-                            {% if order.category %}
-
-                                {{ order.category.name }}
-
-                            {% else %}
-
-                                -
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <td>
-
-                            {% if order.product %}
-
-                                {{ order.product.product_name }}
-
-                            {% else %}
-
-                                -
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <td>
-
-                            {% if order.sales_member %}
-
-                                {{ order.sales_member.username }}
-
-                            {% else %}
-
-                                -
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <td class="amount">
-
-                            ₹{{ order.amount|floatformat:2 }}
-
-                        </td>
-
-
-                        <td>
-
-                            {% if order.status == "Completed" %}
-
-                                <span class="status status-completed">
-
-                                    {{ order.status }}
-
-                                </span>
-
-
-                            {% elif order.status == "Pending" %}
-
-                                <span class="status status-pending">
-
-                                    {{ order.status }}
-
-                                </span>
-
-
-                            {% elif order.status == "Cancelled" %}
-
-                                <span class="status status-cancelled">
-
-                                    {{ order.status }}
-
-                                </span>
-
-
-                            {% elif order.status == "Out of Stock" %}
-
-                                <span class="status status-out">
-
-                                    {{ order.status }}
-
-                                </span>
-
-
-                            {% else %}
-
-                                <span class="status status-pending">
-
-                                    {{ order.status }}
-
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                    </tr>
-
-
-                    {% empty %}
-
-                    <tr>
-
-                        <td
-                            colspan="7"
-                            class="text-center text-muted py-4"
-                        >
-
-                            No Product Orders Found
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-
-                </tbody>
-
-            </table>
 
         </div>
 

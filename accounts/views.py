@@ -11,6 +11,9 @@ from orders.models import Order
 from django.http import HttpResponse
 import openpyxl
 from openpyxl.styles import Font
+from django.utils import timezone
+from datetime import timedelta
+import random
 
 User = get_user_model()
 
@@ -64,8 +67,193 @@ def admin_login(request):
         request,
         "accounts/admin_login.html"
     )
+User = get_user_model()
+@never_cache
+def admin_forgot_password(request):
+    step = "username"
 
+    if request.method == "POST":
+        action = request.POST.get("action")
 
+        # -----------------------------------
+        # STEP 1: SEND OTP
+        # -----------------------------------
+        if action == "send_otp":
+            username = request.POST.get("username")
+
+            try:
+                user = User.objects.get(
+                    username=username,
+                    is_superuser=True
+                )
+
+            except User.DoesNotExist:
+                return render(
+                    request,
+                    "admin_forgot_password.html",
+                    {
+                        "step": "username",
+                        "error": "Admin account not found."
+                    }
+                )
+
+            # Generate 6-digit OTP
+            otp = str(random.randint(100000, 999999))
+
+            # Save OTP temporarily in session
+            request.session["reset_otp"] = otp
+            request.session["reset_username"] = username
+
+            request.session["otp_expiry"] = (
+                timezone.now() +
+                timedelta(minutes=10)
+            ).timestamp()
+
+            # Print OTP in Django terminal
+            print("\n")
+            print("=" * 40)
+            print("ADMIN PASSWORD RESET OTP")
+            print("=" * 40)
+            print(f"Username: {username}")
+            print(f"OTP: {otp}")
+            print("=" * 40)
+            print("\n")
+
+            return render(
+                request,
+                "accounts/admin_forgot_password.html",
+                {
+                    "step": "otp",
+                    "username": username
+                }
+            )
+
+        # -----------------------------------
+        # STEP 2: VERIFY OTP
+        # -----------------------------------
+        elif action == "verify_otp":
+            username = request.POST.get("username")
+            entered_otp = request.POST.get("otp")
+
+            saved_otp = request.session.get("reset_otp")
+            saved_username = request.session.get("reset_username")
+            otp_expiry = request.session.get("otp_expiry")
+
+            # Validate session
+            if (
+                not saved_otp
+                or not saved_username
+                or not otp_expiry
+            ):
+                return redirect("admin_forgot_password")
+
+            # Check OTP expiry
+            if timezone.now().timestamp() > otp_expiry:
+
+                request.session.pop("reset_otp", None)
+                request.session.pop("reset_username", None)
+                request.session.pop("otp_expiry", None)
+
+                return render(
+                    request,
+                    "accounts/admin_forgot_password.html",
+                    {
+                        "step": "username",
+                        "error": "OTP expired. Please request a new one."
+                    }
+                )
+
+            # Check username and OTP
+            if (
+                username != saved_username
+                or entered_otp != saved_otp
+            ):
+                return render(
+                    request,
+                    "accounts/admin_forgot_password.html",
+                    {
+                        "step": "otp",
+                        "username": saved_username,
+                        "error": "Invalid OTP."
+                    }
+                )
+
+            # Mark OTP as verified
+            request.session["otp_verified"] = True
+
+            return render(
+                request,
+                "accounts/admin_forgot_password.html",
+                {
+                    "step": "password",
+                    "username": saved_username
+                }
+            )
+
+        # -----------------------------------
+        # STEP 3: RESET PASSWORD
+        # -----------------------------------
+        elif action == "reset_password":
+
+            username = request.POST.get("username")
+            new_password = request.POST.get("new_password")
+            confirm_password = request.POST.get(
+                "confirm_password"
+            )
+
+            # Security check
+            if (
+                not request.session.get("otp_verified")
+                or username != request.session.get(
+                    "reset_username"
+                )
+            ):
+                return redirect("admin_forgot_password")
+
+            # Check passwords match
+            if new_password != confirm_password:
+                return render(
+                    request,
+                    "accounts/admin_forgot_password.html",
+                    {
+                        "step": "password",
+                        "username": username,
+                        "error": "Passwords do not match."
+                    }
+                )
+
+            try:
+                user = User.objects.get(
+                    username=username,
+                    is_superuser=True
+                )
+
+            except User.DoesNotExist:
+                return redirect("admin_forgot_password")
+
+            # Change password securely
+            user.set_password(new_password)
+            user.save()
+
+            # Remove all reset data from session
+            request.session.pop("reset_otp", None)
+            request.session.pop("reset_username", None)
+            request.session.pop("otp_expiry", None)
+            request.session.pop("otp_verified", None)
+
+            # Redirect back to login
+            return redirect("admin_login")
+
+    # -----------------------------------
+    # DEFAULT PAGE
+    # -----------------------------------
+    return render(
+        request,
+        "accounts/admin_forgot_password.html",
+        {
+            "step": step
+        }
+    )
 # ---------------------------------
 # SALES MEMBER LOGIN
 # ---------------------------------

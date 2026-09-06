@@ -16,6 +16,12 @@ urlpatterns = [
         views.admin_login,
         name="admin_login"
     ),
+    
+    path(
+        "admin/forgot-password/",
+        views.admin_forgot_password,
+        name="admin_forgot_password"
+    ),
 
     # Sales Member Login
     path(
