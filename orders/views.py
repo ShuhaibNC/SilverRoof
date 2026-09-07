@@ -42,6 +42,7 @@ from openpyxl.styles import (
 # ==========================================================
 
 def is_admin(user):
+
     return user.is_superuser
 
 
@@ -50,8 +51,10 @@ def is_admin(user):
 # ==========================================================
 
 def normalize_category_name(name):
+
     if not name:
         return ""
+
     return (
         str(name)
         .strip()
@@ -198,6 +201,11 @@ def order_list(request):
         ""
     )
 
+    selected_category = request.GET.get(
+        "category",
+        ""
+    )
+
     sales_members = (
         User.objects
         .filter(
@@ -205,6 +213,21 @@ def order_list(request):
             is_superuser=False
         )
         .order_by("username")
+    )
+
+    locations = (
+        Order.objects
+        .exclude(location="")
+        .exclude(location__isnull=True)
+        .values_list("location", flat=True)
+        .distinct()
+        .order_by("location")
+    )
+
+    categories = (
+        Category.objects
+        .all()
+        .order_by("name")
     )
 
 
@@ -248,6 +271,12 @@ def order_list(request):
                 sales_member_id=selected_sales_member
             )
 
+        if selected_category:
+
+            orders = orders.filter(
+                category_id=selected_category
+            )
+
 
     # ======================================================
     # SALES MEMBER
@@ -285,6 +314,12 @@ def order_list(request):
                 status=selected_status
             )
 
+        if selected_category:
+
+            orders = orders.filter(
+                category_id=selected_category
+            )
+
 
     return render(
         request,
@@ -295,6 +330,9 @@ def order_list(request):
             "selected_status": selected_status,
             "sales_members": sales_members,
             "selected_sales_member": selected_sales_member,
+            "locations": locations,
+            "categories": categories,
+            "selected_category": selected_category,
         }
     )
 
@@ -1765,6 +1803,7 @@ def delete_order(request, id):
 # ==========================================================
 
 @login_required
+@user_passes_test(is_admin)
 def export_orders_excel(request):
 
     orders = (
