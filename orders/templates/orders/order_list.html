@@ -867,10 +867,6 @@ body.non-superuser-theme .export-btn i {
 
 
 
-<script>
-{% if not request.user.is_superuser %}
-document.body.classList.add('non-superuser-theme');
-{% endif %}
-</script>
+
 
 {% endblock %}
