@@ -161,6 +161,7 @@
 
 
                         <!-- NUMBER -->
+
                         <td>
 
                             {{ forloop.counter }}
@@ -169,6 +170,7 @@
 
 
                         <!-- CATEGORY -->
+
                         <td>
 
                             {% if stock.product.category %}
@@ -185,6 +187,7 @@
 
 
                         <!-- SUB CATEGORY -->
+
                         <td>
 
                             {% if stock.product.subcategory %}
@@ -201,6 +204,7 @@
 
 
                         <!-- PRODUCT -->
+
                         <td>
 
                             <strong>
@@ -221,6 +225,7 @@
 
 
                         <!-- THICKNESS -->
+
                         <td>
 
                             {% if stock.product.thickness %}
@@ -237,6 +242,7 @@
 
 
                         <!-- COLOUR -->
+
                         <td>
 
                             {% if stock.product.colour %}
@@ -257,6 +263,7 @@
 
 
                         <!-- DESIGN -->
+
                         <td>
 
                             {% if stock.product.design %}
@@ -277,6 +284,7 @@
 
 
                         <!-- BRAND -->
+
                         <td>
 
                             {% if stock.product.brand %}
@@ -297,6 +305,7 @@
 
 
                         <!-- WIDTH -->
+
                         <td>
 
                             {% if stock.product.width_ft %}
@@ -313,41 +322,68 @@
 
 
                         <!-- AVAILABLE LENGTH -->
+
                         <td>
 
-                            <span
-                                class="stock-number
-                                {% if stock.out_of_stock %}
-                                    stock-low
+                            {% if stock.product.category.name|lower == "category3" %}
+
+                                -
+
+                            {% else %}
+
+                                {% if stock.length_ft %}
+
+                                    <span
+                                        class="stock-number
+                                        {% if stock.out_of_stock %}
+                                            stock-low
+                                        {% else %}
+                                            stock-good
+                                        {% endif %}"
+                                    >
+
+                                        {{ stock.length_ft|floatformat:2 }}
+
+                                    </span>
+
+                                    ft
+
                                 {% else %}
-                                    stock-good
-                                {% endif %}"
-                            >
 
-                                {{ stock.length_ft|default:"0.00"|floatformat:2 }}
+                                    -
 
-                            </span>
+                                {% endif %}
 
-                            ft
+                            {% endif %}
 
                         </td>
 
 
-                        <!-- QUANTITY -->
+                        <!-- QUANTITY / NOS -->
+
                         <td>
 
-                            <span class="stock-number">
+                            {% if stock.product.category.name|lower == "category3" %}
 
-                                {{ stock.quantity|default:"0" }}
+                                <span class="stock-number">
 
-                            </span>
+                                    {{ stock.product.nos|default:"0" }}
 
-                            Nos
+                                </span>
+
+                                Nos
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
 
                         </td>
 
 
                         <!-- STATUS -->
+
                         <td>
 
                             {% if stock.out_of_stock %}
@@ -372,9 +408,11 @@
 
 
                         <!-- ACTION -->
+
                         <td>
 
                             <!-- VIEW -->
+
                             <a
                                 href="{% url 'stock_detail' stock.id %}"
                                 class="btn btn-sm btn-primary"
@@ -387,34 +425,36 @@
 
 
                             <!-- EDIT -->
+
                             {% if user.is_staff %}
 
-                            <a
-                                href="{% url 'edit_stock' stock.id %}"
-                                class="btn btn-sm btn-warning"
-                                title="Edit Stock"
-                            >
+                                <a
+                                    href="{% url 'edit_stock' stock.id %}"
+                                    class="btn btn-sm btn-warning"
+                                    title="Edit Stock"
+                                >
 
-                                <i class="fa fa-edit"></i>
+                                    <i class="fa fa-edit"></i>
 
-                            </a>
+                                </a>
 
                             {% endif %}
 
 
                             <!-- DELETE -->
+
                             {% if user.is_staff %}
 
-                            <a
-                                href="{% url 'delete_stock' stock.id %}"
-                                class="btn btn-sm btn-danger"
-                                title="Delete Stock"
-                                onclick="return confirm('Are you sure you want to delete this stock?');"
-                            >
+                                <a
+                                    href="{% url 'delete_stock' stock.id %}"
+                                    class="btn btn-sm btn-danger"
+                                    title="Delete Stock"
+                                    onclick="return confirm('Are you sure you want to delete this stock?');"
+                                >
 
-                                <i class="fa fa-trash"></i>
+                                    <i class="fa fa-trash"></i>
 
-                            </a>
+                                </a>
 
                             {% endif %}
 

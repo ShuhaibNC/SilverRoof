@@ -369,6 +369,22 @@
                     </div>
                     {% endif %}
 
+                    <!-- THICKNESS (shown for every category, optional) -->
+                    <div class="col-md-6">
+                        <label for="{{ form.thickness_text.id_for_label }}" class="form-label">
+                            Thickness <span class="optional-tag">(Optional)</span>
+                        </label>
+                        {{ form.thickness_text }}
+                        {% for error in form.thickness_text.errors %}
+                            <div class="error-message">
+                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- STANDARD FIELDS: CATEGORY 1, 2, 4 ONLY -->
+                <div id="standard-fields-section" class="category-specific row g-3">
                     <!-- WIDTH -->
                     <div class="col-md-6">
                         <label for="{{ form.width_ft.id_for_label }}" class="form-label">
@@ -377,19 +393,6 @@
                         {{ form.width_ft }}
                         <div class="form-text">System converts feet automatically for meters display.</div>
                         {% for error in form.width_ft.errors %}
-                            <div class="error-message">
-                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <!-- THICKNESS -->
-                    <div class="col-md-6">
-                        <label for="{{ form.thickness_text.id_for_label }}" class="form-label">
-                            Thickness <span class="optional-tag">(Optional)</span>
-                        </label>
-                        {{ form.thickness_text }}
-                        {% for error in form.thickness_text.errors %}
                             <div class="error-message">
                                 <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
                             </div>
@@ -433,6 +436,29 @@
                                 <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
                             </div>
                         {% endfor %}
+                    </div>
+                </div>
+
+                <!-- CATEGORY 3 SPECIFIC SECTION -->
+                <div id="category3-section" class="category-specific">
+                    <hr class="section-divider">
+                    <div class="section-title">
+                        <i class="fa-solid fa-hashtag"></i>
+                        Category 3 Attributes
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.nos.id_for_label }}" class="form-label">
+                                NOS (Number of Items) <span class="required-star">*</span>
+                            </label>
+                            {{ form.nos }}
+                            <div class="form-text">Mandatory field for Category 3 items.</div>
+                            {% for error in form.nos.errors %}
+                                <div class="error-message">
+                                    <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
 
@@ -521,7 +547,9 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const categorySelect = document.getElementById("id_category");
+    const standardFieldsSection = document.getElementById("standard-fields-section");
     const category2Section = document.getElementById("category2-section");
+    const category3Section = document.getElementById("category3-section");
     const category4Section = document.getElementById("category4-section");
     const categoryInfo = document.getElementById("category-info");
     const categoryInfoTitle = document.getElementById("category-info-title");
@@ -532,7 +560,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function hideCategorySections() {
+        if (standardFieldsSection) standardFieldsSection.style.display = "none";
         if (category2Section) category2Section.style.display = "none";
+        if (category3Section) category3Section.style.display = "none";
         if (category4Section) category4Section.style.display = "none";
     }
 
@@ -552,24 +582,29 @@ document.addEventListener("DOMContentLoaded", function () {
         if (categoryInfo) categoryInfo.style.display = "flex";
 
         if (categoryName === "category1" || categoryName === "1") {
+            if (standardFieldsSection) standardFieldsSection.style.display = "flex";
             categoryInfoTitle.innerText = selectedOption.text;
             categoryInfoText.innerText = "Add variation details (width, thickness, design, color, brand). Stock will be tracked in feet.";
         } 
         else if (categoryName === "category2" || categoryName === "2") {
+            if (standardFieldsSection) standardFieldsSection.style.display = "flex";
             if (category2Section) category2Section.style.display = "block";
             categoryInfoTitle.innerText = selectedOption.text;
             categoryInfoText.innerText = "Add variation and Core Number details. Stock will be tracked in feet.";
         } 
         else if (categoryName === "category3" || categoryName === "3") {
+            if (category3Section) category3Section.style.display = "block";
             categoryInfoTitle.innerText = selectedOption.text;
-            categoryInfoText.innerText = "Add basic product variations. Category 3 inventory is tracked by item units (Nos).";
+            categoryInfoText.innerText = "Only Product Name, Thickness and NOS apply. Category 3 inventory is tracked by item units (Nos).";
         } 
         else if (categoryName === "category4" || categoryName === "4") {
+            if (standardFieldsSection) standardFieldsSection.style.display = "flex";
             if (category4Section) category4Section.style.display = "block";
             categoryInfoTitle.innerText = selectedOption.text;
             categoryInfoText.innerText = "Set Size and SQT Rate manually. Dynamic size computation is disabled for this category.";
         } 
         else {
+            if (standardFieldsSection) standardFieldsSection.style.display = "flex";
             categoryInfoTitle.innerText = selectedOption.text;
             categoryInfoText.innerText = "Specify standard configurations for the selected product category.";
         }

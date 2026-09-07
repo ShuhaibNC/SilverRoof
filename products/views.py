@@ -30,7 +30,9 @@ from .models import (
     Brand,
     Category,
 )
+
 from django.contrib.auth.decorators import user_passes_test
+
 
 # ==========================================================
 # CHECK ADMIN
@@ -38,8 +40,11 @@ from django.contrib.auth.decorators import user_passes_test
 
 def is_admin(user):
     return user.is_superuser
+
+
 def is_sales_member(user):
     return user.is_authenticated and not user.is_staff
+
 
 # ==========================================================
 # CATEGORY NAME HELPER
@@ -231,9 +236,6 @@ def delete_product(request, id):
 # ADMIN ONLY
 # ==========================================================
 
-
-
-
 @login_required
 def stock_list(request):
 
@@ -336,7 +338,7 @@ def add_stock(request):
 
                 # ==================================================
                 # CATEGORY 3
-                # STOCK BASED ON QUANTITY
+                # STOCK BASED ON PRODUCT NOS
                 # ==================================================
 
                 elif category_name == "category3":
@@ -344,19 +346,12 @@ def add_stock(request):
                     # Category 3 does not use length
                     stock.length_ft = Decimal("0.00")
 
-                    if stock.quantity is None:
+                    # Product NOS is the source of truth
+                    stock.quantity = product.nos or 0
 
-                        form.add_error(
-                            "quantity",
-                            "Please enter available quantity."
-                        )
+                    if stock.quantity <= 0:
 
-                    elif stock.quantity <= 0:
-
-                        form.add_error(
-                            "quantity",
-                            "Available quantity must be greater than 0."
-                        )
+                        stock.out_of_stock = True
 
                     else:
 
@@ -429,34 +424,41 @@ def stock_filter_options(request):
     products = Product.objects.all()
 
     if category_id:
+
         products = products.filter(
             category_id=category_id
         )
 
     if subcategory_id:
+
         products = products.filter(
             subcategory_id=subcategory_id
         )
 
     if thickness_id:
+
         products = products.filter(
             thickness_id=thickness_id
         )
 
     if colour_id:
+
         products = products.filter(
             colour_id=colour_id
         )
 
     if design_id:
+
         products = products.filter(
             design_id=design_id
         )
 
     if brand_id:
+
         products = products.filter(
             brand_id=brand_id
         )
+
 
     subcategory_ids = (
         products
@@ -468,6 +470,7 @@ def stock_filter_options(request):
         .distinct()
     )
 
+
     thickness_ids = (
         products
         .exclude(thickness_id__isnull=True)
@@ -477,6 +480,7 @@ def stock_filter_options(request):
         )
         .distinct()
     )
+
 
     colour_ids = (
         products
@@ -488,6 +492,7 @@ def stock_filter_options(request):
         .distinct()
     )
 
+
     design_ids = (
         products
         .exclude(design_id__isnull=True)
@@ -497,6 +502,7 @@ def stock_filter_options(request):
         )
         .distinct()
     )
+
 
     brand_ids = (
         products
@@ -508,11 +514,13 @@ def stock_filter_options(request):
         .distinct()
     )
 
+
     subcategories = (
         SubCategory.objects
         .filter(id__in=subcategory_ids)
         .order_by("name")
     )
+
 
     thicknesses = (
         Thickness.objects
@@ -520,11 +528,13 @@ def stock_filter_options(request):
         .order_by("name")
     )
 
+
     colours = (
         Colour.objects
         .filter(id__in=colour_ids)
         .order_by("name")
     )
+
 
     designs = (
         Design.objects
@@ -532,17 +542,20 @@ def stock_filter_options(request):
         .order_by("name")
     )
 
+
     brands = (
         Brand.objects
         .filter(id__in=brand_ids)
         .order_by("name")
     )
 
+
     widths = (
         products
         .exclude(width_ft__isnull=True)
         .order_by("width_ft")
     )
+
 
     return JsonResponse({
 
@@ -621,11 +634,13 @@ def edit_stock(request, id):
         "name"
     )
 
+
     if request.method == "POST":
 
         # ==================================================
         # CATEGORY 1 / CATEGORY 2
         # ==================================================
+
         if category_name in [
             "category1",
             "category2"
@@ -663,6 +678,7 @@ def edit_stock(request, id):
                     }
                 )
 
+
             if stock.length_ft < 0:
 
                 messages.error(
@@ -680,7 +696,9 @@ def edit_stock(request, id):
                     }
                 )
 
+
             # Category 1 and 2 stock status
+
             stock.out_of_stock = (
                 stock.length_ft <= Decimal("0.00")
             )
@@ -689,55 +707,14 @@ def edit_stock(request, id):
         # ==================================================
         # CATEGORY 3
         # ==================================================
+
         elif category_name == "category3":
 
-            quantity = request.POST.get(
-                "quantity",
-                "0"
-            )
+            # Category 3 quantity always comes from Product NOS
+            stock.quantity = product.nos or 0
 
-            try:
-
-                stock.quantity = int(
-                    quantity
-                )
-
-            except (
-                TypeError,
-                ValueError
-            ):
-
-                messages.error(
-                    request,
-                    "Please enter a valid quantity."
-                )
-
-                return render(
-                    request,
-                    "products/stock_form.html",
-                    {
-                        "stock": stock,
-                        "edit": True,
-                        "categories": categories,
-                    }
-                )
-
-            if stock.quantity < 0:
-
-                messages.error(
-                    request,
-                    "Quantity cannot be negative."
-                )
-
-                return render(
-                    request,
-                    "products/stock_form.html",
-                    {
-                        "stock": stock,
-                        "edit": True,
-                        "categories": categories,
-                    }
-                )
+            # Category 3 does not use length
+            stock.length_ft = Decimal("0.00")
 
             # Category 3 stock status
             stock.out_of_stock = (
@@ -748,6 +725,7 @@ def edit_stock(request, id):
         # ==================================================
         # OTHER CATEGORY
         # ==================================================
+
         else:
 
             stock.out_of_stock = False
@@ -783,6 +761,7 @@ def edit_stock(request, id):
             "categories": categories,
         }
     )
+
 
 # ==========================================================
 # DELETE STOCK
@@ -1069,8 +1048,11 @@ def get_products_by_subcategory(request):
     return JsonResponse({
         "products": data
     })
-from django.shortcuts import render, get_object_or_404
 
+
+# ==========================================================
+# STOCK DETAIL
+# ==========================================================
 
 def stock_detail(request, id):
 
@@ -1086,6 +1068,7 @@ def stock_detail(request, id):
             "stock": stock
         }
     )
+
 
 # ==========================================================
 # PRODUCT DETAILS
@@ -1250,7 +1233,14 @@ def get_product_details(request):
         "category_type": category_name,
 
     })
+
+
+# ==========================================================
+# STOCK DETAIL
+# ==========================================================
+
 def stock_detail(request, id):
+
     stock = get_object_or_404(
         ProductStock,
         id=id

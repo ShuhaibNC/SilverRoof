@@ -207,7 +207,7 @@ class ProductForm(forms.ModelForm):
     )
 
     brand_text = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "form-control",
@@ -227,7 +227,7 @@ class ProductForm(forms.ModelForm):
     )
 
     colour_text = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "form-control",
@@ -242,6 +242,17 @@ class ProductForm(forms.ModelForm):
             attrs={
                 "class": "form-control",
                 "placeholder": "Enter Design",
+            }
+        )
+    )
+
+    nos = forms.IntegerField(
+        required=False,
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-control",
+                "min": "0",
+                "placeholder": "Enter Number of Items (NOS)",
             }
         )
     )
@@ -262,6 +273,7 @@ class ProductForm(forms.ModelForm):
             "core_number",
             "sqt_rate",
             "size",
+            "nos",
         ]
 
         widgets = {
@@ -313,14 +325,19 @@ class ProductForm(forms.ModelForm):
         self.fields["category"].required = True
         self.fields["product_name"].required = True
         self.fields["subcategory_text"].required = True
-        self.fields["brand_text"].required = True
-        self.fields["colour_text"].required = True
+
+        # These are only required for categories 1, 2 and 4.
+        # Category 3 skips them entirely — enforced in clean().
+        self.fields["brand_text"].required = False
+        self.fields["colour_text"].required = False
+        self.fields["width_ft"].required = False
 
         self.fields["thickness_text"].required = False
         self.fields["design_text"].required = False
         self.fields["core_number"].required = False
         self.fields["sqt_rate"].required = False
         self.fields["size"].required = False
+        self.fields["nos"].required = False
 
         # Edit product initial values
 
@@ -401,24 +418,6 @@ class ProductForm(forms.ModelForm):
                 "Please enter Sub Category."
             )
 
-        if not brand_name:
-            self.add_error(
-                "brand_text",
-                "Please enter Brand."
-            )
-
-        if not colour_name:
-            self.add_error(
-                "colour_text",
-                "Please enter Colour."
-            )
-
-        if width is None or width <= 0:
-            self.add_error(
-                "width_ft",
-                "Please enter a valid width."
-            )
-
         category_name = ""
 
         if category:
@@ -431,18 +430,44 @@ class ProductForm(forms.ModelForm):
                 .replace("_", "")
             )
 
-        # Category 2
-        if category_name == "category2":
+        # --------------------------------------------------
+        # CATEGORY 1, 2, 4 — standard fields required
+        # --------------------------------------------------
+        if category_name in ("category1", "category2", "category4"):
 
-            core_number = (
-                cleaned_data.get("core_number") or ""
-            ).strip()
-
-            if not core_number:
+            if not brand_name:
                 self.add_error(
-                    "core_number",
-                    "Please enter Core Number for Category 2."
+                    "brand_text",
+                    "Please enter Brand."
                 )
+
+            if not colour_name:
+                self.add_error(
+                    "colour_text",
+                    "Please enter Colour."
+                )
+
+            if width is None or width <= 0:
+                self.add_error(
+                    "width_ft",
+                    "Please enter a valid width."
+                )
+
+        # --------------------------------------------------
+        # CATEGORY 3 — only Product Name, NOS, Thickness
+        # --------------------------------------------------
+        if category_name == "category3":
+
+            nos = cleaned_data.get("nos")
+
+            if nos is None or nos < 0:
+                self.add_error(
+                    "nos",
+                    "Please enter Number of Items (NOS)."
+                )
+
+        # Category 2 — Core Number is now optional
+        # (kept on the model, no longer required in the form)
 
         # Category 4
         if category_name == "category4":
@@ -583,6 +608,9 @@ class ProductForm(forms.ModelForm):
         else:
 
             product.design = None
+
+        # NOS (Category 3)
+        product.nos = self.cleaned_data.get("nos")
 
         if commit:
             product.save()
