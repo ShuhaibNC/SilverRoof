@@ -218,40 +218,20 @@
 
 
         /* ==================================================
-           RECENT ORDERS
+           MODERN RECENT ORDERS
         ================================================== */
-
-        .orders-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-            box-shadow: 0 6px 20px rgba(0,0,0,.08);
-        }
-
-        .orders-title {
-            font-size: 25px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .orders-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .orders-table th {
-            background: #f4f6f8;
-            padding: 13px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        .orders-table td {
-            padding: 13px;
-            border: 1px solid #ddd;
-        }
-
+        .orders-card{background:white;border-radius:18px;padding:0;margin-top:30px;overflow:hidden;border:1px solid #e5ebf2;box-shadow:0 8px 28px rgba(20,48,76,.08);}
+        .orders-card-top{padding:22px 25px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #edf1f5;}
+        .orders-heading{display:flex;align-items:center;gap:12px}.orders-title{font-size:22px;font-weight:700;color:#172b45;margin:0}
+        .live-indicator{display:inline-flex;align-items:center;gap:6px;background:#e8f7ee;color:#198754;font-size:11px;font-weight:700;padding:6px 10px;border-radius:20px;letter-spacing:.5px}
+        .live-dot{width:7px;height:7px;background:#198754;border-radius:50%;box-shadow:0 0 0 4px rgba(25,135,84,.12)}
+        .view-orders-btn{color:#198754;font-weight:600;text-decoration:none;white-space:nowrap}.view-orders-btn:hover{color:#0f5132}
+        .orders-table-wrap{padding:0 10px 10px}.orders-table{width:100%;border-collapse:separate;border-spacing:0;margin:0}
+        .orders-table th{background:#f7f9fc;color:#718096;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:14px 16px;text-align:left;border:none}
+        .orders-table td{padding:16px;border:none;border-bottom:1px solid #edf1f5;color:#334155;vertical-align:middle}
+        .orders-table tbody tr{transition:background .2s ease}.orders-table tbody tr:hover{background:#f8fbff}.orders-table tbody tr:last-child td{border-bottom:none}
+        .order-id{display:inline-flex;min-width:42px;padding:5px 9px;background:#e8f7ee;color:#198754;border-radius:8px;font-weight:700}
+        .product-name{font-weight:600;color:#172b45}.member-name{color:#64748b;font-size:14px}.amount{font-weight:700;color:#172b45}.orders-empty{padding:35px!important;color:#94a3b8!important}
 
         /* ==================================================
            STATUS
@@ -714,122 +694,33 @@
     ================================================== -->
 
     <div class="orders-card">
-
-        <div class="orders-title">
-
-            Recent Orders
-
+        <div class="orders-card-top">
+            <div class="orders-heading">
+                <div class="orders-title">Recent Orders</div>
+                <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
+            </div>
+            <a href="{% url 'order_list' %}" class="view-orders-btn">View All <i class="fa-solid fa-arrow-right ms-1"></i></a>
         </div>
-
-
-        <div class="table-responsive">
-
+        <div class="table-responsive orders-table-wrap">
             <table class="orders-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>Customer</th>
-
-                        <th>Product</th>
-
-                        <th>Amount</th>
-
-                        <th>Status</th>
-
-                    </tr>
-
-                </thead>
-
-
+                <thead><tr><th>Order ID</th><th>Customer</th><th>Category</th><th>Product</th><th>Sales Member</th><th>Amount</th><th>Status</th></tr></thead>
                 <tbody>
-
                     {% for order in recent_orders %}
-
                     <tr>
-
-                        <td>
-                            {{ order.id }}
-                        </td>
-
-                        <td>
-                            {{ order.customer_name }}
-                        </td>
-
-                        <td>
-
-                            {% if order.product %}
-                                {{ order.product.product_name }}
-                            {% else %}
-                                -
-                            {% endif %}
-
-                        </td>
-
-                        <td>
-
-                            ₹{{ order.amount|default:0|floatformat:2 }}
-
-                        </td>
-
-                        <td>
-
-                            {% if order.status == "Completed" %}
-
-                                <span class="status status-completed">
-                                    {{ order.status }}
-                                </span>
-
-                            {% elif order.status == "Cancelled" %}
-
-                                <span class="status status-cancelled">
-                                    {{ order.status }}
-                                </span>
-
-                            {% elif order.status == "Out of Stock" %}
-
-                                <span class="status status-out">
-                                    {{ order.status }}
-                                </span>
-
-                            {% else %}
-
-                                <span class="status status-pending">
-                                    {{ order.status }}
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
+                        <td><span class="order-id">#{{ order.id }}</span></td>
+                        <td>{{ order.customer_name }}</td>
+                        <td>{% if order.category %}{{ order.category.name }}{% else %}-{% endif %}</td>
+                        <td class="product-name">{% if order.product %}{{ order.product.product_name }}{% else %}-{% endif %}</td>
+                        <td class="member-name">{% if order.sales_member %}<i class="fa-regular fa-user me-1"></i>{{ order.sales_member.username }}{% else %}-{% endif %}</td>
+                        <td class="amount">₹{{ order.amount|default:0|floatformat:2 }}</td>
+                        <td>{% if order.status == "Completed" %}<span class="status status-completed">{{ order.status }}</span>{% elif order.status == "Pending" %}<span class="status status-pending">{{ order.status }}</span>{% elif order.status == "Cancelled" %}<span class="status status-cancelled">{{ order.status }}</span>{% elif order.status == "Out of Stock" %}<span class="status status-out">{{ order.status }}</span>{% else %}<span class="status status-pending">{{ order.status }}</span>{% endif %}</td>
                     </tr>
-
                     {% empty %}
-
-                    <tr>
-
-                        <td
-                            colspan="5"
-                            class="text-center text-muted py-4"
-                        >
-
-                            No orders found.
-
-                        </td>
-
-                    </tr>
-
+                    <tr><td colspan="7" class="text-center orders-empty"><i class="fa-solid fa-box-open fs-4 d-block mb-2"></i>No Product Orders Found</td></tr>
                     {% endfor %}
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
 

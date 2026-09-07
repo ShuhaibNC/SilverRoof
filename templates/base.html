@@ -369,12 +369,87 @@
 
         }
 
+
+        /* ==================================================
+           NON-SUPERUSER GREEN THEME
+           Superusers retain the existing blue/admin theme.
+        ================================================== */
+
+        body.non-superuser-theme {
+            background: #eef4fa;
+        }
+
+        body.non-superuser-theme .sidebar {
+            background: linear-gradient(135deg, #198754, #0f5132);
+        }
+
+        body.non-superuser-theme .sidebar a:hover,
+        body.non-superuser-theme .sidebar a.active {
+            background: #25a96b;
+            color: white;
+        }
+
+        body.non-superuser-theme .sidebar-section {
+            color: #b7e4c7;
+        }
+
+        body.non-superuser-theme .topbar h4,
+        body.non-superuser-theme .topbar-user i {
+            color: #198754;
+        }
+
+        body.non-superuser-theme .summary-icon,
+        body.non-superuser-theme .summary-number {
+            color: #25a96b;
+        }
+
+        body.non-superuser-theme .quick-action i {
+            color: #25a96b;
+        }
+
+        body.non-superuser-theme .quick-action:hover {
+            border-color: #25a96b;
+        }
+
+        body.non-superuser-theme .orders-title,
+        body.non-superuser-theme .product-name,
+        body.non-superuser-theme .amount {
+            color: #172b45;
+        }
+
+        body.non-superuser-theme .orders-table tbody tr:hover {
+            background: #f2fbf6;
+        }
+
+        body.non-superuser-theme .order-id {
+            background: #e8f7ee;
+            color: #198754;
+        }
+
+        body.non-superuser-theme .view-orders-btn {
+            color: #198754;
+        }
+
+        body.non-superuser-theme .view-orders-btn:hover {
+            color: #0f5132;
+        }
+
+        body.non-superuser-theme .live-indicator {
+            background: #e8f7ee;
+            color: #198754;
+        }
+
+        body.non-superuser-theme .live-dot {
+            background: #198754;
+            box-shadow: 0 0 0 4px rgba(25, 135, 84, .12);
+        }
+
     </style>
 
 </head>
 
 
-<body>
+<body class="{% if not request.user.is_superuser %}non-superuser-theme{% endif %}">
 
 
 <!-- =====================================================

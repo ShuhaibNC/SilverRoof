@@ -3,6 +3,39 @@
 {% block content %}
 
 <style>
+    body.non-superuser-theme { background: #eef4fa; }
+    body.non-superuser-theme .add-btn {
+        background: #198754;
+    }
+    body.non-superuser-theme .add-btn:hover {
+        background: #157347;
+    }
+    body.non-superuser-theme .stock-btn {
+        background: #198754;
+    }
+    body.non-superuser-theme .stock-btn:hover {
+        background: #157347;
+    }
+    body.non-superuser-theme th {
+        background: #198754;
+    }
+    body.non-superuser-theme .product-name {
+        color: #198754;
+    }
+    body.non-superuser-theme .stock-available,
+    body.non-superuser-theme .badge-success {
+        color: #198754;
+    }
+    body.non-superuser-theme .badge-success {
+        background: #198754;
+        color: white;
+    }
+    body.non-superuser-theme tbody tr:hover {
+        background: #f2fbf6;
+    }
+</style>
+
+<style>
 
     body {
         background: #f4f6f9;
@@ -617,4 +650,11 @@
 
 </div>
 
+
+<script>
+    {% if not request.user.is_superuser %}
+    document.body.classList.add('non-superuser-theme');
+    {% endif %}
+</script>
+    
 {% endblock %}

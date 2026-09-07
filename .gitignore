@@ -3,3 +3,5 @@ djvenv/
 .env
 .vscode/
 migrations/
+db.sqlite3
+db.sqlite3

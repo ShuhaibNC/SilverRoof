@@ -2,23 +2,98 @@
 
 {% block content %}
 
+<style>
+/* =========================================================
+   CUSTOMER MANAGEMENT - NON-SUPERUSER GREEN THEME
+   Superusers keep the existing blue theme
+   ========================================================= */
+
+body.non-superuser-theme .customer-page-title {
+    color: #198754;
+}
+
+body.non-superuser-theme .customer-page-title i {
+    color: #198754 !important;
+}
+
+body.non-superuser-theme .customer-add-btn {
+    background: #198754;
+    border-color: #198754;
+}
+
+body.non-superuser-theme .customer-add-btn:hover {
+    background: #157347;
+    border-color: #157347;
+}
+
+body.non-superuser-theme .customer-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+body.non-superuser-theme #customerTable thead {
+    background: #198754;
+}
+
+body.non-superuser-theme #customerTable thead th {
+    background: #198754 !important;
+    color: #fff;
+    border-color: #157347;
+}
+
+body.non-superuser-theme #customerTable tbody tr {
+    transition: background 0.15s ease;
+}
+
+body.non-superuser-theme #customerTable tbody tr:hover {
+    background: #f2fbf6;
+}
+
+body.non-superuser-theme #customerTable tbody td {
+    border-color: #e3ebe6;
+}
+
+body.non-superuser-theme #customerTable tbody td:first-child {
+    color: #198754;
+    font-weight: 600;
+}
+
+body.non-superuser-theme .customer-search:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.15);
+}
+
+body.non-superuser-theme .customer-edit-btn {
+    background: #198754;
+    border-color: #198754;
+}
+
+body.non-superuser-theme .customer-edit-btn:hover {
+    background: #157347;
+    border-color: #157347;
+}
+</style>
+
 <div class="container-fluid">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <h2 class="fw-bold">
+        <h2 class="fw-bold customer-page-title">
             <i class="fa fa-users text-primary"></i>
             Customer Management
         </h2>
 
-        <a href="{% url 'add_customer' %}" class="btn btn-primary">
+        <a href="{% url 'add_customer' %}"
+           class="btn btn-primary customer-add-btn">
+
             <i class="fa fa-plus"></i>
             Add Customer
+
         </a>
 
     </div>
 
-    <div class="card shadow border-0">
+    <div class="card shadow border-0 customer-card">
 
         <div class="card-body">
 
@@ -26,12 +101,13 @@
 
                 <input type="text"
                        id="searchCustomer"
-                       class="form-control"
+                       class="form-control customer-search"
                        placeholder="Search Customer...">
 
             </div>
 
-            <table class="table table-hover table-bordered align-middle" id="customerTable">
+            <table class="table table-hover table-bordered align-middle"
+                   id="customerTable">
 
                 <thead class="table-dark">
 
@@ -70,7 +146,7 @@
                         <td>
 
                             <a href="{% url 'edit_customer' customer.id %}"
-                               class="btn btn-success btn-sm">
+                               class="btn btn-success btn-sm customer-edit-btn">
 
                                 <i class="fa fa-pen"></i>
 
@@ -93,9 +169,7 @@
                     <tr>
 
                         <td colspan="7" class="text-center">
-
                             No Customers Found
-
                         </td>
 
                     </tr>
@@ -118,17 +192,17 @@ const searchInput = document.getElementById("searchCustomer");
 
 searchInput.addEventListener("keyup", function(){
 
-let filter = this.value.toLowerCase();
+    let filter = this.value.toLowerCase();
 
-let rows = document.querySelectorAll("#customerTable tbody tr");
+    let rows = document.querySelectorAll("#customerTable tbody tr");
 
-rows.forEach(function(row){
+    rows.forEach(function(row){
 
-let text = row.innerText.toLowerCase();
+        let text = row.innerText.toLowerCase();
 
-row.style.display = text.includes(filter) ? "" : "none";
+        row.style.display = text.includes(filter) ? "" : "none";
 
-});
+    });
 
 });
 

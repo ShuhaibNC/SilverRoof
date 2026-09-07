@@ -145,7 +145,113 @@
         text-decoration: none;
     }
 
+
+
+    .export-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        background: #198754;
+        color: #fff !important;
+        padding: 10px 18px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-weight: 500;
+        border: 1px solid #198754;
+        margin-left: 8px;
+        transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .export-btn:hover {
+        background: #157347;
+        border-color: #157347;
+        color: #fff !important;
+    }
+
+    .export-btn i {
+        color: #fff;
+    }
 </style>
+
+<style>
+/* =========================================================
+   ORDERS PAGE - NON-SUPERUSER GREEN THEME
+   Superusers retain the existing blue theme
+   ========================================================= */
+
+body.non-superuser-theme .page-header h2 {
+    color: #198754;
+}
+
+body.non-superuser-theme .page-header h2 i {
+    color: #198754;
+}
+
+body.non-superuser-theme .add-btn {
+    background: #198754;
+}
+
+body.non-superuser-theme .add-btn:hover {
+    background: #157347;
+}
+
+body.non-superuser-theme .filter-btn {
+    background: #198754;
+}
+
+body.non-superuser-theme .filter-btn:hover {
+    background: #157347;
+}
+
+body.non-superuser-theme .table-card th {
+    background: #198754;
+}
+
+body.non-superuser-theme .table-card tbody tr:hover {
+    background: #f2fbf6;
+}
+
+body.non-superuser-theme .dispatch-btn {
+    background: #198754;
+}
+
+body.non-superuser-theme .dispatch-btn:hover {
+    background: #157347;
+}
+
+body.non-superuser-theme .status-completed {
+    background: #198754;
+}
+
+body.non-superuser-theme .filter-card .form-select:focus,
+body.non-superuser-theme .filter-card .form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.15);
+}
+
+body.non-superuser-theme .export-btn {
+    background: #198754 !important;
+    border-color: #198754 !important;
+}
+
+body.non-superuser-theme .export-btn {
+    background: #198754 !important;
+    border-color: #198754 !important;
+    color: #fff !important;
+}
+
+body.non-superuser-theme .export-btn:hover {
+    background: #157347 !important;
+    border-color: #157347 !important;
+    color: #fff !important;
+}
+
+body.non-superuser-theme .export-btn i {
+    color: #fff !important;
+}
+</style>
+
 
 
 <div class="container-fluid mt-4 order-container">
@@ -710,5 +816,12 @@
 
 </div>
 
+
+
+<script>
+{% if not request.user.is_superuser %}
+document.body.classList.add('non-superuser-theme');
+{% endif %}
+</script>
 
 {% endblock %}
