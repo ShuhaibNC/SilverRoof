@@ -31,6 +31,9 @@ from openpyxl import Workbook
 from openpyxl.styles import (
     Font,
     Alignment,
+    Border,
+    Side,
+    PatternFill,
 )
 
 
@@ -39,7 +42,6 @@ from openpyxl.styles import (
 # ==========================================================
 
 def is_admin(user):
-
     return user.is_superuser
 
 
@@ -48,10 +50,8 @@ def is_admin(user):
 # ==========================================================
 
 def normalize_category_name(name):
-
     if not name:
         return ""
-
     return (
         str(name)
         .strip()
@@ -1781,7 +1781,7 @@ def export_orders_excel(request):
             "order_taken_by",
         )
         .all()
-        .order_by("id")
+        .order_by("customer_name", "id")
     )
 
 
@@ -1822,6 +1822,46 @@ def export_orders_excel(request):
         "Order Taken By",
     ]
 
+    NUM_COLUMNS = len(headers)
+
+
+    # ======================================================
+    # STYLES
+    # ======================================================
+
+    bold_side = Side(
+        style="medium",
+        color="000000",
+    )
+
+    cell_border = Border(
+        left=bold_side,
+        right=bold_side,
+        top=bold_side,
+        bottom=bold_side,
+    )
+
+    category_2_fill = PatternFill(
+        fill_type="solid",
+        start_color="00B050",
+        end_color="00B050",
+    )
+
+    out_of_stock_fill = PatternFill(
+        fill_type="solid",
+        start_color="FF0000",
+        end_color="FF0000",
+    )
+
+    normal_font = Font(
+        bold=True,
+    )
+
+    coloured_row_font = Font(
+        bold=True,
+        color="FFFFFF",
+    )
+
 
     for column_number, header in enumerate(
         headers,
@@ -1843,135 +1883,100 @@ def export_orders_excel(request):
             vertical="center"
         )
 
+        cell.border = cell_border
+
+
+    # ======================================================
+    # DATA ROWS
+    # ======================================================
+
+    previous_customer_name = None
+
 
     for index, order in enumerate(
         orders,
         1
     ):
 
-        worksheet.cell(
-            index + 1,
-            1,
-            index
-        )
+        row = index + 1
 
-        worksheet.cell(
-            index + 1,
-            2,
+        current_customer_name = (
             order.customer_name
             or ""
         )
 
-        worksheet.cell(
-            index + 1,
-            3,
-            order.location
-            or ""
+        display_customer_name = (
+            current_customer_name
+            if current_customer_name
+            != previous_customer_name
+            else ""
         )
 
-        worksheet.cell(
-            index + 1,
-            4,
-            str(
-                order.thickness
-                or ""
+        previous_customer_name = (
+            current_customer_name
+        )
+
+        row_values = [
+            index,
+            display_customer_name,
+            order.location or "",
+            str(order.thickness or ""),
+            str(order.design or ""),
+            str(order.colour or ""),
+            float(order.length_ft or 0),
+            float(order.width_ft or 0),
+            order.sheets or 0,
+            float(order.sq_mtr or 0),
+            float(order.rate or 0),
+            float(order.sqm_price or 0),
+            float(order.amount or 0),
+            order.loading_from or "",
+            str(order.order_taken_by or ""),
+        ]
+
+        # --------------------------------------------------
+        # ROW COLOUR
+        # OUT OF STOCK TAKES PRIORITY OVER CATEGORY 2 GREEN
+        # --------------------------------------------------
+
+        row_fill = None
+
+        if order.status == "Out of Stock":
+
+            row_fill = out_of_stock_fill
+
+        elif is_category_2(order):
+
+            row_fill = category_2_fill
+
+
+        for column_number in range(
+            1,
+            NUM_COLUMNS + 1
+        ):
+
+            cell = worksheet.cell(
+                row=row,
+                column=column_number,
+                value=row_values[column_number - 1]
             )
-        )
 
-        worksheet.cell(
-            index + 1,
-            5,
-            str(
-                order.design
-                or ""
+            cell.border = cell_border
+
+            cell.alignment = Alignment(
+                horizontal="center",
+                vertical="center"
             )
-        )
 
-        worksheet.cell(
-            index + 1,
-            6,
-            str(
-                order.colour
-                or ""
-            )
-        )
+            if row_fill:
 
-        worksheet.cell(
-            index + 1,
-            7,
-            float(
-                order.length_ft
-                or 0
-            )
-        )
+                cell.fill = row_fill
 
-        worksheet.cell(
-            index + 1,
-            8,
-            float(
-                order.width_ft
-                or 0
-            )
-        )
+                cell.font = coloured_row_font
 
-        worksheet.cell(
-            index + 1,
-            9,
-            order.sheets
-            or 0
-        )
+            else:
 
-        worksheet.cell(
-            index + 1,
-            10,
-            float(
-                order.sq_mtr
-                or 0
-            )
-        )
-
-        worksheet.cell(
-            index + 1,
-            11,
-            float(
-                order.rate
-                or 0
-            )
-        )
-
-        worksheet.cell(
-            index + 1,
-            12,
-            float(
-                order.sqm_price
-                or 0
-            )
-        )
-
-        worksheet.cell(
-            index + 1,
-            13,
-            float(
-                order.amount
-                or 0
-            )
-        )
-
-        worksheet.cell(
-            index + 1,
-            14,
-            order.loading_from
-            or ""
-        )
-
-        worksheet.cell(
-            index + 1,
-            15,
-            str(
-                order.order_taken_by
-                or ""
-            )
-        )
+                cell.font = normal_font
 
 
     for column in worksheet.columns:
@@ -2024,6 +2029,7 @@ def export_orders_excel(request):
 
 
     return response
+
 
 
 # ==========================================================
