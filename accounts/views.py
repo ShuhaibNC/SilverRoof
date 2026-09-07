@@ -6,6 +6,8 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+
+from main_dashboard.views import sales_members
 from .forms import SalesMemberForm
 from orders.models import Order
 from django.http import HttpResponse
@@ -14,7 +16,9 @@ from openpyxl.styles import Font
 from django.utils import timezone
 from datetime import timedelta
 import random
-
+from products.models import Product
+from customers.models import Customer
+from orders.models import Order
 User = get_user_model()
 
 
@@ -22,7 +26,18 @@ User = get_user_model()
 # HOME
 # ---------------------------------
 def home(request):
-    return render(request, "home.html")
+    sales_member_count = User.objects.filter(
+    groups__name="Sales",
+    is_superuser=False,
+    is_active=True
+)
+    context = {
+        "products": Product.objects.count(),
+        "customers": Customer.objects.count(),
+        "sales_members_count": sales_member_count.count(),
+         "orders": Order.objects.count(),
+    }
+    return render(request, "home.html", context)
 
 
 # ---------------------------------

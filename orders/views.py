@@ -16,7 +16,7 @@ from django.http import (
     HttpResponse,
 )
 from django.db import transaction
-
+from products.models import ProductStock
 from .models import Order
 from .forms import OrderForm
 
@@ -1177,6 +1177,109 @@ def add_order(request):
                         if order.amount is None:
                             order.amount = Decimal("0.00")
 
+
+                    # -----------------------------------------
+                    # REDUCE PRODUCT STOCK
+                    # -----------------------------------------
+
+                    if selected_product:
+
+                        try:
+                            # Lock the stock row so two orders cannot
+                            # reduce the same stock at the same time.
+                            stock = (
+                                ProductStock.objects
+                                .select_for_update()
+                                .select_related("product", "product__category")
+                                .get(product=selected_product)
+                            )
+
+                        except ProductStock.DoesNotExist:
+
+                            form.add_error(
+                                None,
+                                "Stock details were not found for the selected product."
+                            )
+
+                            raise ValueError(
+                                "Product stock record does not exist."
+                            )
+
+                        # Use the same category logic as ProductStock.
+                        stock_category = stock.get_category_name()
+
+                        # -----------------------------------------
+                        # CATEGORY 1 & 2
+                        # REDUCE LENGTH IN FEET
+                        # -----------------------------------------
+
+                        if stock_category in ["category1", "category2"]:
+
+                            requested_length = Decimal(
+                                str(order.length_ft or 0)
+                            )
+
+                            available_length = Decimal(
+                                str(stock.length_ft or 0)
+                            )
+
+                            if requested_length > available_length:
+
+                                form.add_error(
+                                    "length_ft",
+                                    f"Insufficient stock. Available: {available_length} ft."
+                                )
+
+                                raise ValueError(
+                                    "Insufficient product stock."
+                                )
+
+                            stock.length_ft = (
+                                available_length - requested_length
+                            ).quantize(Decimal("0.01"))
+
+                            stock.save()
+
+                        # -----------------------------------------
+                        # CATEGORY 3
+                        # REDUCE QUANTITY
+                        # -----------------------------------------
+
+                        elif stock_category == "category3":
+
+                            requested_quantity = int(
+                                order.sheets or 0
+                            )
+
+                            available_quantity = int(
+                                stock.quantity or 0
+                            )
+
+                            if requested_quantity > available_quantity:
+
+                                form.add_error(
+                                    "sheets",
+                                    f"Insufficient stock. Available quantity: {available_quantity}."
+                                )
+
+                                raise ValueError(
+                                    "Insufficient product quantity."
+                                )
+
+                            stock.quantity = (
+                                available_quantity - requested_quantity
+                            )
+
+                            stock.save()
+
+                        # -----------------------------------------
+                        # CATEGORY 4
+                        # NO STOCK REDUCTION
+                        # -----------------------------------------
+
+                        elif stock_category == "category4":
+
+                            pass
 
                     # -----------------------------------------
                     # SAVE ORDER
