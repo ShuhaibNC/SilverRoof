@@ -6,6 +6,7 @@
     /* ==================================================
        DESIGN SYSTEM & VARIABLES
     ================================================== */
+
     :root {
         --primary-color: #0f172a;
         --primary-accent: #2563eb;
@@ -22,9 +23,11 @@
         --transition-fast: all 0.2s ease-in-out;
     }
 
+
     /* ==================================================
        CARD CONTAINER
     ================================================== */
+
     .product-card-wrapper {
         max-width: 1000px;
         margin: 2rem auto;
@@ -34,15 +37,26 @@
         background: var(--surface-bg);
         border-radius: var(--radius-lg);
         border: 1px solid var(--border-color);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+
+        box-shadow:
+            0 20px 25px -5px rgba(0, 0, 0, 0.04),
+            0 8px 10px -6px rgba(0, 0, 0, 0.02);
+
         overflow: hidden;
     }
+
 
     /* ==================================================
        HEADER
     ================================================== */
+
     .product-header {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        background: linear-gradient(
+            135deg,
+            #0f172a 0%,
+            #1e293b 100%
+        );
+
         color: #ffffff;
         padding: 32px 40px;
         position: relative;
@@ -53,6 +67,7 @@
         font-size: 26px;
         font-weight: 700;
         letter-spacing: -0.02em;
+
         display: flex;
         align-items: center;
         gap: 12px;
@@ -64,23 +79,30 @@
         font-size: 14px;
     }
 
+
     /* ==================================================
        BODY
     ================================================== */
+
     .product-body {
         padding: 40px;
     }
 
+
     /* ==================================================
        SECTIONS & TITLES
     ================================================== */
+
     .section-title {
         font-size: 16px;
         font-weight: 700;
         color: var(--primary-color);
+
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
         margin-bottom: 20px;
+
         display: flex;
         align-items: center;
         gap: 10px;
@@ -97,14 +119,18 @@
         margin: 32px 0;
     }
 
+
     /* ==================================================
        LABELS & INPUTS
     ================================================== */
+
     .form-label {
         font-weight: 600;
         font-size: 14px;
         color: var(--text-main);
+
         margin-bottom: 8px;
+
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -124,12 +150,17 @@
     .form-control,
     .form-select {
         min-height: 48px;
+
         font-size: 14px;
+
         border-radius: var(--radius-md);
         border: 1px solid var(--border-color);
+
         background-color: #f8fafc;
         color: var(--text-main);
+
         padding: 10px 16px;
+
         transition: var(--transition-fast);
     }
 
@@ -143,7 +174,10 @@
     .form-select:focus {
         background-color: #ffffff;
         border-color: var(--primary-accent);
-        box-shadow: 0 0 0 4px var(--focus-ring);
+
+        box-shadow:
+            0 0 0 4px var(--focus-ring);
+
         outline: none;
     }
 
@@ -153,75 +187,53 @@
         margin-top: 6px;
     }
 
+
     /* ==================================================
-       DYNAMIC CATEGORY CARD
+       CATEGORY-SPECIFIC SECTIONS
     ================================================== */
-    .category-info-card {
-        background: #f0f6ff;
-        border: 1px solid #bfdbfe;
-        border-radius: var(--radius-md);
-        padding: 18px 20px;
-        margin-top: 24px;
-        display: flex;
-        gap: 14px;
-        align-items: flex-start;
-        transition: var(--transition-fast);
-    }
 
-    .category-info-icon {
-        background: var(--primary-accent);
-        color: #ffffff;
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        font-size: 14px;
-    }
-
-    .category-info-content strong {
-        display: block;
-        color: var(--primary-color);
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 2px;
-    }
-
-    .category-info-content span {
-        color: #334155;
-        font-size: 13px;
-        line-height: 1.5;
-    }
-
-    /* Dynamic section wrapper for smooth toggling */
     .category-specific {
         display: none;
         animation: fadeIn 0.3s ease-in-out forwards;
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-4px); }
-        to { opacity: 1; transform: translateY(0); }
+
+        from {
+            opacity: 0;
+            transform: translateY(-4px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
     }
+
 
     /* ==================================================
        ERROR MESSAGES
     ================================================== */
+
     .error-message {
         color: var(--danger-color);
+
         font-size: 12px;
         font-weight: 500;
+
         margin-top: 6px;
+
         display: flex;
         align-items: center;
         gap: 4px;
     }
 
+
     /* ==================================================
        BUTTONS
     ================================================== */
+
     .button-area {
         display: flex;
         align-items: center;
@@ -232,13 +244,20 @@
     .btn-custom-primary {
         background: var(--primary-accent);
         color: #ffffff;
+
         font-weight: 600;
         font-size: 15px;
+
         padding: 12px 28px;
+
         border-radius: var(--radius-md);
         border: none;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+
+        box-shadow:
+            0 4px 12px rgba(37, 99, 235, 0.2);
+
         transition: var(--transition-fast);
+
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -247,22 +266,31 @@
     .btn-custom-primary:hover {
         background: var(--primary-accent-hover);
         color: #ffffff;
+
         transform: translateY(-1px);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+
+        box-shadow:
+            0 6px 16px rgba(37, 99, 235, 0.3);
     }
 
     .btn-custom-secondary {
         background: #ffffff;
         color: var(--text-main);
+
         font-weight: 600;
         font-size: 15px;
+
         padding: 12px 24px;
+
         border-radius: var(--radius-md);
         border: 1px solid var(--border-color);
+
         transition: var(--transition-fast);
+
         display: inline-flex;
         align-items: center;
         gap: 8px;
+
         text-decoration: none;
     }
 
@@ -271,351 +299,1182 @@
         color: var(--text-main);
         border-color: #cbd5e1;
     }
+
+
+    /* ==================================================
+       DISABLED FIELDS
+    ================================================== */
+
+    .form-control:disabled,
+    .form-select:disabled {
+        background-color: #e2e8f0;
+        color: #64748b;
+        cursor: not-allowed;
+        opacity: 0.75;
+    }
+
 </style>
+
 
 <div class="container-fluid product-card-wrapper">
 
     <div class="product-card">
 
-        <!-- HEADER -->
+
+        <!-- ==================================================
+             HEADER
+        ================================================== -->
+
         <div class="product-header">
+
             <h2>
+
                 <i class="fa-solid fa-box-archive"></i>
-                {% if product %} Edit Product {% else %} Add New Product {% endif %}
+
+                {% if product %}
+                    Edit Product
+                {% else %}
+                    Add New Product
+                {% endif %}
+
             </h2>
-            <p>Specify specs, stock dimensions, and configuration rules for inventory management.</p>
+
+            <p>
+                Specify specs, stock dimensions, and configuration
+                rules for inventory management.
+            </p>
+
         </div>
 
-        <!-- BODY -->
+
+        <!-- ==================================================
+             BODY
+        ================================================== -->
+
         <div class="product-body">
 
             <form method="POST">
+
                 {% csrf_token %}
 
-                <!-- FORM ERRORS -->
+
+                <!-- ==================================================
+                     FORM NON FIELD ERRORS
+                ================================================== -->
+
                 {% if form.non_field_errors %}
+
                     <div class="alert alert-danger mb-4 rounded-3">
+
                         {{ form.non_field_errors }}
+
                     </div>
+
                 {% endif %}
 
-                <!-- SECTION 1: CATEGORY -->
+
+                <!-- ==================================================
+                     SECTION 1: CATEGORY
+                ================================================== -->
+
                 <div class="section-title">
+
                     <i class="fa-solid fa-layer-group"></i>
+
                     Product Categorization
+
                 </div>
 
+
                 <div class="row g-3">
+
+
                     <!-- CATEGORY -->
+
                     <div class="col-md-6">
-                        <label for="{{ form.category.id_for_label }}" class="form-label">
-                            Category <span class="required-star">*</span>
+
+                        <label
+                            for="{{ form.category.id_for_label }}"
+                            class="form-label"
+                        >
+
+                            Category
+
+                            <span class="required-star">
+                                *
+                            </span>
+
                         </label>
+
+
                         {{ form.category }}
+
+
                         {% for error in form.category.errors %}
+
                             <div class="error-message">
-                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                <i class="fa-solid fa-circle-exclamation"></i>
+
+                                {{ error }}
+
                             </div>
+
                         {% endfor %}
+
                     </div>
+
 
                     <!-- SUB CATEGORY -->
+
                     <div class="col-md-6">
-                        <label for="{{ form.subcategory_text.id_for_label }}" class="form-label">
-                            Sub Category / Product Type <span class="required-star">*</span>
+
+                        <label
+                            for="{{ form.subcategory_text.id_for_label }}"
+                            class="form-label"
+                        >
+
+                            Sub Category / Product Type
+
+                            <span class="required-star">
+                                *
+                            </span>
+
                         </label>
+
+
                         {{ form.subcategory_text }}
-                        <div class="form-text">Selected sub-category will be available for sales allocation.</div>
+
+
+                        <div class="form-text">
+
+                            Selected sub-category will be available
+                            for sales allocation.
+
+                        </div>
+
+
                         {% for error in form.subcategory_text.errors %}
+
                             <div class="error-message">
-                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                <i class="fa-solid fa-circle-exclamation"></i>
+
+                                {{ error }}
+
                             </div>
+
                         {% endfor %}
+
                     </div>
+
                 </div>
 
-                <!-- CATEGORY INFORMATIONAL DISPLAY CARD -->
-                <div id="category-info" class="category-info-card" style="display:none;">
-                    <div class="category-info-icon">
-                        <i class="fa-solid fa-circle-info"></i>
-                    </div>
-                    <div class="category-info-content">
-                        <strong id="category-info-title">Category</strong>
-                        <span id="category-info-text"></span>
-                    </div>
-                </div>
 
                 <hr class="section-divider">
 
-                <!-- SECTION 2: PRODUCT DETAILS -->
+
+                <!-- ==================================================
+                     SECTION 2: PRODUCT DETAILS
+                ================================================== -->
+
                 <div class="section-title">
+
                     <i class="fa-solid fa-sliders"></i>
+
                     Base Specifications
+
                 </div>
+
 
                 <div class="row g-3">
-                    <!-- PRODUCT NAME (Optional Render wrapper) -->
+
+
+                    <!-- PRODUCT NAME -->
+
                     {% if form.product_name %}
-                    <div class="col-md-6">
-                        <label for="{{ form.product_name.id_for_label }}" class="form-label">
-                            Product Name <span class="required-star">*</span>
-                        </label>
-                        {{ form.product_name }}
-                        {% for error in form.product_name.errors %}
-                            <div class="error-message">
-                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
-                            </div>
-                        {% endfor %}
-                    </div>
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.product_name.id_for_label }}"
+                                class="form-label"
+                            >
+
+                                Product Name
+
+                                <span class="required-star">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form.product_name }}
+
+
+                            {% for error in form.product_name.errors %}
+
+                                <div class="error-message">
+
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                                    {{ error }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
                     {% endif %}
 
-                    <!-- THICKNESS (shown for every category, optional) -->
+
+                    <!-- THICKNESS -->
+
                     <div class="col-md-6">
-                        <label for="{{ form.thickness_text.id_for_label }}" class="form-label">
-                            Thickness <span class="optional-tag">(Optional)</span>
+
+                        <label
+                            for="{{ form.thickness_text.id_for_label }}"
+                            class="form-label"
+                        >
+
+                            Thickness
+
+                            <span class="optional-tag">
+                                (Optional)
+                            </span>
+
                         </label>
+
+
                         {{ form.thickness_text }}
+
+
                         {% for error in form.thickness_text.errors %}
+
                             <div class="error-message">
-                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                <i class="fa-solid fa-circle-exclamation"></i>
+
+                                {{ error }}
+
                             </div>
+
                         {% endfor %}
+
                     </div>
+
                 </div>
 
-                <!-- STANDARD FIELDS: CATEGORY 1, 2, 4 ONLY -->
-                <div id="standard-fields-section" class="category-specific row g-3">
+
+                <!-- ==================================================
+                     CATEGORY 1, 2, 4 STANDARD FIELDS
+                ================================================== -->
+
+                <div
+                    id="standard-fields-section"
+                    class="category-specific row g-3"
+                >
+
+
                     <!-- WIDTH -->
+
                     <div class="col-md-6">
-                        <label for="{{ form.width_ft.id_for_label }}" class="form-label">
-                            Width (Feet) <span class="required-star">*</span>
+
+                        <label
+                            for="{{ form.width_ft.id_for_label }}"
+                            class="form-label"
+                        >
+
+                            Width (Feet)
+
+                            <span class="required-star">
+                                *
+                            </span>
+
                         </label>
+
+
                         {{ form.width_ft }}
-                        <div class="form-text">System converts feet automatically for meters display.</div>
+
+
+                        <div class="form-text">
+
+                            System converts feet automatically
+                            for meters display.
+
+                        </div>
+
+
                         {% for error in form.width_ft.errors %}
+
                             <div class="error-message">
-                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                <i class="fa-solid fa-circle-exclamation"></i>
+
+                                {{ error }}
+
                             </div>
+
                         {% endfor %}
+
                     </div>
+
 
                     <!-- DESIGN -->
+
                     <div class="col-md-6">
-                        <label for="{{ form.design_text.id_for_label }}" class="form-label">
-                            Design <span class="optional-tag">(Optional)</span>
+
+                        <label
+                            for="{{ form.design_text.id_for_label }}"
+                            class="form-label"
+                        >
+
+                            Design
+
+                            <span class="optional-tag">
+                                (Optional)
+                            </span>
+
                         </label>
+
+
                         {{ form.design_text }}
+
+
                         {% for error in form.design_text.errors %}
+
                             <div class="error-message">
-                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                <i class="fa-solid fa-circle-exclamation"></i>
+
+                                {{ error }}
+
                             </div>
+
                         {% endfor %}
+
                     </div>
+
 
                     <!-- COLOUR -->
+
                     <div class="col-md-6">
-                        <label for="{{ form.colour_text.id_for_label }}" class="form-label">
-                            Colour <span class="required-star">*</span>
+
+                        <label
+                            for="{{ form.colour_text.id_for_label }}"
+                            class="form-label"
+                        >
+
+                            Colour
+
+                            <span class="required-star">
+                                *
+                            </span>
+
                         </label>
+
+
                         {{ form.colour_text }}
+
+
                         {% for error in form.colour_text.errors %}
+
                             <div class="error-message">
-                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                <i class="fa-solid fa-circle-exclamation"></i>
+
+                                {{ error }}
+
                             </div>
+
                         {% endfor %}
+
                     </div>
+
 
                     <!-- BRAND -->
+
                     <div class="col-md-6">
-                        <label for="{{ form.brand_text.id_for_label }}" class="form-label">
-                            Brand <span class="required-star">*</span>
+
+                        <label
+                            for="{{ form.brand_text.id_for_label }}"
+                            class="form-label"
+                        >
+
+                            Brand
+
+                            <span class="required-star">
+                                *
+                            </span>
+
                         </label>
+
+
                         {{ form.brand_text }}
+
+
                         {% for error in form.brand_text.errors %}
+
                             <div class="error-message">
-                                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                <i class="fa-solid fa-circle-exclamation"></i>
+
+                                {{ error }}
+
                             </div>
+
                         {% endfor %}
+
                     </div>
+
                 </div>
 
-                <!-- CATEGORY 3 SPECIFIC SECTION -->
-                <div id="category3-section" class="category-specific">
-                    <hr class="section-divider">
-                    <div class="section-title">
-                        <i class="fa-solid fa-hashtag"></i>
-                        Category 3 Attributes
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="{{ form.nos.id_for_label }}" class="form-label">
-                                NOS (Number of Items) <span class="required-star">*</span>
-                            </label>
-                            {{ form.nos }}
-                            <div class="form-text">Mandatory field for Category 3 items.</div>
-                            {% for error in form.nos.errors %}
-                                <div class="error-message">
-                                    <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
 
-                <!-- CATEGORY 2 SPECIFIC SECTION -->
-                <div id="category2-section" class="category-specific">
+                <!-- ==================================================
+                     CATEGORY 2
+                ================================================== -->
+
+                <div
+                    id="category2-section"
+                    class="category-specific"
+                >
+
                     <hr class="section-divider">
+
+
                     <div class="section-title">
+
                         <i class="fa-solid fa-hashtag"></i>
+
                         Category 2 Attributes
+
                     </div>
+
+
                     <div class="row g-3">
+
                         <div class="col-md-6">
-                            <label for="{{ form.core_number.id_for_label }}" class="form-label">
-                                Core Number <span class="required-star">*</span>
+
+                            <label
+                                for="{{ form.core_number.id_for_label }}"
+                                class="form-label"
+                            >
+
+                                Core Number
+
+                                <span class="required-star">
+                                    *
+                                </span>
+
                             </label>
+
+
                             {{ form.core_number }}
-                            <div class="form-text">Mandatory field for Category 2 items.</div>
+
+
+                            <div class="form-text">
+
+                                Mandatory field for Category 2 items.
+
+                            </div>
+
+
                             {% for error in form.core_number.errors %}
+
                                 <div class="error-message">
-                                    <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                                    {{ error }}
+
                                 </div>
+
                             {% endfor %}
+
                         </div>
+
                     </div>
+
                 </div>
 
-                <!-- CATEGORY 4 SPECIFIC SECTION -->
-                <div id="category4-section" class="category-specific">
+
+                <!-- ==================================================
+                     CATEGORY 4
+                ================================================== -->
+
+                <div
+                    id="category4-section"
+                    class="category-specific"
+                >
+
                     <hr class="section-divider">
+
+
                     <div class="section-title">
+
                         <i class="fa-solid fa-ruler-combined"></i>
+
                         Category 4 Attributes
+
                     </div>
+
+
                     <div class="row g-3">
+
+
                         <!-- SQT RATE -->
+
                         <div class="col-md-6">
-                            <label for="{{ form.sqt_rate.id_for_label }}" class="form-label">
-                                SQT Rate <span class="required-star">*</span>
+
+                            <label
+                                for="{{ form.sqt_rate.id_for_label }}"
+                                class="form-label"
+                            >
+
+                                SQT Rate
+
+                                <span class="required-star">
+                                    *
+                                </span>
+
                             </label>
+
+
                             {{ form.sqt_rate }}
-                            <div class="form-text">Enter base rate manually.</div>
+
+
+                            <div class="form-text">
+
+                                Enter base rate manually.
+
+                            </div>
+
+
                             {% for error in form.sqt_rate.errors %}
+
                                 <div class="error-message">
-                                    <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                                    {{ error }}
+
                                 </div>
+
                             {% endfor %}
+
                         </div>
+
 
                         <!-- SIZE -->
+
                         <div class="col-md-6">
-                            <label for="{{ form.size.id_for_label }}" class="form-label">
-                                Size <span class="required-star">*</span>
+
+                            <label
+                                for="{{ form.size.id_for_label }}"
+                                class="form-label"
+                            >
+
+                                Size
+
+                                <span class="required-star">
+                                    *
+                                </span>
+
                             </label>
+
+
                             {{ form.size }}
-                            <div class="form-text">Manual input override (no dynamic calculations).</div>
+
+
+                            <div class="form-text">
+
+                                Manual input override
+                                (no dynamic calculations).
+
+                            </div>
+
+
                             {% for error in form.size.errors %}
+
                                 <div class="error-message">
-                                    <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                                    {{ error }}
+
                                 </div>
+
                             {% endfor %}
+
                         </div>
+
                     </div>
+
                 </div>
+
 
                 <hr class="section-divider">
 
-                <!-- ACTION BUTTONS -->
+
+                <!-- ==================================================
+                     ACTION BUTTONS
+                ================================================== -->
+
                 <div class="button-area">
-                    <button type="submit" class="btn-custom-primary">
+
+
+                    <button
+                        type="submit"
+                        class="btn-custom-primary"
+                    >
+
                         <i class="fa-solid fa-floppy-disk"></i>
-                        {% if product %} Save Changes {% else %} Create Product {% endif %}
+
+
+                        {% if product %}
+
+                            Save Changes
+
+                        {% else %}
+
+                            Create Product
+
+                        {% endif %}
+
                     </button>
 
-                    <a href="{% url 'product_list' %}" class="btn-custom-secondary">
+
+                    <a
+                        href="{% url 'product_list' %}"
+                        class="btn-custom-secondary"
+                    >
+
                         <i class="fa-solid fa-arrow-left"></i>
+
                         Cancel
+
                     </a>
+
                 </div>
 
+
             </form>
+
         </div>
+
     </div>
+
 </div>
 
-<!-- CATEGORY JS LOGIC -->
+
+<!-- ==========================================================
+     CATEGORY JAVASCRIPT
+========================================================== -->
+
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
-    const categorySelect = document.getElementById("id_category");
-    const standardFieldsSection = document.getElementById("standard-fields-section");
-    const category2Section = document.getElementById("category2-section");
-    const category3Section = document.getElementById("category3-section");
-    const category4Section = document.getElementById("category4-section");
-    const categoryInfo = document.getElementById("category-info");
-    const categoryInfoTitle = document.getElementById("category-info-title");
-    const categoryInfoText = document.getElementById("category-info-text");
+
+
+    /* ==================================================
+       CATEGORY
+    ================================================== */
+
+    const categorySelect =
+        document.getElementById("id_category");
+
+
+    /* ==================================================
+       SECTIONS
+    ================================================== */
+
+    const standardFieldsSection =
+        document.getElementById(
+            "standard-fields-section"
+        );
+
+
+    const category2Section =
+        document.getElementById(
+            "category2-section"
+        );
+
+
+    const category4Section =
+        document.getElementById(
+            "category4-section"
+        );
+
+
+    /* ==================================================
+       NORMALIZE CATEGORY NAME
+    ================================================== */
 
     function normalizeCategoryName(name) {
-        return (name || "").trim().toLowerCase().replace(/[\s\-_]+/g, "");
+
+        return (name || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s\-_]+/g, "");
+
     }
 
-    function hideCategorySections() {
-        if (standardFieldsSection) standardFieldsSection.style.display = "none";
-        if (category2Section) category2Section.style.display = "none";
-        if (category3Section) category3Section.style.display = "none";
-        if (category4Section) category4Section.style.display = "none";
-    }
 
-    function updateCategoryFields() {
-        if (!categorySelect) return;
+    /* ==================================================
+       ENABLE / DISABLE FIELD
+    ==================================================
 
-        const selectedOption = categorySelect.options[categorySelect.selectedIndex];
-        hideCategorySections();
+       IMPORTANT:
 
-        if (!selectedOption || !selectedOption.value) {
-            if (categoryInfo) categoryInfo.style.display = "none";
+       Hiding a field with display:none does NOT
+       prevent Django from receiving/validating it.
+
+       disabled=true prevents it from being submitted.
+    */
+
+    function setFieldState(fieldId, enabled) {
+
+        const field =
+            document.getElementById(fieldId);
+
+
+        if (!field) {
             return;
         }
 
-        const categoryName = normalizeCategoryName(selectedOption.text);
 
-        if (categoryInfo) categoryInfo.style.display = "flex";
+        field.disabled = !enabled;
 
-        if (categoryName === "category1" || categoryName === "1") {
-            if (standardFieldsSection) standardFieldsSection.style.display = "flex";
-            categoryInfoTitle.innerText = selectedOption.text;
-            categoryInfoText.innerText = "Add variation details (width, thickness, design, color, brand). Stock will be tracked in feet.";
-        } 
-        else if (categoryName === "category2" || categoryName === "2") {
-            if (standardFieldsSection) standardFieldsSection.style.display = "flex";
-            if (category2Section) category2Section.style.display = "block";
-            categoryInfoTitle.innerText = selectedOption.text;
-            categoryInfoText.innerText = "Add variation and Core Number details. Stock will be tracked in feet.";
-        } 
-        else if (categoryName === "category3" || categoryName === "3") {
-            if (category3Section) category3Section.style.display = "block";
-            categoryInfoTitle.innerText = selectedOption.text;
-            categoryInfoText.innerText = "Only Product Name, Thickness and NOS apply. Category 3 inventory is tracked by item units (Nos).";
-        } 
-        else if (categoryName === "category4" || categoryName === "4") {
-            if (standardFieldsSection) standardFieldsSection.style.display = "flex";
-            if (category4Section) category4Section.style.display = "block";
-            categoryInfoTitle.innerText = selectedOption.text;
-            categoryInfoText.innerText = "Set Size and SQT Rate manually. Dynamic size computation is disabled for this category.";
-        } 
-        else {
-            if (standardFieldsSection) standardFieldsSection.style.display = "flex";
-            categoryInfoTitle.innerText = selectedOption.text;
-            categoryInfoText.innerText = "Specify standard configurations for the selected product category.";
+
+        /*
+         * Clear fields that are not used
+         * by the selected category.
+         */
+
+        if (!enabled) {
+            field.value = "";
         }
+
     }
+
+
+    /* ==================================================
+       HIDE ALL SECTIONS
+    ================================================== */
+
+    function hideCategorySections() {
+
+        if (standardFieldsSection) {
+
+            standardFieldsSection.style.display =
+                "none";
+
+        }
+
+
+        if (category2Section) {
+
+            category2Section.style.display =
+                "none";
+
+        }
+
+
+        if (category4Section) {
+
+            category4Section.style.display =
+                "none";
+
+        }
+
+    }
+
+
+    /* ==================================================
+       DISABLE ALL CATEGORY-SPECIFIC FIELDS
+    ================================================== */
+
+    function disableAllCategoryFields() {
+
+        /*
+         * Category 1 / 2 / 4
+         */
+
+        setFieldState(
+            "id_width_ft",
+            false
+        );
+
+
+        setFieldState(
+            "id_design_text",
+            false
+        );
+
+
+        setFieldState(
+            "id_colour_text",
+            false
+        );
+
+
+        setFieldState(
+            "id_brand_text",
+            false
+        );
+
+
+        /*
+         * Category 2
+         */
+
+        setFieldState(
+            "id_core_number",
+            false
+        );
+
+
+        /*
+         * Category 4
+         */
+
+        setFieldState(
+            "id_sqt_rate",
+            false
+        );
+
+
+        setFieldState(
+            "id_size",
+            false
+        );
+
+    }
+
+
+    /* ==================================================
+       UPDATE CATEGORY FIELDS
+    ================================================== */
+
+    function updateCategoryFields() {
+
+        if (!categorySelect) {
+            return;
+        }
+
+
+        const selectedOption =
+            categorySelect.options[
+                categorySelect.selectedIndex
+            ];
+
+
+        /*
+         * Hide everything first
+         */
+
+        hideCategorySections();
+
+
+        /*
+         * Disable everything first
+         */
+
+        disableAllCategoryFields();
+
+
+        /*
+         * Nothing selected
+         */
+
+        if (
+            !selectedOption ||
+            !selectedOption.value
+        ) {
+
+            return;
+
+        }
+
+
+        const categoryName =
+            normalizeCategoryName(
+                selectedOption.text
+            );
+
+
+        /* ==================================================
+           CATEGORY 1
+        ================================================== */
+
+        if (
+            categoryName === "category1" ||
+            categoryName === "1"
+        ) {
+
+
+            if (standardFieldsSection) {
+
+                standardFieldsSection.style.display =
+                    "flex";
+
+            }
+
+
+            setFieldState(
+                "id_width_ft",
+                true
+            );
+
+
+            setFieldState(
+                "id_design_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_colour_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_brand_text",
+                true
+            );
+
+        }
+
+
+        /* ==================================================
+           CATEGORY 2
+        ================================================== */
+
+        else if (
+            categoryName === "category2" ||
+            categoryName === "2"
+        ) {
+
+
+            if (standardFieldsSection) {
+
+                standardFieldsSection.style.display =
+                    "flex";
+
+            }
+
+
+            if (category2Section) {
+
+                category2Section.style.display =
+                    "block";
+
+            }
+
+
+            setFieldState(
+                "id_width_ft",
+                true
+            );
+
+
+            setFieldState(
+                "id_design_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_colour_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_brand_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_core_number",
+                true
+            );
+
+        }
+
+
+        /* ==================================================
+           CATEGORY 3
+        ==================================================
+
+           CATEGORY 3 USES ONLY:
+
+           Product Name
+           Thickness
+
+           It does NOT use:
+
+           Width
+           Design
+           Colour
+           Brand
+           Core Number
+           SQT Rate
+           Size
+
+        */
+
+        else if (
+            categoryName === "category3" ||
+            categoryName === "3"
+        ) {
+
+
+            /*
+             * Nothing else needs to be displayed.
+
+             * Product Name and Thickness are already
+             * outside the category-specific sections.
+             *
+             * All other fields remain disabled.
+             */
+
+        }
+
+
+        /* ==================================================
+           CATEGORY 4
+        ================================================== */
+
+        else if (
+            categoryName === "category4" ||
+            categoryName === "4"
+        ) {
+
+
+            if (standardFieldsSection) {
+
+                standardFieldsSection.style.display =
+                    "flex";
+
+            }
+
+
+            if (category4Section) {
+
+                category4Section.style.display =
+                    "block";
+
+            }
+
+
+            setFieldState(
+                "id_width_ft",
+                true
+            );
+
+
+            setFieldState(
+                "id_design_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_colour_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_brand_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_sqt_rate",
+                true
+            );
+
+
+            setFieldState(
+                "id_size",
+                true
+            );
+
+        }
+
+
+        /* ==================================================
+           OTHER
+        ================================================== */
+
+        else {
+
+
+            if (standardFieldsSection) {
+
+                standardFieldsSection.style.display =
+                    "flex";
+
+            }
+
+
+            setFieldState(
+                "id_width_ft",
+                true
+            );
+
+
+            setFieldState(
+                "id_design_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_colour_text",
+                true
+            );
+
+
+            setFieldState(
+                "id_brand_text",
+                true
+            );
+
+        }
+
+    }
+
+
+    /* ==================================================
+       CATEGORY CHANGE
+    ================================================== */
 
     if (categorySelect) {
-        categorySelect.addEventListener("change", updateCategoryFields);
+
+        categorySelect.addEventListener(
+            "change",
+            updateCategoryFields
+        );
+
     }
 
+
+    /* ==================================================
+       INITIAL LOAD
+    ================================================== */
+
     updateCategoryFields();
+
 });
+
 </script>
 
 {% endblock %}

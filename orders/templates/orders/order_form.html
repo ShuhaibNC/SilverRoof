@@ -9,13 +9,16 @@
         <div class="card-header">
             <h3>
                 <i class="fa fa-shopping-cart"></i>
+
                 {% if order %}
                     Edit Order
                 {% else %}
                     Create New Order
                 {% endif %}
+
             </h3>
         </div>
+
 
         <div class="card-body">
 
@@ -23,436 +26,760 @@
 
                 {% csrf_token %}
 
+
                 {% if form.errors %}
-        <div class="alert alert-danger">
-            <strong>Please correct these errors:</strong>
 
-            {{ form.non_field_errors }}
+                    <div class="alert alert-danger">
 
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <div>
-                        {{ field.label }}: {{ error }}
+                        <strong>Please correct these errors:</strong>
+
+                        {{ form.non_field_errors }}
+
+                        {% for field in form %}
+
+                            {% for error in field.errors %}
+
+                                <div>
+                                    {{ field.label }}: {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        {% endfor %}
+
                     </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
-    {% endif %}
+
+                {% endif %}
+
 
                 <!-- ===================================== -->
-<!-- CUSTOMER DETAILS -->
-<!-- ===================================== -->
+                <!-- CUSTOMER DETAILS -->
+                <!-- ===================================== -->
 
-<h3 class="mb-4">
-    <i class="fa fa-user"></i>
-    Customer Details
-</h3>
+                <h3 class="mb-4">
+                    <i class="fa fa-user"></i>
+                    Customer Details
+                </h3>
 
-<div class="row g-4 mb-5">
 
-    <!-- CUSTOMER NAME -->
-    <div class="col-md-6">
-        <label class="form-label">
-            Customer Name <span class="text-danger">*</span>
-        </label>
-        {{ form.customer_name }}
-        {% if form.customer_name.errors %}
-            <div class="text-danger small mt-1">{{ form.customer_name.errors.0 }}</div>
-        {% endif %}
-    </div>
+                <div class="row g-4 mb-5">
 
-    <!-- LOCATION -->
-    <div class="col-md-6">
-        <label class="form-label">Location</label>
-        {{ form.location }}
-        {% if form.location.errors %}
-            <div class="text-danger small mt-1">{{ form.location.errors.0 }}</div>
-        {% endif %}
-    </div>
+                    <!-- CUSTOMER NAME -->
 
-</div>
+                    <div class="col-md-6">
 
-<hr class="my-4">
+                        <label class="form-label">
+
+                            Customer Name
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        {{ form.customer_name }}
+
+                        {% if form.customer_name.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.customer_name.errors.0 }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- LOCATION -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Location
+
+                        </label>
+
+                        {{ form.location }}
+
+                        {% if form.location.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.location.errors.0 }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <hr class="my-4">
+
 
                 <!-- ===================================== -->
-<!-- PRODUCT DETAILS -->
-<!-- ===================================== -->
+                <!-- PRODUCT DETAILS -->
+                <!-- ===================================== -->
 
-<h3 class="mb-4">
-    <i class="fa fa-box"></i>
-    Product Details
-</h3>
+                <h3 class="mb-4">
 
-<div class="row g-4">
+                    <i class="fa fa-box"></i>
 
-    <!-- CATEGORY -->
-    <div class="col-md-4">
-        <label class="form-label">
-            Category <span class="text-danger">*</span>
-        </label>
+                    Product Details
 
-        <select
-            name="category"
-            id="category"
-            class="form-select"
-            required
-        >
-            <option value="">Select Category</option>
+                </h3>
 
-            {% for cat in categories %}
-                <option
-                    value="{{ cat.id }}"
-                    {% if form.category.value|stringformat:"s" == cat.id|stringformat:"s" %}
-                        selected
-                    {% endif %}
+
+                <div class="row g-4">
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Category
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+
+                        <select
+                            name="category"
+                            id="category"
+                            class="form-select"
+                            required
+                        >
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+
+                            {% for cat in categories %}
+
+                                <option
+                                    value="{{ cat.id }}"
+
+                                    {% if form.category.value|stringformat:"s" == cat.id|stringformat:"s" %}
+
+                                        selected
+
+                                    {% endif %}
+                                >
+
+                                    {{ cat.name }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        {% if form.category.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.category.errors.0 }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- SUB CATEGORY -->
+
+                    <div
+                        class="col-md-4"
+                        id="subcategory-field"
+                    >
+
+                        <label class="form-label">
+
+                            Sub Category
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+
+                        <select
+                            name="subcategory"
+                            id="subcategory"
+                            class="form-select"
+                            required
+                            disabled
+                        >
+
+                            <option value="">
+                                Select Category First
+                            </option>
+
+                        </select>
+
+
+                        {% if form.subcategory.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.subcategory.errors.0 }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- THICKNESS -->
+
+                    <div
+                        class="col-md-4"
+                        id="thickness-field"
+                    >
+
+                        <label class="form-label">
+
+                            Thickness
+
+                        </label>
+
+
+                        <select
+                            name="thickness"
+                            id="thickness"
+                            class="form-select"
+                            disabled
+                        >
+
+                            <option value="">
+                                Select Sub Category First
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- WIDTH -->
+
+                    <div
+                        class="col-md-4"
+                        id="width-field"
+                    >
+
+                        <label class="form-label">
+
+                            Width
+
+                        </label>
+
+
+                        <select
+                            name="width_ft"
+                            id="width_ft"
+                            class="form-select"
+                            disabled
+                        >
+
+                            <option value="">
+                                Select Thickness First
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- DESIGN -->
+
+                    <div
+                        class="col-md-4"
+                        id="design-field"
+                    >
+
+                        <label class="form-label">
+
+                            Design
+
+                        </label>
+
+
+                        <select
+                            name="design"
+                            id="design"
+                            class="form-select"
+                            disabled
+                        >
+
+                            <option value="">
+                                Select Width First
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- COLOUR -->
+
+                    <div
+                        class="col-md-4"
+                        id="colour-field"
+                    >
+
+                        <label class="form-label">
+
+                            Colour
+
+                        </label>
+
+
+                        <select
+                            name="colour"
+                            id="colour"
+                            class="form-select"
+                            disabled
+                        >
+
+                            <option value="">
+                                Select Design First
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BRAND -->
+
+                    <div
+                        class="col-md-4"
+                        id="brand-field"
+                    >
+
+                        <label class="form-label">
+
+                            Brand
+
+                        </label>
+
+
+                        <select
+                            name="brand"
+                            id="brand"
+                            class="form-select"
+                            disabled
+                        >
+
+                            <option value="">
+                                Select Colour First
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CORE NUMBER -->
+
+                    <div id="core_number_field">
+
+                        <label for="{{ form.core_number.id_for_label }}">
+
+                            Core Number
+
+                        </label>
+
+                        {{ form.core_number }}
+
+                    </div>
+
+
+                    <!-- LENGTH -->
+
+                    <div
+                        class="col-md-4"
+                        id="length-field"
+                    >
+
+                        <label class="form-label">
+
+                            Length
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            name="length_ft"
+                            id="length_ft"
+                            class="form-control"
+                            step="0.01"
+                            placeholder="Enter Length"
+                        >
+
+
+                        {% if form.length_ft.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.length_ft.errors.0 }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- SIZE -->
+
+                    <div
+                        class="col-md-4"
+                        id="size-field"
+                    >
+
+                        <label class="form-label">
+
+                            Size
+
+                        </label>
+
+                        {{ form.size_text }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- ===================================== -->
+                <!-- SELECTED PRODUCT -->
+                <!-- ===================================== -->
+
+                <input
+                    type="hidden"
+                    name="product"
+                    id="product"
                 >
-                    {{ cat.name }}
-                </option>
-            {% endfor %}
-        </select>
-
-        {% if form.category.errors %}
-            <div class="text-danger small mt-1">
-                {{ form.category.errors.0 }}
-            </div>
-        {% endif %}
-    </div>
 
 
-    <!-- SUB CATEGORY -->
-    <div class="col-md-4" id="subcategory-field">
-        <label class="form-label">
-            Sub Category <span class="text-danger">*</span>
-        </label>
-
-        <select
-            name="subcategory"
-            id="subcategory"
-            class="form-select"
-            required
-            disabled
-        >
-            <option value="">Select Category First</option>
-        </select>
-
-        {% if form.subcategory.errors %}
-            <div class="text-danger small mt-1">
-                {{ form.subcategory.errors.0 }}
-            </div>
-        {% endif %}
-    </div>
+                <div
+                    id="product-message"
+                    class="alert alert-success mt-4"
+                    style="display:none;"
+                ></div>
 
 
-    <!-- THICKNESS -->
-    <div class="col-md-4" id="thickness-field">
-        <label class="form-label">Thickness</label>
-
-        <select
-            name="thickness"
-            id="thickness"
-            class="form-select"
-            disabled
-        >
-            <option value="">Select Sub Category First</option>
-        </select>
-    </div>
+                <hr class="my-4">
 
 
-    <!-- WIDTH -->
-    <div class="col-md-4" id="width-field">
-        <label class="form-label">Width</label>
-
-        <select
-            name="width_ft"
-            id="width_ft"
-            class="form-select"
-            disabled
-        >
-            <option value="">Select Thickness First</option>
-        </select>
-    </div>
-
-
-    <!-- DESIGN -->
-    <div class="col-md-4" id="design-field">
-        <label class="form-label">Design</label>
-
-        <select
-            name="design"
-            id="design"
-            class="form-select"
-            disabled
-        >
-            <option value="">Select Width First</option>
-        </select>
-    </div>
-
-
-    <!-- COLOUR -->
-    <div class="col-md-4" id="colour-field">
-        <label class="form-label">Colour</label>
-
-        <select
-            name="colour"
-            id="colour"
-            class="form-select"
-            disabled
-        >
-            <option value="">Select Design First</option>
-        </select>
-    </div>
-
-
-    <!-- BRAND -->
-    <div class="col-md-4" id="brand-field">
-        <label class="form-label">Brand</label>
-
-        <select
-            name="brand"
-            id="brand"
-            class="form-select"
-            disabled
-        >
-            <option value="">Select Colour First</option>
-        </select>
-    </div>
-
-    <!-- CORE NUMBER -->
-<div id="core_number_field">
-    <label for="{{ form.core_number.id_for_label }}">
-        Core Number
-    </label>
-
-    {{ form.core_number }}
-</div>
-    <div class="col-md-4" id="length-field">
-    <label class="form-label">Length</label>
-
-    <input
-        type="number"
-        name="length_ft"
-        id="length_ft"
-        class="form-control"
-        step="0.01"
-        placeholder="Enter Length"
-    >
-
-    {% if form.length_ft.errors %}
-        <div class="text-danger small mt-1">
-            {{ form.length_ft.errors.0 }}
-        </div>
-    {% endif %}
-</div>
-<div class="col-md-4" id="size-field">
-    <label class="form-label">Size</label>
-    {{ form.size_text }}
-</div>
-
-</div>
-
-
-<!-- SELECTED PRODUCT -->
-<input
-    type="hidden"
-    name="product"
-    id="product"
->
-
-<div
-    id="product-message"
-    class="alert alert-success mt-4"
-    style="display:none;"
-></div>
-
-<hr class="my-4">
                 <!-- ===================================== -->
-<!-- ORDER DETAILS -->
-<!-- ===================================== -->
+                <!-- ORDER DETAILS -->
+                <!-- ===================================== -->
 
-<h3 class="mb-4">
-    <i class="fa fa-list"></i>
-    Order Details
-</h3>
+                <h3 class="mb-4">
 
-<div class="row g-4">
+                    <i class="fa fa-list"></i>
 
-    <!-- LENGTH METER -->
-<div class="col-md-4" id="length-meter-field">
-    <label class="form-label">Length (Meter)</label>
-    <input
-        type="number"
-        id="length_meter"
-        name="length_meter"
-        class="form-control"
-        step="0.01"
-        readonly
-    >
-</div>
+                    Order Details
+
+                </h3>
 
 
-    <!-- WIDTH METER -->
-<div class="col-md-4" id="width-meter-field">
-    <label class="form-label">Width (Meter)</label>
-    <input
-        type="number"
-        id="width_meter"
-        name="width_meter"
-        class="form-control"
-        step="0.01"
-        readonly
-    >
-</div>
+                <div class="row g-4">
 
 
-    <!-- NUMBER OF PRODUCTS -->
-    <div class="col-md-4" id="numbers-field">
-        <label class="form-label">
-            Number of Products
-        </label>
+                    <!-- LENGTH METER -->
 
-        <input
-            type="number"
-            name="sheets"
-            id="sheets"
-            class="form-control"
-            min="1"
-            value="1"
-            placeholder="Enter Number of Products"
-        >
-    </div>
+                    <div
+                        class="col-md-4"
+                        id="length-meter-field"
+                    >
+
+                        <label class="form-label">
+
+                            Length (Meter)
+
+                        </label>
 
 
-    <!-- SQM -->
-    <div class="col-md-4" id="sqm-field">
-        <label class="form-label">
-            SQM
-        </label>
+                        <input
+                            type="number"
+                            id="length_meter"
+                            name="length_meter"
+                            class="form-control"
+                            step="0.01"
+                            readonly
+                        >
 
-        <input
-            type="number"
-            name="sq_mtr"
-            id="sq_mtr"
-            class="form-control"
-            step="0.01"
-            readonly
-        >
-    </div>
+                    </div>
 
 
-    <!-- RATE -->
-    <div class="col-md-4" id="rate-field">
-        <label class="form-label">
-            Rate
-        </label>
+                    <!-- WIDTH METER -->
 
-        <input
-            type="number"
-            name="rate"
-            id="rate"
-            class="form-control"
-            step="0.01"
-            min="0"
-            placeholder="Enter Rate"
-        >
-    </div>
+                    <div
+                        class="col-md-4"
+                        id="width-meter-field"
+                    >
+
+                        <label class="form-label">
+
+                            Width (Meter)
+
+                        </label>
 
 
-    <!-- SQM PRICE -->
-    <div class="col-md-4" id="sqm-price-field">
-        <label class="form-label">
-            SQM Price
-        </label>
+                        <input
+                            type="number"
+                            id="width_meter"
+                            name="width_meter"
+                            class="form-control"
+                            step="0.01"
+                            readonly
+                        >
 
-        <input
-            type="number"
-            name="sqm_price"
-            id="sqm_price"
-            class="form-control"
-            step="0.01"
-            readonly
-        >
-    </div>
+                    </div>
 
 
-    <!-- AMOUNT -->
-    <div class="col-md-4" id="amount-field">
-        <label class="form-label">
-            Amount
-        </label>
+                    <!-- NUMBER OF PRODUCTS -->
 
-        <input
-            type="number"
-            name="amount"
-            id="amount"
-            class="form-control"
-            step="0.01"
-            readonly
-        >
-    </div>
+                    <div
+                        class="col-md-4"
+                        id="numbers-field"
+                    >
+
+                        <label class="form-label">
+
+                            Number of Products
+
+                        </label>
 
 
-    <!-- LOADING FROM -->
-    <div class="col-md-4">
-        <label class="form-label">
-            Loading From
-        </label>
+                        <input
+                            type="number"
+                            name="sheets"
+                            id="sheets"
+                            class="form-control"
+                            min="1"
+                            value="1"
+                            placeholder="Enter Number of Products"
+                        >
 
-        {{ form.loading_from }}
-    </div>
-    <!-- ===================================== -->
-<!-- REMARKS AND STATUS -->
-<!-- ===================================== -->
-
-<hr class="my-4">
-
-<div class="row">
-
-    <!-- REMARKS -->
-    <div class="col-md-6 mb-3">
-        <label class="form-label">
-            Remarks
-        </label>
-
-        {{ form.remarks }}
-    </div>
+                    </div>
 
 
-    <!-- STATUS -->
-    <div class="col-md-6 mb-3">
-        <label class="form-label">
-            Status
-        </label>
+                    <!-- SQM -->
 
-        {{ form.status }}
-    </div>
+                    <div
+                        class="col-md-4"
+                        id="sqm-field"
+                    >
+
+                        <label class="form-label">
+
+                            SQM
+
+                        </label>
 
 
-</div>
+                        <input
+                            type="number"
+                            name="sq_mtr"
+                            id="sq_mtr"
+                            class="form-control"
+                            step="0.01"
+                            readonly
+                        >
+
+                    </div>
+
+
+                    <!-- RATE -->
+
+                    <div
+                        class="col-md-4"
+                        id="rate-field"
+                    >
+
+                        <label class="form-label">
+
+                            Rate
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            name="rate"
+                            id="rate"
+                            class="form-control"
+                            step="0.01"
+                            min="0"
+                            placeholder="Enter Rate"
+                        >
+
+                    </div>
+
+
+                    <!-- SQM PRICE -->
+
+                    <div
+                        class="col-md-4"
+                        id="sqm-price-field"
+                    >
+
+                        <label class="form-label">
+
+                            SQM Price
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            name="sqm_price"
+                            id="sqm_price"
+                            class="form-control"
+                            step="0.01"
+                            readonly
+                        >
+
+                    </div>
+
+
+                    <!-- AMOUNT -->
+
+                    <div
+                        class="col-md-4"
+                        id="amount-field"
+                    >
+
+                        <label class="form-label">
+
+                            Amount
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            name="amount"
+                            id="amount"
+                            class="form-control"
+                            step="0.01"
+                            readonly
+                        >
+
+                    </div>
+
+
+                    <!-- LOADING FROM -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Loading From
+
+                        </label>
+
+                        {{ form.loading_from }}
+
+                    </div>
+
+
+                    <!-- ===================================== -->
+                    <!-- REMARKS AND STATUS -->
+                    <!-- ===================================== -->
+
+                    <hr class="my-4">
+
+
+                    <div class="row">
+
+
+                        <!-- REMARKS -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Remarks
+
+                            </label>
+
+                            {{ form.remarks }}
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Status
+
+                            </label>
+
+                            {{ form.status }}
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
 
                 <!-- ===================================== -->
                 <!-- SUBMIT BUTTONS -->
                 <!-- ===================================== -->
 
                 <div class="mt-4">
+
                     <button
                         type="submit"
                         class="btn btn-primary"
                     >
+
                         <i class="fa fa-save"></i>
+
                         {% if order %}
+
                             Update Order
+
                         {% else %}
+
                             Create Order
+
                         {% endif %}
+
                     </button>
+
 
                     <a
                         href="{% url 'order_list' %}"
                         class="btn btn-secondary"
                     >
+
                         Cancel
+
                     </a>
+
                 </div>
+
 
             </form>
 
@@ -462,49 +789,104 @@
 
 </div>
 
+
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
+
 
     // ==================================================
     // GET ELEMENTS
     // ==================================================
 
     // Main dropdowns
-    const category = document.getElementById("category");
-    const subcategory = document.getElementById("subcategory");
+
+    const category =
+        document.getElementById("category");
+
+    const subcategory =
+        document.getElementById("subcategory");
+
 
     // Product fields
-    const thickness = document.getElementById("thickness");
-    const width = document.getElementById("width_ft");
-    const design = document.getElementById("design");
-    const colour = document.getElementById("colour");
-    const brand = document.getElementById("brand");
-    const length = document.getElementById("length_ft");
-    const sizeText = document.getElementById("size_text");
-    const product = document.getElementById("product");
+
+    const thickness =
+        document.getElementById("thickness");
+
+    const width =
+        document.getElementById("width_ft");
+
+    const design =
+        document.getElementById("design");
+
+    const colour =
+        document.getElementById("colour");
+
+    const brand =
+        document.getElementById("brand");
+
+    const length =
+        document.getElementById("length_ft");
+
+    const sizeText =
+        document.getElementById("size_text");
+
+    const product =
+        document.getElementById("product");
+
 
     // Order fields
-    const widthMeter = document.getElementById("width_meter");
-    const sheets = document.getElementById("sheets");
-    const sqm = document.getElementById("sq_mtr");
-    const rate = document.getElementById("rate");
-    const sqmPrice = document.getElementById("sqm_price");
-    const amount = document.getElementById("amount");
-    const lengthMeter = document.getElementById("length_meter");
+
+    const widthMeter =
+        document.getElementById("width_meter");
+
+    const sheets =
+        document.getElementById("sheets");
+
+    const sqm =
+        document.getElementById("sq_mtr");
+
+    const rate =
+        document.getElementById("rate");
+
+    const sqmPrice =
+        document.getElementById("sqm_price");
+
+    const amount =
+        document.getElementById("amount");
+
+    const lengthMeter =
+        document.getElementById("length_meter");
 
 
     // ==================================================
     // FIELD CONTAINERS
     // ==================================================
 
-    const subcategoryField = document.getElementById("subcategory-field");
-    const thicknessField = document.getElementById("thickness-field");
-    const widthField = document.getElementById("width-field");
-    const designField = document.getElementById("design-field");
-    const colourField = document.getElementById("colour-field");
-    const brandField = document.getElementById("brand-field");
-    const lengthField = document.getElementById("length-field");
-    const sizeField = document.getElementById("size-field");
+    const subcategoryField =
+        document.getElementById("subcategory-field");
+
+    const thicknessField =
+        document.getElementById("thickness-field");
+
+    const widthField =
+        document.getElementById("width-field");
+
+    const designField =
+        document.getElementById("design-field");
+
+    const colourField =
+        document.getElementById("colour-field");
+
+    const brandField =
+        document.getElementById("brand-field");
+
+    const lengthField =
+        document.getElementById("length-field");
+
+    const sizeField =
+        document.getElementById("size-field");
+
 
     const widthMeterField =
         document.getElementById("width-meter-field");
@@ -526,7 +908,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const amountField =
         document.getElementById("amount-field");
-    const coreNumberField = document.getElementById("core_number_field");
+
+    const coreNumberField =
+        document.getElementById("core_number_field");
+
 
     // ==================================================
     // RESET SELECT
@@ -534,13 +919,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function resetSelect(element, message) {
 
-        if (!element) return;
+        if (!element) {
+            return;
+        }
 
         element.innerHTML =
             `<option value="">${message}</option>`;
 
         element.value = "";
+
         element.disabled = true;
+
     }
 
 
@@ -548,17 +937,32 @@ document.addEventListener("DOMContentLoaded", function () {
     // ADD OPTIONS
     // ==================================================
 
-    function addOptions(element, items, placeholder) {
+    function addOptions(
+        element,
+        items,
+        placeholder
+    ) {
 
-        if (!element) return;
+        if (!element) {
+            return;
+        }
+
 
         element.innerHTML =
             `<option value="">${placeholder}</option>`;
 
-        if (!items || items.length === 0) {
+
+        if (
+            !items ||
+            items.length === 0
+        ) {
+
             element.disabled = true;
+
             return;
+
         }
+
 
         items.forEach(function (item) {
 
@@ -566,12 +970,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.createElement("option");
 
             option.value = item.id;
+
             option.textContent = item.name;
 
             element.appendChild(option);
+
         });
 
+
         element.disabled = false;
+
     }
 
 
@@ -581,18 +989,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function getCategoryName() {
 
-        if (!category || !category.value) {
+        if (
+            !category ||
+            !category.value
+        ) {
+
             return "";
+
         }
+
 
         return category.options[
             category.selectedIndex
         ].text
             .trim()
             .toLowerCase();
+
     }
-
-
 
 
     // ==================================================
@@ -602,29 +1015,50 @@ document.addEventListener("DOMContentLoaded", function () {
     function hideAllCategoryFields() {
 
         [
+
             subcategoryField,
+
             thicknessField,
+
             widthField,
+
             designField,
+
             colourField,
+
             brandField,
+
             lengthField,
+
             sizeField,
+
             coreNumberField,
+
             widthMeterField,
+
             lengthMeterField,
+
             numbersField,
+
             sqmField,
+
             rateField,
+
             sqmPriceField,
+
             amountField
+
         ].forEach(function (field) {
 
             if (field) {
-                field.style.display = "none";
+
+                field.style.display =
+                    "none";
+
             }
 
         });
+
     }
 
 
@@ -634,69 +1068,122 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function showCategoryFields() {
 
-        // Hide everything first
         hideAllCategoryFields();
 
-        const categoryName = getCategoryName();
+
+        const categoryName =
+            getCategoryName();
 
 
         // ==========================================
-// CATEGORY 1
-// ==========================================
+        // CATEGORY 1
+        // ==========================================
 
-if (categoryName === "category1") {
+        if (
+            categoryName === "category1"
+        ) {
 
-    [
-        subcategoryField,
-        thicknessField,
-        widthField,
-        designField,
-        colourField,
-        brandField,
-        lengthField,
-        widthMeterField,
-        lengthMeterField,
-        numbersField,
-        sqmField,
-        rateField,
-        sqmPriceField,
-        amountField
-    ].forEach(field => {
-        if (field) field.style.display = "block";
-    });
-}
+            [
+
+                subcategoryField,
+
+                thicknessField,
+
+                widthField,
+
+                designField,
+
+                colourField,
+
+                brandField,
+
+                lengthField,
+
+                widthMeterField,
+
+                lengthMeterField,
+
+                numbersField,
+
+                sqmField,
+
+                rateField,
+
+                sqmPriceField,
+
+                amountField
+
+            ].forEach(function (field) {
+
+                if (field) {
+
+                    field.style.display =
+                        "block";
+
+                }
+
+            });
+
+        }
 
 
-// ==========================================
-// CATEGORY 2
-// ==========================================
+        // ==========================================
+        // CATEGORY 2
+        // ==========================================
 
-else if (categoryName === "category2") {
+        else if (
+            categoryName === "category2"
+        ) {
 
-    [
-        subcategoryField,
-        thicknessField,
-        widthField,
-        designField,
-        colourField,
-        brandField,
-        coreNumberField,  // SHOW ONLY CATEGORY 2
-        lengthField,
-        widthMeterField,
-        lengthMeterField,
-        numbersField,
-        sqmField,
-        rateField,
-        sqmPriceField,
-        amountField
-    ].forEach(field => {
-        if (field) field.style.display = "block";
-    });
-}
+            [
+
+                subcategoryField,
+
+                thicknessField,
+
+                widthField,
+
+                designField,
+
+                colourField,
+
+                brandField,
+
+                coreNumberField,
+
+                lengthField,
+
+                widthMeterField,
+
+                lengthMeterField,
+
+                numbersField,
+
+                sqmField,
+
+                rateField,
+
+                sqmPriceField,
+
+                amountField
+
+            ].forEach(function (field) {
+
+                if (field) {
+
+                    field.style.display =
+                        "block";
+
+                }
+
+            });
+
+        }
 
 
         // ==============================================
         // CATEGORY 3
+        //
         // PRODUCT:
         // Sub Category
         //
@@ -704,90 +1191,75 @@ else if (categoryName === "category2") {
         // Number of Products
         // Rate
         // Amount
+        //
+        // Amount = Number of Products × Rate
         // ==============================================
 
-        else if (categoryName === "category3") {
+        else if (
+            categoryName === "category3"
+        ) {
 
             [
+
                 subcategoryField,
+
                 numbersField,
+
                 rateField,
+
                 amountField
+
             ].forEach(function (field) {
 
                 if (field) {
-                    field.style.display = "block";
+
+                    field.style.display =
+                        "block";
+
                 }
 
             });
+
         }
 
 
         // ==============================================
         // CATEGORY 4
-        // PRODUCT:
-        // Sub Category
-        // Thickness
-        // Size
-        //
-        // ORDER:
-        // Number of Products
-        // Rate
-        // Amount
         // ==============================================
 
-        else if (categoryName === "category4") {
+        else if (
+            categoryName === "category4"
+        ) {
 
             [
+
                 subcategoryField,
+
                 thicknessField,
+
                 sizeField,
+
                 numbersField,
+
                 rateField,
+
                 amountField
+
             ].forEach(function (field) {
 
                 if (field) {
-                    field.style.display = "block";
+
+                    field.style.display =
+                        "block";
+
                 }
 
             });
+
         }
+
     }
-    // ==================================================
-// CATEGORY 3 AMOUNT CALCULATION
-// Amount = Numbers × Rate
-// ==================================================
 
-function calculateAmount() {
-
-    const categoryName = getCategoryName();
-
-    // Only for Category 3
-    if (categoryName === "category3") {
-
-        const numbers = parseFloat(sheets.value) || 0;
-        const rateValue = parseFloat(rate.value) || 0;
-
-        const calculatedAmount = numbers * rateValue;
-
-        if (amount) {
-            amount.value = calculatedAmount.toFixed(2);
-        }
-    }
-}
-
-
-// Calculate when Numbers changes
-if (sheets) {
-    sheets.addEventListener("input", calculateAmount);
-}
-
-
-// Calculate when Rate changes
-if (rate) {
-    rate.addEventListener("input", calculateAmount);
-}
 
     // ==================================================
     // LOAD SUBCATEGORIES
@@ -795,36 +1267,47 @@ if (rate) {
 
     function loadSubcategories() {
 
-    const categoryId = category.value;
+        const categoryId =
+            category.value;
 
-    if (!categoryId) {
-        resetSelect(
-            subcategory,
-            "Select Category First"
-        );
-        return;
-    }
 
-    subcategory.innerHTML =
-        '<option value="">Loading...</option>';
+        if (!categoryId) {
 
-    subcategory.disabled = true;
+            resetSelect(
+                subcategory,
+                "Select Category First"
+            );
 
-    fetch(
-        `/orders/get-subcategories/?category_id=${categoryId}`
-    )
-        .then(response => {
+            return;
+
+        }
+
+
+        subcategory.innerHTML =
+            '<option value="">Loading...</option>';
+
+        subcategory.disabled = true;
+
+
+        fetch(
+            `/orders/get-subcategories/?category_id=${categoryId}`
+        )
+
+        .then(function (response) {
 
             if (!response.ok) {
+
                 throw new Error(
                     "Failed to load subcategories"
                 );
+
             }
 
             return response.json();
+
         })
 
-        .then(data => {
+        .then(function (data) {
 
             console.log(
                 "Category ID:",
@@ -836,8 +1319,10 @@ if (rate) {
                 data.subcategories
             );
 
+
             subcategory.innerHTML =
                 '<option value="">Select Sub Category</option>';
+
 
             if (
                 !data.subcategories ||
@@ -850,35 +1335,52 @@ if (rate) {
                 subcategory.disabled = true;
 
                 return;
+
             }
 
-            data.subcategories.forEach(function (item) {
 
-                const option =
-                    document.createElement("option");
+            data.subcategories.forEach(
+                function (item) {
 
-                option.value = item.id;
-                option.textContent = item.name;
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
 
-                subcategory.appendChild(option);
-            });
+                    option.value =
+                        item.id;
+
+                    option.textContent =
+                        item.name;
+
+                    subcategory.appendChild(
+                        option
+                    );
+
+                }
+            );
+
 
             subcategory.disabled = false;
+
         })
 
-        .catch(error => {
+        .catch(function (error) {
 
             console.error(
                 "Error loading subcategories:",
                 error
             );
 
+
             subcategory.innerHTML =
                 '<option value="">Error Loading Sub Categories</option>';
 
             subcategory.disabled = true;
+
         });
-}
+
+    }
 
 
     // ==================================================
@@ -888,8 +1390,11 @@ if (rate) {
     function resetProduct() {
 
         if (product) {
+
             product.value = "";
+
         }
+
     }
 
 
@@ -906,16 +1411,21 @@ if (rate) {
             !subcategory ||
             !subcategory.value
         ) {
+
             return;
+
         }
 
 
-        const params = new URLSearchParams();
+        const params =
+            new URLSearchParams();
+
 
         params.append(
             "category_id",
             category.value
         );
+
 
         params.append(
             "subcategory_id",
@@ -923,198 +1433,234 @@ if (rate) {
         );
 
 
-        if (thickness && thickness.value) {
+        if (
+            thickness &&
+            thickness.value
+        ) {
 
             params.append(
                 "thickness_id",
                 thickness.value
             );
+
         }
 
 
-        if (width && width.value) {
+        if (
+            width &&
+            width.value
+        ) {
 
             params.append(
                 "width",
                 width.value
             );
+
         }
 
 
-        if (design && design.value) {
+        if (
+            design &&
+            design.value
+        ) {
 
             params.append(
                 "design_id",
                 design.value
             );
+
         }
 
 
-        if (colour && colour.value) {
+        if (
+            colour &&
+            colour.value
+        ) {
 
             params.append(
                 "colour_id",
                 colour.value
             );
+
         }
 
 
-        if (brand && brand.value) {
+        if (
+            brand &&
+            brand.value
+        ) {
 
             params.append(
                 "brand_id",
                 brand.value
             );
+
         }
 
 
         fetch(
             `/orders/get-product-details/?${params.toString()}`
         )
-            .then(function (response) {
 
-                if (!response.ok) {
-                    throw new Error(
-                        "Failed to load product details"
-                    );
-                }
+        .then(function (response) {
 
-                return response.json();
-            })
+            if (!response.ok) {
 
-            .then(function (data) {
-
-                const categoryName =
-                    getCategoryName();
-
-
-                // ==========================================
-                // CATEGORY 1 AND CATEGORY 2
-                // ==========================================
-
-                if (
-                    categoryName === "category1" ||
-                    categoryName === "category2"
-                ) {
-
-                    if (
-                        thickness &&
-                        !thickness.value
-                    ) {
-
-                        addOptions(
-                            thickness,
-                            data.thicknesses || [],
-                            "Select Thickness"
-                        );
-                    }
-
-
-                    if (
-                        thickness &&
-                        thickness.value &&
-                        width &&
-                        !width.value
-                    ) {
-
-                        addOptions(
-                            width,
-                            data.widths || [],
-                            "Select Width"
-                        );
-                    }
-
-
-                    if (
-                        width &&
-                        width.value &&
-                        design &&
-                        !design.value
-                    ) {
-
-                        addOptions(
-                            design,
-                            data.designs || [],
-                            "Select Design"
-                        );
-                    }
-
-
-                    if (
-                        design &&
-                        design.value &&
-                        colour &&
-                        !colour.value
-                    ) {
-
-                        addOptions(
-                            colour,
-                            data.colours || [],
-                            "Select Colour"
-                        );
-                    }
-
-
-                    if (
-                        colour &&
-                        colour.value &&
-                        brand &&
-                        !brand.value
-                    ) {
-
-                        addOptions(
-                            brand,
-                            data.brands || [],
-                            "Select Brand"
-                        );
-                    }
-                }
-
-
-                // ==========================================
-                // CATEGORY 4
-                // ==========================================
-
-                else if (
-                    categoryName === "category4"
-                ) {
-
-                    if (
-                        thickness &&
-                        !thickness.value
-                    ) {
-
-                        addOptions(
-                            thickness,
-                            data.thicknesses || [],
-                            "Select Thickness"
-                        );
-                    }
-                }
-
-
-                // ==========================================
-                // PRODUCT FOUND
-                // ==========================================
-
-                if (
-                    data.product &&
-                    product
-                ) {
-
-                    product.value =
-                        data.product.id;
-                }
-
-            })
-
-            .catch(function (error) {
-
-                console.error(
-                    "Error loading product details:",
-                    error
+                throw new Error(
+                    "Failed to load product details"
                 );
-            });
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(function (data) {
+
+            const categoryName =
+                getCategoryName();
+
+
+            // ==========================================
+            // CATEGORY 1 AND CATEGORY 2
+            // ==========================================
+
+            if (
+                categoryName === "category1" ||
+                categoryName === "category2"
+            ) {
+
+
+                if (
+                    thickness &&
+                    !thickness.value
+                ) {
+
+                    addOptions(
+                        thickness,
+                        data.thicknesses || [],
+                        "Select Thickness"
+                    );
+
+                }
+
+
+                if (
+                    thickness &&
+                    thickness.value &&
+                    width &&
+                    !width.value
+                ) {
+
+                    addOptions(
+                        width,
+                        data.widths || [],
+                        "Select Width"
+                    );
+
+                }
+
+
+                if (
+                    width &&
+                    width.value &&
+                    design &&
+                    !design.value
+                ) {
+
+                    addOptions(
+                        design,
+                        data.designs || [],
+                        "Select Design"
+                    );
+
+                }
+
+
+                if (
+                    design &&
+                    design.value &&
+                    colour &&
+                    !colour.value
+                ) {
+
+                    addOptions(
+                        colour,
+                        data.colours || [],
+                        "Select Colour"
+                    );
+
+                }
+
+
+                if (
+                    colour &&
+                    colour.value &&
+                    brand &&
+                    !brand.value
+                ) {
+
+                    addOptions(
+                        brand,
+                        data.brands || [],
+                        "Select Brand"
+                    );
+
+                }
+
+            }
+
+
+            // ==========================================
+            // CATEGORY 4
+            // ==========================================
+
+            else if (
+                categoryName === "category4"
+            ) {
+
+                if (
+                    thickness &&
+                    !thickness.value
+                ) {
+
+                    addOptions(
+                        thickness,
+                        data.thicknesses || [],
+                        "Select Thickness"
+                    );
+
+                }
+
+            }
+
+
+            // ==========================================
+            // PRODUCT FOUND
+            // ==========================================
+
+            if (
+                data.product &&
+                product
+            ) {
+
+                product.value =
+                    data.product.id;
+
+            }
+
+        })
+
+        .catch(function (error) {
+
+            console.error(
+                "Error loading product details:",
+                error
+            );
+
+        });
+
     }
 
 
@@ -1128,26 +1674,33 @@ if (rate) {
             "change",
             function () {
 
+
                 // Show correct fields
+
                 showCategoryFields();
 
 
                 // Reset subcategory
+
                 resetSelect(
                     subcategory,
                     "Select Category First"
                 );
 
 
-                // Reset other dropdowns
+                // Reset thickness
+
                 if (thickness) {
 
                     resetSelect(
                         thickness,
                         "Select Sub Category First"
                     );
+
                 }
 
+
+                // Reset width
 
                 if (width) {
 
@@ -1155,8 +1708,11 @@ if (rate) {
                         width,
                         "Select Thickness First"
                     );
+
                 }
 
+
+                // Reset design
 
                 if (design) {
 
@@ -1164,8 +1720,11 @@ if (rate) {
                         design,
                         "Select Width First"
                     );
+
                 }
 
+
+                // Reset colour
 
                 if (colour) {
 
@@ -1173,8 +1732,11 @@ if (rate) {
                         colour,
                         "Select Design First"
                     );
+
                 }
 
+
+                // Reset brand
 
                 if (brand) {
 
@@ -1182,29 +1744,77 @@ if (rate) {
                         brand,
                         "Select Colour First"
                     );
+
                 }
 
 
-                // Reset text fields
+                // Reset length
+
                 if (length) {
+
                     length.value = "";
+
                 }
+
+
+                // Reset size
 
                 if (sizeText) {
+
                     sizeText.value = "";
+
                 }
 
 
                 // Reset product
+
                 resetProduct();
 
 
-                // Load subcategories
-                if (category.value) {
-                    loadSubcategories();
+                // Reset calculations
+
+                if (lengthMeter) {
+
+                    lengthMeter.value = "";
+
                 }
+
+                if (widthMeter) {
+
+                    widthMeter.value = "";
+
+                }
+
+                if (sqm) {
+
+                    sqm.value = "";
+
+                }
+
+                if (sqmPrice) {
+
+                    sqmPrice.value = "";
+
+                }
+
+                if (amount) {
+
+                    amount.value = "";
+
+                }
+
+
+                // Load subcategories
+
+                if (category.value) {
+
+                    loadSubcategories();
+
+                }
+
             }
         );
+
     }
 
 
@@ -1220,44 +1830,54 @@ if (rate) {
 
                 resetProduct();
 
+
                 const categoryName =
                     getCategoryName();
 
 
                 if (!subcategory.value) {
+
                     return;
+
                 }
 
 
                 // CATEGORY 1 AND 2
+
                 if (
                     categoryName === "category1" ||
                     categoryName === "category2"
                 ) {
 
                     loadProductDetails();
+
                 }
 
 
                 // CATEGORY 3
+
                 else if (
                     categoryName === "category3"
                 ) {
 
-                    // Only subcategory required
                     // No additional dropdown
+
                 }
 
 
                 // CATEGORY 4
+
                 else if (
                     categoryName === "category4"
                 ) {
 
                     loadProductDetails();
+
                 }
+
             }
         );
+
     }
 
 
@@ -1280,6 +1900,7 @@ if (rate) {
                         width,
                         "Select Thickness First"
                     );
+
                 }
 
 
@@ -1289,6 +1910,7 @@ if (rate) {
                         design,
                         "Select Width First"
                     );
+
                 }
 
 
@@ -1298,6 +1920,7 @@ if (rate) {
                         colour,
                         "Select Design First"
                     );
+
                 }
 
 
@@ -1307,12 +1930,15 @@ if (rate) {
                         brand,
                         "Select Colour First"
                     );
+
                 }
 
 
                 loadProductDetails();
+
             }
         );
+
     }
 
 
@@ -1335,6 +1961,7 @@ if (rate) {
                         design,
                         "Select Width First"
                     );
+
                 }
 
 
@@ -1344,6 +1971,7 @@ if (rate) {
                         colour,
                         "Select Design First"
                     );
+
                 }
 
 
@@ -1353,12 +1981,18 @@ if (rate) {
                         brand,
                         "Select Colour First"
                     );
+
                 }
 
 
                 loadProductDetails();
+
+
+                calculateMeters();
+
             }
         );
+
     }
 
 
@@ -1381,6 +2015,7 @@ if (rate) {
                         colour,
                         "Select Design First"
                     );
+
                 }
 
 
@@ -1390,12 +2025,15 @@ if (rate) {
                         brand,
                         "Select Colour First"
                     );
+
                 }
 
 
                 loadProductDetails();
+
             }
         );
+
     }
 
 
@@ -1418,12 +2056,15 @@ if (rate) {
                         brand,
                         "Select Colour First"
                     );
+
                 }
 
 
                 loadProductDetails();
+
             }
         );
+
     }
 
 
@@ -1440,8 +2081,10 @@ if (rate) {
                 resetProduct();
 
                 loadProductDetails();
+
             }
         );
+
     }
 
 
@@ -1450,288 +2093,514 @@ if (rate) {
     // ==================================================
 
     showCategoryFields();
-    // ==================================================
-// CATEGORY SHOW / HIDE FUNCTIONS
-// ==================================================
-
-// Your existing hideAllCategoryFields()
-// Your existing showCategoryFields()
-// Your existing category change event code
-
-// ==================================================
-// CUSTOM LENGTH TO METER CONVERSION
-// ==================================================
-
-function convertCustomLength(feetValue, categoryName) {
-
-    if (feetValue === null || feetValue === undefined || feetValue === "") {
-        return 0;
-    }
-
-    const value = String(feetValue).trim();
 
 
     // ==================================================
-    // CATEGORY 1
+    // CUSTOM LENGTH TO METER CONVERSION
     // ==================================================
 
-    if (categoryName === "category1") {
+    function convertCustomLength(
+        feetValue,
+        categoryName
+    ) {
 
-        // ----------------------------------------------
-        // WHOLE NUMBER
-        // ----------------------------------------------
-        if (!value.includes(".")) {
+        if (
+            feetValue === null ||
+            feetValue === undefined ||
+            feetValue === ""
+        ) {
 
-            const feet = parseFloat(value) || 0;
+            return 0;
+
+        }
+
+
+        const value =
+            String(feetValue).trim();
+
+
+        // ==================================================
+        // CATEGORY 1
+        // ==================================================
+
+        if (
+            categoryName === "category1"
+        ) {
+
+
+            // WHOLE NUMBER
+
+            if (!value.includes(".")) {
+
+                const feet =
+                    parseFloat(value) || 0;
+
+
+                // Special values
+
+                if (feet === 100) {
+
+                    return 30.50;
+
+                }
+
+
+                if (feet === 50) {
+
+                    return 15.25;
+
+                }
+
+
+                // Normal conversion
+
+                return feet / 3.28;
+
+            }
+
+
+            const parts =
+                value.split(".");
+
+
+            const beforePoint =
+                parseFloat(parts[0]) || 0;
+
+
+            const afterPoint =
+                parseInt(parts[1], 10) || 0;
+
+
+            // DECIMAL PART 9 OR BELOW
+
+            if (afterPoint <= 9) {
+
+                return parseFloat(value) / 3.28;
+
+            }
+
+
+            // DECIMAL PART GREATER THAN 9
+
+            const firstPart = 9;
+
+            const secondPart =
+                afterPoint - 9;
+
+
+            // Round each part first
+
+            const feetInMeter =
+                Number(
+                    (
+                        beforePoint / 3.28
+                    ).toFixed(2)
+                );
+
+
+            const firstPartInMeter =
+                Number(
+                    (
+                        firstPart /
+                        12 /
+                        3.28
+                    ).toFixed(2)
+                );
+
+
+            const secondPartInMeter =
+                Number(
+                    (
+                        secondPart /
+                        12 /
+                        3.28
+                    ).toFixed(2)
+                );
+
+
+            return (
+                feetInMeter +
+                firstPartInMeter +
+                secondPartInMeter
+            );
+
+        }
+
+
+        // ==================================================
+        // CATEGORY 2
+        // ==================================================
+
+        if (
+            categoryName === "category2"
+        ) {
+
+            const parts =
+                value.split(".");
+
+
+            const feet =
+                parseFloat(parts[0]) || 0;
+
+
+            let feetInMeter;
+
 
             // Special values
+
             if (feet === 100) {
-                return 30.50;
+
+                feetInMeter = 30.50;
+
             }
 
-            if (feet === 50) {
-                return 15.25;
+            else if (feet === 50) {
+
+                feetInMeter = 15.25;
+
             }
 
-            // Normal conversion
-            return feet / 3.28;
+            else {
+
+                feetInMeter =
+                    feet / 3.28;
+
+            }
+
+
+            // No decimal part
+
+            if (parts.length === 1) {
+
+                return feetInMeter;
+
+            }
+
+
+            const inches =
+                parseFloat(parts[1]) || 0;
+
+
+            const inchesInMeter =
+                inches /
+                12 /
+                3.28;
+
+
+            return (
+                feetInMeter +
+                inchesInMeter
+            );
+
         }
 
 
-        const parts = value.split(".");
-
-        const beforePoint =
-            parseFloat(parts[0]) || 0;
-
-        const afterPoint =
-            parseInt(parts[1], 10) || 0;
-
-
-        // ----------------------------------------------
-        // DECIMAL PART 9 OR BELOW
-        // Example: 10.6
-        // ----------------------------------------------
-        if (afterPoint <= 9) {
-
-            return parseFloat(value) / 3.28;
-        }
-
-
-        // ----------------------------------------------
-        // DECIMAL PART GREATER THAN 9
-        // Example: 10.12
-        //
-        // 10 / 3.28 = 3.05
-        // 9 / 12 / 3.28 = 0.23
-        // 3 / 12 / 3.28 = 0.08
-        //
-        // Total = 3.36
-        // ----------------------------------------------
-
-        const firstPart = 9;
-        const secondPart = afterPoint - 9;
-
-
-        // Round EACH part first
-        const feetInMeter = Number(
-            (beforePoint / 3.28).toFixed(2)
-        );
-
-        const firstPartInMeter = Number(
-            (firstPart / 12 / 3.28).toFixed(2)
-        );
-
-        const secondPartInMeter = Number(
-            (secondPart / 12 / 3.28).toFixed(2)
-        );
-
-
-        // Add rounded values
-        return (
-            feetInMeter +
-            firstPartInMeter +
-            secondPartInMeter
-        );
-    }
-
-
-    // ==================================================
-    // CATEGORY 2
-    // Example:
-    // 10.6 = 10 feet + 6 inches
-    // ==================================================
-
-    if (categoryName === "category2") {
-
-        const parts = value.split(".");
-
-        const feet =
-            parseFloat(parts[0]) || 0;
-
-        let feetInMeter;
-
-// Special values
-if (feet === 100) {
-    feetInMeter = 30.50;
-}
-else if (feet === 50) {
-    feetInMeter = 15.25;
-}
-else {
-    feetInMeter = feet / 3.28;
-}
-
-
-        // No decimal part
-        if (parts.length === 1) {
-            return feetInMeter;
-        }
-
-
-        const inches =
-            parseFloat(parts[1]) || 0;
-
-        const inchesInMeter =
-            inches / 12 / 3.28;
-
+        // ==================================================
+        // OTHER CATEGORIES
+        // ==================================================
 
         return (
-            feetInMeter +
-            inchesInMeter
+            parseFloat(value) || 0
+        ) / 3.28;
+
+    }
+
+
+    // ==================================================
+    // CALCULATE METERS
+    // ==================================================
+
+    function calculateMeters() {
+
+        if (!category) {
+
+            return;
+
+        }
+
+
+        const categoryName =
+            category.options[
+                category.selectedIndex
+            ].text
+                .trim()
+                .toLowerCase();
+
+
+        // ==================================================
+        // WIDTH
+        // ==================================================
+
+        const widthValue =
+            parseFloat(
+                width.value
+            ) || 0;
+
+
+        const widthInMeter =
+            widthValue / 3.28;
+
+
+        // ==================================================
+        // LENGTH
+        // ==================================================
+
+        const lengthInMeter =
+            convertCustomLength(
+                length.value,
+                categoryName
+            );
+
+
+        // ==================================================
+        // DISPLAY WIDTH IN METER
+        // ==================================================
+
+        if (widthMeter) {
+
+            widthMeter.value =
+                widthInMeter.toFixed(2);
+
+        }
+
+
+        // ==================================================
+        // DISPLAY LENGTH IN METER
+        // ==================================================
+
+        if (lengthMeter) {
+
+            lengthMeter.value =
+                lengthInMeter.toFixed(2);
+
+        }
+
+
+        // ==================================================
+        // RECALCULATE SQM AND AMOUNT
+        // ==================================================
+
+        calculateOrderDetails();
+
+    }
+
+
+    // ==================================================
+    // SQM AND AMOUNT CALCULATION
+    // ==================================================
+    //
+    // CATEGORY 3:
+    //
+    // Amount = Number of Products × Rate
+    //
+    // OTHER CATEGORIES:
+    //
+    // SQM = Length × Width × Number of Products
+    //
+    // Amount = SQM × Rate
+    //
+    // ==================================================
+
+    function calculateOrderDetails() {
+
+
+        const categoryName =
+            getCategoryName();
+
+
+        const numberOfProducts =
+            parseFloat(
+                sheets.value
+            ) || 0;
+
+
+        const rateValue =
+            parseFloat(
+                rate.value
+            ) || 0;
+
+
+        // ==================================================
+        // CATEGORY 3
+        // ==================================================
+        //
+        // Category 3 does NOT use SQM.
+        //
+        // Amount = Number of Products × Rate
+        //
+        // Example:
+        //
+        // Number of Products = 5
+        // Rate = 100
+        //
+        // Amount = 5 × 100
+        //        = 500
+        //
+        // ==================================================
+
+        if (
+            categoryName === "category3"
+        ) {
+
+
+            const totalAmount =
+                numberOfProducts *
+                rateValue;
+
+
+            if (amount) {
+
+                amount.value =
+                    totalAmount.toFixed(2);
+
+            }
+
+
+            // Category 3 does not use SQM
+
+            if (sqm) {
+
+                sqm.value = "";
+
+            }
+
+
+            if (sqmPrice) {
+
+                sqmPrice.value = "";
+
+            }
+
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // OTHER CATEGORIES
+        // ==================================================
+
+        const lengthValue =
+            parseFloat(
+                lengthMeter.value
+            ) || 0;
+
+
+        const widthValue =
+            parseFloat(
+                widthMeter.value
+            ) || 0;
+
+
+        // ==================================================
+        // SQM
+        // ==================================================
+
+        const sqmValue =
+            lengthValue *
+            widthValue *
+            numberOfProducts;
+
+
+        if (sqm) {
+
+            sqm.value =
+                sqmValue.toFixed(2);
+
+        }
+
+
+        // ==================================================
+        // SQM PRICE / TOTAL AMOUNT
+        // ==================================================
+
+        const totalAmount =
+            sqmValue *
+            rateValue;
+
+
+        if (sqmPrice) {
+
+            sqmPrice.value =
+                totalAmount.toFixed(2);
+
+        }
+
+
+        // ==================================================
+        // AMOUNT
+        // ==================================================
+
+        if (amount) {
+
+            amount.value =
+                totalAmount.toFixed(2);
+
+        }
+
+    }
+
+
+    // ==================================================
+    // CALCULATION EVENTS
+    // ==================================================
+
+
+    // Width changes
+
+    if (width) {
+
+        width.addEventListener(
+            "change",
+            calculateMeters
         );
+
     }
 
 
-    // ==================================================
-    // OTHER CATEGORIES
-    // ==================================================
+    // Length changes
 
-    return parseFloat(value) / 3.28;
-}
+    if (length) {
 
-
-// ==================================================
-// CALCULATE METERS
-// ==================================================
-
-function calculateMeters() {
-
-    if (!category) {
-        return;
-    }
-
-
-    const categoryName =
-        category.options[category.selectedIndex]
-            .text
-            .trim()
-            .toLowerCase();
-
-
-    // ==================================================
-    // WIDTH
-    // ==================================================
-
-    const widthValue =
-        parseFloat(width.value) || 0;
-
-    const widthInMeter =
-        widthValue / 3.28;
-
-
-    // ==================================================
-    // LENGTH
-    // ==================================================
-
-    const lengthInMeter =
-        convertCustomLength(
-            length.value,
-            categoryName
+        length.addEventListener(
+            "input",
+            calculateMeters
         );
 
+    }
 
-    // ==================================================
-    // DISPLAY WIDTH IN METER
-    // ==================================================
 
-    if (widthMeter) {
+    // Number of products changes
 
-        widthMeter.value =
-            widthInMeter.toFixed(2);
+    if (sheets) {
+
+        sheets.addEventListener(
+            "input",
+            calculateOrderDetails
+        );
+
+    }
+
+
+    // Rate changes
+
+    if (rate) {
+
+        rate.addEventListener(
+            "input",
+            calculateOrderDetails
+        );
+
     }
 
 
     // ==================================================
-    // DISPLAY LENGTH IN METER
-    // ==================================================
-
-    if (lengthMeter) {
-
-        lengthMeter.value =
-            lengthInMeter.toFixed(2);
-    }
-
-
-    // ==================================================
-    // RECALCULATE SQM AND AMOUNT
+    // INITIAL CALCULATION
     // ==================================================
 
     calculateOrderDetails();
-}
 
-// ==================================================
-// SQM AND AMOUNT CALCULATION
-// ==================================================
-
-function calculateOrderDetails() {
-
-    const lengthValue = parseFloat(lengthMeter.value) || 0;
-    const widthValue = parseFloat(widthMeter.value) || 0;
-    const numberOfProducts = parseFloat(sheets.value) || 0;
-    const rateValue = parseFloat(rate.value) || 0;
-
-    // SQM
-    const sqmValue =
-        lengthValue * widthValue * numberOfProducts;
-
-    if (sqm) {
-        sqm.value = sqmValue.toFixed(2);
-    }
-
-    // SQM Price
-    const totalAmount =
-        sqmValue * rateValue;
-
-    if (sqmPrice) {
-        sqmPrice.value = totalAmount.toFixed(2);
-    }
-
-    // Amount
-    if (amount) {
-        amount.value = totalAmount.toFixed(2);
-    }
-}
-
-
-// ==================================================
-// CALCULATION EVENTS
-// ==================================================
-
-if (width) {
-    width.addEventListener("change", calculateMeters);
-}
-
-if (length) {
-    length.addEventListener("input", calculateMeters);
-}
-
-if (sheets) {
-    sheets.addEventListener("input", calculateOrderDetails);
-}
-
-if (rate) {
-    rate.addEventListener("input", calculateOrderDetails);
-}
 
 });
 

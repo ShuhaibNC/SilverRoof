@@ -202,23 +202,9 @@ def edit_product(request, id):
 @user_passes_test(is_admin)
 def delete_product(request, id):
 
-    product = get_object_or_404(
-        Product,
-        id=id
-    )
-
-    if request.method == "GET":
-
-        return render(
-            request,
-            "products/product_confirm_delete.html",
-            {
-                "product": product
-            }
-        )
+    product = get_object_or_404(Product, id=id)
 
     if request.method == "POST":
-
         product.delete()
 
         messages.success(
@@ -228,7 +214,13 @@ def delete_product(request, id):
 
         return redirect("product_list")
 
-    return redirect("product_list")
+    return render(
+        request,
+        "products/product_confirm_delete.html",
+        {
+            "product": product
+        }
+    )
 
 
 # ==========================================================

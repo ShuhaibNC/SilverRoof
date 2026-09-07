@@ -26,8 +26,6 @@ class Order(models.Model):
     # ======================================================
 
     STATUS_CHOICES = [
-        ("Pending 1", "Pending 1"),
-        ("Pending 2", "Pending 2"),
         ("Pending", "Pending"),
         ("Approved", "Approved"),
         ("Completed", "Completed"),

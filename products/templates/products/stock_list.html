@@ -131,10 +131,9 @@
                         <th>Product</th>
 
                         <th>Thickness</th>
-
-                        <th>Colour</th>
-
-                        <th>Design</th>
+<th>Core Number</th>
+<th>Colour</th>
+<th>Design</th>
 
                         <th>Brand</th>
 
@@ -239,6 +238,18 @@
                             {% endif %}
 
                         </td>
+
+                        <!-- CORE NUMBER -->
+
+<td>
+
+    {% if stock.product.core_number %}
+        {{ stock.product.core_number }}
+    {% else %}
+        -
+    {% endif %}
+
+</td>
 
 
                         <!-- COLOUR -->
@@ -371,8 +382,6 @@
 
                                 </span>
 
-                                Nos
-
                             {% else %}
 
                                 -
@@ -470,7 +479,7 @@
                     <tr>
 
                         <td
-                            colspan="13"
+                            colspan="14"
                             class="text-center py-5 text-muted"
                         >
 

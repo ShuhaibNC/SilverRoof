@@ -1,8 +1,13 @@
-{% extends "base.html" %}
+
+{% extends 'base.html' %}
 
 {% block content %}
 
 <div class="container-fluid py-4">
+
+    <!-- ========================================= -->
+    <!-- HEADER -->
+    <!-- ========================================= -->
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
@@ -39,20 +44,20 @@
             href="{% url 'stock_list' %}"
             class="btn btn-secondary"
         >
-
             <i class="fa fa-arrow-left"></i>
-
             Back
-
         </a>
 
     </div>
 
 
+    <!-- ========================================= -->
+    <!-- CARD -->
+    <!-- ========================================= -->
+
     <div class="card shadow-sm border-0">
 
         <div class="card-body p-4">
-
 
             {% if form.errors %}
 
@@ -73,327 +78,340 @@
 
 
                 <!-- ====================================== -->
-                <!-- PRODUCT DETAILS -->
+                <!-- PRODUCT SELECTION -->
                 <!-- ====================================== -->
 
-                <div class="row g-3">
+                <div class="mb-4">
+
+                    <h5 class="fw-bold mb-3">
+                        <i class="fa fa-box me-2"></i>
+                        Product Selection
+                    </h5>
 
 
-                    <!-- CATEGORY -->
+                    <div class="row g-3">
 
-                    <div class="col-md-6">
+                        <!-- CATEGORY -->
 
-                        <label class="form-label fw-bold">
+                        <div class="col-md-6">
 
-                            Category
-
-                        </label>
-
-
-                        {% if edit %}
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ stock.product.category.name|default:'' }}"
-                                readonly
-                            >
-
-                        {% else %}
-
-                            <select
-                                id="category"
-                                class="form-select"
-                            >
-
-                                <option value="">
-
-                                    Select Category
-
-                                </option>
+                            <label class="form-label fw-bold">
+                                Category
+                            </label>
 
 
-                                {% for category in categories %}
+                            {% if edit %}
 
-                                    <option
-                                        value="{{ category.id }}"
-                                    >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    value="{{ stock.product.category.name|default:'' }}"
+                                    readonly
+                                >
 
-                                        {{ category.name }}
+                                <input
+                                    type="hidden"
+                                    id="category"
+                                    value="{{ stock.product.category.id }}"
+                                >
 
+                            {% else %}
+
+                                <select
+                                    id="category"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Category
                                     </option>
 
-                                {% endfor %}
 
-                            </select>
+                                    {% for category in categories %}
 
-                        {% endif %}
+                                        <option
+                                            value="{{ category.id }}"
+                                        >
+                                            {{ category.name }}
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- SUB CATEGORY -->
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-bold">
+                                Sub Category
+                            </label>
+
+
+                            {% if edit %}
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    value="{{ stock.product.subcategory.name|default:stock.product.subcategory_text|default:'' }}"
+                                    readonly
+                                >
+
+                                <input
+                                    type="hidden"
+                                    id="subcategory"
+                                    value="{{ stock.product.subcategory.id|default:'' }}"
+                                >
+
+                            {% else %}
+
+                                <select
+                                    id="subcategory"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Sub Category
+                                    </option>
+
+                                </select>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- PRODUCT -->
+
+                        <div class="col-md-12">
+
+                            <label class="form-label fw-bold">
+                                Select Product
+                            </label>
+
+
+                            {% if edit %}
+
+                                <select
+                                    id="product"
+                                    name="product"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option
+                                        value="{{ stock.product.id }}"
+                                        selected
+                                    >
+                                        {{ stock.product.product_name|default:"Unnamed Product" }}
+                                    </option>
+
+                                </select>
+
+                            {% else %}
+
+                                <select
+                                    id="product"
+                                    name="product"
+                                    class="form-select"
+                                    required
+                                    disabled
+                                >
+
+                                    <option value="">
+                                        Select Product
+                                    </option>
+
+                                </select>
+
+                            {% endif %}
+
+                            <div class="form-text">
+                                Select the exact product configuration whose stock you want to update.
+                            </div>
+
+                        </div>
 
                     </div>
 
-
-                    <!-- SUB CATEGORY -->
-
-                    <div class="col-md-6">
-
-                        <label class="form-label fw-bold">
-
-                            Sub Category
-
-                        </label>
+                </div>
 
 
-                        {% if edit %}
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ stock.product.subcategory.name|default:'' }}"
-                                readonly
-                            >
-
-                        {% else %}
-
-                            <select
-                                id="subcategory"
-                                class="form-select"
-                            >
-
-                                <option value="">
-
-                                    Select Sub Category
-
-                                </option>
-
-                            </select>
-
-                        {% endif %}
-
-                    </div>
+                <hr class="my-4">
 
 
-                    <!-- PRODUCT -->
+                <!-- ====================================== -->
+                <!-- PRODUCT INFORMATION -->
+                <!-- ====================================== -->
 
-                    <div class="col-md-6">
+                <div id="product-info-section">
 
-                        <label class="form-label fw-bold">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fa fa-circle-info me-2"></i>
+                        Product Details
+                    </h5>
 
-                            Product
 
-                        </label>
+                    <div class="row g-3">
 
 
-                        {% if edit %}
+                        <!-- PRODUCT NAME -->
 
-                            <!-- IMPORTANT:
-                                 Product field is product_name,
-                                 NOT product.name
-                            -->
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-bold">
+                                Product
+                            </label>
 
                             <input
                                 type="text"
+                                id="product_name"
                                 class="form-control"
-                                value="{{ stock.product.product_name }}"
+                                value="{% if edit %}{{ stock.product.product_name|default:'' }}{% endif %}"
                                 readonly
                             >
 
-                            <input
-                                type="hidden"
-                                name="product"
-                                value="{{ stock.product.id }}"
-                            >
-
-                        {% else %}
-
-                            <select
-                                id="product"
-                                name="product"
-                                class="form-select"
-                                required
-                            >
-
-                                <option value="">
-
-                                    Select Product
-
-                                </option>
-
-                            </select>
-
-                        {% endif %}
-
-                    </div>
+                        </div>
 
 
-                    <!-- THICKNESS -->
+                        <!-- THICKNESS -->
 
-                    <div class="col-md-6">
+                        <div class="col-md-6">
 
-                        <label class="form-label fw-bold">
-
-                            Thickness
-
-                        </label>
-
-
-                        {% if edit %}
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ stock.product.thickness|default:'' }}"
-                                readonly
-                            >
-
-                        {% else %}
+                            <label class="form-label fw-bold">
+                                Thickness
+                            </label>
 
                             <input
                                 type="text"
                                 id="thickness"
                                 class="form-control"
+                                value="{% if edit %}{{ stock.product.thickness|default:'' }}{% endif %}"
                                 readonly
                             >
 
-                        {% endif %}
-
-                    </div>
+                        </div>
 
 
-                    <!-- COLOUR -->
+                        <!-- CORE NUMBER -->
+                        <!-- CATEGORY 2 ONLY -->
 
-                    <div class="col-md-6">
+                        <div
+                            class="col-md-6"
+                            id="core-number-container"
+                            style="display:none;"
+                        >
 
-                        <label class="form-label fw-bold">
-
-                            Colour
-
-                        </label>
-
-
-                        {% if edit %}
+                            <label class="form-label fw-bold">
+                                Core Number
+                            </label>
 
                             <input
                                 type="text"
+                                id="core_number"
                                 class="form-control"
-                                value="{% if stock.product.colour %}{{ stock.product.colour.name }}{% elif stock.product.colour_text %}{{ stock.product.colour_text }}{% endif %}"
+                                value="{% if edit %}{{ stock.product.core_number|default:'' }}{% endif %}"
                                 readonly
                             >
 
-                        {% else %}
+                        </div>
+
+
+                        <!-- COLOUR -->
+
+                        <div
+                            class="col-md-6"
+                            id="colour-container"
+                        >
+
+                            <label class="form-label fw-bold">
+                                Colour
+                            </label>
 
                             <input
                                 type="text"
                                 id="colour"
                                 class="form-control"
+                                value="{% if edit %}{% if stock.product.colour %}{{ stock.product.colour.name }}{% elif stock.product.colour_text %}{{ stock.product.colour_text }}{% endif %}{% endif %}"
                                 readonly
                             >
 
-                        {% endif %}
-
-                    </div>
+                        </div>
 
 
-                    <!-- DESIGN -->
+                        <!-- DESIGN -->
 
-                    <div class="col-md-6">
+                        <div
+                            class="col-md-6"
+                            id="design-container"
+                        >
 
-                        <label class="form-label fw-bold">
-
-                            Design
-
-                        </label>
-
-
-                        {% if edit %}
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{% if stock.product.design %}{{ stock.product.design.name }}{% elif stock.product.design_text %}{{ stock.product.design_text }}{% endif %}"
-                                readonly
-                            >
-
-                        {% else %}
+                            <label class="form-label fw-bold">
+                                Design
+                            </label>
 
                             <input
                                 type="text"
                                 id="design"
                                 class="form-control"
+                                value="{% if edit %}{% if stock.product.design %}{{ stock.product.design.name }}{% elif stock.product.design_text %}{{ stock.product.design_text }}{% endif %}{% endif %}"
                                 readonly
                             >
 
-                        {% endif %}
-
-                    </div>
+                        </div>
 
 
-                    <!-- BRAND -->
+                        <!-- BRAND -->
 
-                    <div class="col-md-6">
+                        <div
+                            class="col-md-6"
+                            id="brand-container"
+                        >
 
-                        <label class="form-label fw-bold">
-
-                            Brand
-
-                        </label>
-
-
-                        {% if edit %}
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{% if stock.product.brand %}{{ stock.product.brand.name }}{% elif stock.product.brand_text %}{{ stock.product.brand_text }}{% endif %}"
-                                readonly
-                            >
-
-                        {% else %}
+                            <label class="form-label fw-bold">
+                                Brand
+                            </label>
 
                             <input
                                 type="text"
                                 id="brand"
                                 class="form-control"
+                                value="{% if edit %}{% if stock.product.brand %}{{ stock.product.brand.name }}{% elif stock.product.brand_text %}{{ stock.product.brand_text }}{% endif %}{% endif %}"
                                 readonly
                             >
 
-                        {% endif %}
-
-                    </div>
+                        </div>
 
 
-                    <!-- WIDTH -->
+                        <!-- WIDTH -->
 
-                    <div class="col-md-6">
+                        <div
+                            class="col-md-6"
+                            id="width-container"
+                        >
 
-                        <label class="form-label fw-bold">
-
-                            Width
-
-                        </label>
-
-
-                        {% if edit %}
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ stock.product.width_ft|default:'' }}"
-                                readonly
-                            >
-
-                        {% else %}
+                            <label class="form-label fw-bold">
+                                Width
+                            </label>
 
                             <input
                                 type="text"
                                 id="width"
                                 class="form-control"
+                                value="{% if edit %}{{ stock.product.width_ft|default:'' }}{% endif %}"
                                 readonly
                             >
 
-                        {% endif %}
+                        </div>
 
                     </div>
-
 
                 </div>
 
@@ -405,99 +423,109 @@
                 <!-- STOCK INPUT -->
                 <!-- ====================================== -->
 
-                <div class="row g-3">
+                <div>
+
+                    <h5 class="fw-bold mb-3">
+                        <i class="fa fa-boxes-stacked me-2"></i>
+                        Stock
+                    </h5>
 
 
-                    <!-- LENGTH -->
+                    <div class="row g-3">
 
-                    <div class="col-md-6">
 
-                        <label
-                            for="length_ft"
-                            class="form-label fw-bold"
+                        <!-- AVAILABLE LENGTH -->
+                        <!-- CATEGORY 1, 2, 4 -->
+
+                        <div
+                            class="col-md-6"
+                            id="length-container"
                         >
 
-                            Available Length (Feet)
-
-                        </label>
-
-
-                        {% if edit %}
-
-                            <input
-                                type="number"
-                                name="length_ft"
-                                id="length_ft"
-                                class="form-control"
-                                step="0.01"
-                                min="0"
-                                value="{{ stock.length_ft|default_if_none:'' }}"
+                            <label
+                                for="length_ft"
+                                class="form-label fw-bold"
                             >
-
-                        {% else %}
-
-                            {{ form.length_ft }}
-
-                        {% endif %}
+                                Available Length (Feet)
+                            </label>
 
 
-                        {% if form.length_ft.errors %}
+                            {% if edit %}
 
-                            <div class="text-danger small mt-1">
+                                <input
+                                    type="number"
+                                    name="length_ft"
+                                    id="length_ft"
+                                    class="form-control"
+                                    step="0.01"
+                                    min="0"
+                                    value="{{ stock.length_ft|default_if_none:'' }}"
+                                >
 
-                                {{ form.length_ft.errors }}
+                            {% else %}
 
-                            </div>
+                                {{ form.length_ft }}
 
-                        {% endif %}
-
-                    </div>
+                            {% endif %}
 
 
-                    <!-- QUANTITY -->
+                            {% if form.length_ft.errors %}
 
-                    <div class="col-md-6">
+                                <div class="text-danger small mt-1">
+                                    {{ form.length_ft.errors }}
+                                </div>
 
-                        <label
-                            for="quantity"
-                            class="form-label fw-bold"
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- QUANTITY / NOS -->
+                        <!-- CATEGORY 3 ONLY -->
+
+                        <div
+                            class="col-md-6"
+                            id="quantity-container"
+                            style="display:none;"
                         >
 
-                            Available Quantity (Nos)
-
-                        </label>
-
-
-                        {% if edit %}
-
-                            <input
-                                type="number"
-                                name="quantity"
-                                id="quantity"
-                                class="form-control"
-                                min="0"
-                                value="{{ stock.quantity|default_if_none:'0' }}"
+                            <label
+                                for="quantity"
+                                class="form-label fw-bold"
                             >
-
-                        {% else %}
-
-                            {{ form.quantity }}
-
-                        {% endif %}
+                                Quantity (Nos)
+                            </label>
 
 
-                        {% if form.quantity.errors %}
+                            {% if edit %}
 
-                            <div class="text-danger small mt-1">
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    id="quantity"
+                                    class="form-control"
+                                    min="0"
+                                    value="{{ stock.quantity|default_if_none:'0' }}"
+                                >
 
-                                {{ form.quantity.errors }}
+                            {% else %}
 
-                            </div>
+                                {{ form.quantity }}
 
-                        {% endif %}
+                            {% endif %}
+
+
+                            {% if form.quantity.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ form.quantity.errors }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
 
                     </div>
-
 
                 </div>
 
@@ -516,13 +544,9 @@
                         <i class="fa fa-save"></i>
 
                         {% if edit %}
-
                             Update Stock
-
                         {% else %}
-
                             Save Stock
-
                         {% endif %}
 
                     </button>
@@ -532,6 +556,8 @@
                         href="{% url 'stock_list' %}"
                         class="btn btn-secondary"
                     >
+
+                        <i class="fa fa-times"></i>
 
                         Cancel
 
@@ -549,23 +575,337 @@
 </div>
 
 
-{% if not edit %}
+<!-- ===================================================== -->
+<!-- JAVASCRIPT -->
+<!-- ===================================================== -->
 
 <script>
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-        const categorySelect =
-            document.getElementById("category");
+    const categorySelect =
+        document.getElementById("category");
 
-        const subcategorySelect =
-            document.getElementById("subcategory");
+    const subcategorySelect =
+        document.getElementById("subcategory");
 
-        const productSelect =
-            document.getElementById("product");
+    const productSelect =
+        document.getElementById("product");
 
+
+    const productName =
+        document.getElementById("product_name");
+
+    const thickness =
+        document.getElementById("thickness");
+
+    const coreNumber =
+        document.getElementById("core_number");
+
+    const colour =
+        document.getElementById("colour");
+
+    const design =
+        document.getElementById("design");
+
+    const brand =
+        document.getElementById("brand");
+
+    const width =
+        document.getElementById("width");
+
+
+    const coreNumberContainer =
+        document.getElementById("core-number-container");
+
+    const colourContainer =
+        document.getElementById("colour-container");
+
+    const designContainer =
+        document.getElementById("design-container");
+
+    const brandContainer =
+        document.getElementById("brand-container");
+
+    const widthContainer =
+        document.getElementById("width-container");
+
+    const lengthContainer =
+        document.getElementById("length-container");
+
+    const quantityContainer =
+        document.getElementById("quantity-container");
+
+
+    /*
+    ======================================================
+    GET CATEGORY NAME
+    ======================================================
+    */
+
+    function getCategoryName() {
+
+        if (!categorySelect) {
+            return "";
+        }
+
+
+        const selectedOption =
+            categorySelect.options[
+                categorySelect.selectedIndex
+            ];
+
+
+        if (!selectedOption) {
+            return "";
+        }
+
+
+        return (
+            selectedOption.text
+                .trim()
+                .toLowerCase()
+                .replace(/[\s\-_]+/g, "")
+        );
+
+    }
+
+
+    /*
+    ======================================================
+    RESET PRODUCT DETAILS
+    ======================================================
+    */
+
+    function clearProductDetails() {
+
+        if (productName)
+            productName.value = "";
+
+        if (thickness)
+            thickness.value = "";
+
+        if (coreNumber)
+            coreNumber.value = "";
+
+        if (colour)
+            colour.value = "";
+
+        if (design)
+            design.value = "";
+
+        if (brand)
+            brand.value = "";
+
+        if (width)
+            width.value = "";
+
+    }
+
+
+    /*
+    ======================================================
+    UPDATE CATEGORY UI
+    ======================================================
+    */
+
+    function updateCategoryUI() {
+
+        const category =
+            getCategoryName();
+
+
+        /*
+        ==============================================
+        CATEGORY 3
+        ==============================================
+        */
+
+        if (
+            category === "category3" ||
+            category === "3"
+        ) {
+
+            /*
+             * Category 3 only uses:
+             *
+             * Product
+             * Thickness
+             * Quantity
+             */
+
+            if (coreNumberContainer)
+                coreNumberContainer.style.display = "none";
+
+            if (colourContainer)
+                colourContainer.style.display = "none";
+
+            if (designContainer)
+                designContainer.style.display = "none";
+
+            if (brandContainer)
+                brandContainer.style.display = "none";
+
+            if (widthContainer)
+                widthContainer.style.display = "none";
+
+
+            if (lengthContainer)
+                lengthContainer.style.display = "none";
+
+
+            if (quantityContainer)
+                quantityContainer.style.display = "block";
+
+        }
+
+
+        /*
+        ==============================================
+        CATEGORY 1
+        ==============================================
+        */
+
+        else if (
+            category === "category1" ||
+            category === "1"
+        ) {
+
+            if (coreNumberContainer)
+                coreNumberContainer.style.display = "none";
+
+            if (colourContainer)
+                colourContainer.style.display = "block";
+
+            if (designContainer)
+                designContainer.style.display = "block";
+
+            if (brandContainer)
+                brandContainer.style.display = "block";
+
+            if (widthContainer)
+                widthContainer.style.display = "block";
+
+            if (lengthContainer)
+                lengthContainer.style.display = "block";
+
+            if (quantityContainer)
+                quantityContainer.style.display = "none";
+
+        }
+
+
+        /*
+        ==============================================
+        CATEGORY 2
+        ==============================================
+        */
+
+        else if (
+            category === "category2" ||
+            category === "2"
+        ) {
+
+            if (coreNumberContainer)
+                coreNumberContainer.style.display = "block";
+
+            if (colourContainer)
+                colourContainer.style.display = "block";
+
+            if (designContainer)
+                designContainer.style.display = "block";
+
+            if (brandContainer)
+                brandContainer.style.display = "block";
+
+            if (widthContainer)
+                widthContainer.style.display = "block";
+
+            if (lengthContainer)
+                lengthContainer.style.display = "block";
+
+            if (quantityContainer)
+                quantityContainer.style.display = "none";
+
+        }
+
+
+        /*
+        ==============================================
+        CATEGORY 4
+        ==============================================
+        */
+
+        else if (
+            category === "category4" ||
+            category === "4"
+        ) {
+
+            if (coreNumberContainer)
+                coreNumberContainer.style.display = "none";
+
+            if (colourContainer)
+                colourContainer.style.display = "block";
+
+            if (designContainer)
+                designContainer.style.display = "block";
+
+            if (brandContainer)
+                brandContainer.style.display = "block";
+
+            if (widthContainer)
+                widthContainer.style.display = "block";
+
+            if (lengthContainer)
+                lengthContainer.style.display = "block";
+
+            if (quantityContainer)
+                quantityContainer.style.display = "none";
+
+        }
+
+
+        /*
+        ==============================================
+        NO CATEGORY
+        ==============================================
+        */
+
+        else {
+
+            if (coreNumberContainer)
+                coreNumberContainer.style.display = "none";
+
+            if (colourContainer)
+                colourContainer.style.display = "none";
+
+            if (designContainer)
+                designContainer.style.display = "none";
+
+            if (brandContainer)
+                brandContainer.style.display = "none";
+
+            if (widthContainer)
+                widthContainer.style.display = "none";
+
+            if (lengthContainer)
+                lengthContainer.style.display = "none";
+
+            if (quantityContainer)
+                quantityContainer.style.display = "none";
+
+        }
+
+    }
+
+
+    /*
+    ======================================================
+    CATEGORY CHANGE
+    ======================================================
+    */
+
+    if (categorySelect && !categorySelect.readOnly) {
 
         categorySelect.addEventListener(
             "change",
@@ -575,19 +915,32 @@ document.addEventListener(
                     this.value;
 
 
-                subcategorySelect.innerHTML =
-                    '<option value="">Select Sub Category</option>';
+                if (subcategorySelect) {
 
-
-                productSelect.innerHTML =
-                    '<option value="">Select Product</option>';
-
-
-                if (!categoryId) {
-
-                    return;
+                    subcategorySelect.innerHTML =
+                        '<option value="">Select Sub Category</option>';
 
                 }
+
+
+                if (productSelect) {
+
+                    productSelect.innerHTML =
+                        '<option value="">Select Product</option>';
+
+                    productSelect.disabled = true;
+
+                }
+
+
+                clearProductDetails();
+
+
+                updateCategoryUI();
+
+
+                if (!categoryId)
+                    return;
 
 
                 fetch(
@@ -602,17 +955,24 @@ document.addEventListener(
                 .then(
                     data => {
 
+                        if (!subcategorySelect)
+                            return;
+
+
                         data.subcategories.forEach(
                             function (subcategory) {
 
                                 const option =
                                     document.createElement("option");
 
+
                                 option.value =
                                     subcategory.id;
 
+
                                 option.textContent =
                                     subcategory.name;
+
 
                                 subcategorySelect.appendChild(
                                     option
@@ -622,11 +982,30 @@ document.addEventListener(
                         );
 
                     }
+                )
+
+                .catch(
+                    error => {
+                        console.error(
+                            "Error loading subcategories:",
+                            error
+                        );
+                    }
                 );
 
             }
         );
 
+    }
+
+
+    /*
+    ======================================================
+    SUBCATEGORY CHANGE
+    ======================================================
+    */
+
+    if (subcategorySelect && categorySelect) {
 
         subcategorySelect.addEventListener(
             "change",
@@ -639,21 +1018,33 @@ document.addEventListener(
                     this.value;
 
 
-                productSelect.innerHTML =
-                    '<option value="">Select Product</option>';
+                if (productSelect) {
 
+                    productSelect.innerHTML =
+                        '<option value="">Select Product</option>';
 
-                if (!categoryId) {
-
-                    return;
+                    productSelect.disabled = true;
 
                 }
+
+
+                clearProductDetails();
+
+
+                if (!categoryId)
+                    return;
 
 
                 let url =
                     "{% url 'get_products_by_category' %}?category_id="
                     + categoryId;
 
+
+                /*
+                 * When a subcategory is selected,
+                 * fetch products belonging to that
+                 * subcategory.
+                 */
 
                 if (subcategoryId) {
 
@@ -673,17 +1064,34 @@ document.addEventListener(
                 .then(
                     data => {
 
+                        if (!productSelect)
+                            return;
+
+
                         data.products.forEach(
                             function (product) {
 
                                 const option =
                                     document.createElement("option");
 
+
                                 option.value =
                                     product.id;
 
+
+                                /*
+                                 * Display the product name.
+                                 * If several products have the
+                                 * same name, the user can still
+                                 * identify the exact product after
+                                 * selecting it because its details
+                                 * are automatically populated.
+                                 */
+
                                 option.textContent =
-                                    product.product_name;
+                                    product.product_name ||
+                                    "Unnamed Product";
+
 
                                 productSelect.appendChild(
                                     option
@@ -692,12 +1100,36 @@ document.addEventListener(
                             }
                         );
 
+
+                        productSelect.disabled = false;
+
+                    }
+                )
+
+                .catch(
+                    error => {
+
+                        console.error(
+                            "Error loading products:",
+                            error
+                        );
+
                     }
                 );
 
             }
         );
 
+    }
+
+
+    /*
+    ======================================================
+    PRODUCT CHANGE
+    ======================================================
+    */
+
+    if (productSelect) {
 
         productSelect.addEventListener(
             "change",
@@ -707,11 +1139,11 @@ document.addEventListener(
                     this.value;
 
 
-                if (!productId) {
+                clearProductDetails();
 
+
+                if (!productId)
                     return;
-
-                }
 
 
                 fetch(
@@ -726,34 +1158,81 @@ document.addEventListener(
                 .then(
                     data => {
 
-                        document.getElementById(
-                            "thickness"
-                        ).value =
-                            data.thickness || "";
+                        /*
+                        Product
+                        */
+
+                        if (productName)
+                            productName.value =
+                                data.product_name || "";
 
 
-                        document.getElementById(
-                            "colour"
-                        ).value =
-                            data.colour || "";
+                        /*
+                        Thickness
+                        */
+
+                        if (thickness)
+                            thickness.value =
+                                data.thickness || "";
 
 
-                        document.getElementById(
-                            "design"
-                        ).value =
-                            data.design || "";
+                        /*
+                        Core Number
+                        */
+
+                        if (coreNumber)
+                            coreNumber.value =
+                                data.core_number || "";
 
 
-                        document.getElementById(
-                            "brand"
-                        ).value =
-                            data.brand || "";
+                        /*
+                        Colour
+                        */
+
+                        if (colour)
+                            colour.value =
+                                data.colour || "";
 
 
-                        document.getElementById(
-                            "width"
-                        ).value =
-                            data.width_ft || "";
+                        /*
+                        Design
+                        */
+
+                        if (design)
+                            design.value =
+                                data.design || "";
+
+
+                        /*
+                        Brand
+                        */
+
+                        if (brand)
+                            brand.value =
+                                data.brand || "";
+
+
+                        /*
+                        Width
+                        */
+
+                        if (width)
+                            width.value =
+                                data.width_ft || "";
+
+
+                        updateCategoryUI();
+
+                    }
+                )
+
+                .catch(
+                    error => {
+
+                        console.error(
+                            "Error loading product details:",
+                            error
+                        );
 
                     }
                 );
@@ -762,10 +1241,92 @@ document.addEventListener(
         );
 
     }
-);
+
+
+    /*
+    ======================================================
+    INITIAL STATE
+    ======================================================
+    */
+
+    updateCategoryUI();
+
+
+    /*
+    ======================================================
+    EDIT MODE
+    ======================================================
+    */
+
+    {% if edit %}
+
+        /*
+         * In edit mode the product is already selected.
+         * Load its complete details through the same API.
+         */
+
+        if (productSelect && productSelect.value) {
+
+            fetch(
+                "{% url 'get_product_details' %}?product_id="
+                + productSelect.value
+            )
+
+            .then(
+                response => response.json()
+            )
+
+            .then(
+                data => {
+
+                    if (productName)
+                        productName.value =
+                            data.product_name || "";
+
+                    if (thickness)
+                        thickness.value =
+                            data.thickness || "";
+
+                    if (coreNumber)
+                        coreNumber.value =
+                            data.core_number || "";
+
+                    if (colour)
+                        colour.value =
+                            data.colour || "";
+
+                    if (design)
+                        design.value =
+                            data.design || "";
+
+                    if (brand)
+                        brand.value =
+                            data.brand || "";
+
+                    if (width)
+                        width.value =
+                            data.width_ft || "";
+
+                    updateCategoryUI();
+
+                }
+            )
+
+            .catch(
+                error => {
+                    console.error(
+                        "Error loading existing product:",
+                        error
+                    );
+                }
+            );
+
+        }
+
+    {% endif %}
+
+});
 
 </script>
-
-{% endif %}
 
 {% endblock %}
