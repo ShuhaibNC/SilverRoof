@@ -3,33 +3,44 @@
 {% block content %}
 
 <style>
-    body.non-superuser-theme { background: #eef4fa; }
+    body.non-superuser-theme {
+        background: #eef4fa;
+    }
+
     body.non-superuser-theme .add-btn {
         background: #198754;
     }
+
     body.non-superuser-theme .add-btn:hover {
         background: #157347;
     }
+
     body.non-superuser-theme .stock-btn {
         background: #198754;
     }
+
     body.non-superuser-theme .stock-btn:hover {
         background: #157347;
     }
+
     body.non-superuser-theme th {
         background: #198754;
     }
+
     body.non-superuser-theme .product-name {
         color: #198754;
     }
+
     body.non-superuser-theme .stock-available,
     body.non-superuser-theme .badge-success {
         color: #198754;
     }
+
     body.non-superuser-theme .badge-success {
         background: #198754;
         color: white;
     }
+
     body.non-superuser-theme tbody tr:hover {
         background: #f2fbf6;
     }
@@ -358,6 +369,8 @@
 
                     <th>Size</th>
 
+                    <th>NOS</th>
+
                     <th>Action</th>
 
                 </tr>
@@ -441,7 +454,23 @@
 
                     <td>
 
-                        {{ product.width_ft }} ft
+                        {% if product.category.name|lower == "category 3" %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% elif product.width_ft %}
+
+                            {{ product.width_ft }} ft
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
 
                     </td>
 
@@ -450,7 +479,13 @@
 
                     <td>
 
-                        {% if product.colour %}
+                        {% if product.category.name|lower == "category 3" %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% elif product.colour %}
 
                             {{ product.colour.name }}
 
@@ -469,7 +504,13 @@
 
                     <td>
 
-                        {% if product.brand %}
+                        {% if product.category.name|lower == "category 3" %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% elif product.brand %}
 
                             {{ product.brand.name }}
 
@@ -507,7 +548,13 @@
 
                     <td>
 
-                        {% if product.design %}
+                        {% if product.category.name|lower == "category 3" %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% elif product.design %}
 
                             {{ product.design.name }}
 
@@ -526,7 +573,13 @@
 
                     <td>
 
-                        {% if product.core_number %}
+                        {% if product.category.name|lower == "category 3" %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% elif product.core_number %}
 
                             {{ product.core_number }}
 
@@ -545,7 +598,13 @@
 
                     <td>
 
-                        {% if product.sqt_rate %}
+                        {% if product.category.name|lower == "category 3" %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% elif product.sqt_rate %}
 
                             ₹{{ product.sqt_rate }}
 
@@ -564,9 +623,34 @@
 
                     <td>
 
-                        {% if product.size %}
+                        {% if product.category.name|lower == "category 3" %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% elif product.size %}
 
                             {{ product.size }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- NOS -->
+
+                    <td>
+
+                        {% if product.nos is not None %}
+
+                            {{ product.nos }}
 
                         {% else %}
 
@@ -628,7 +712,7 @@
                 <tr>
 
                     <td
-                        colspan="13"
+                        colspan="14"
                         class="empty-message"
                     >
 
@@ -652,9 +736,13 @@
 
 
 <script>
+
     {% if not request.user.is_superuser %}
+
     document.body.classList.add('non-superuser-theme');
+
     {% endif %}
+
 </script>
-    
+
 {% endblock %}
