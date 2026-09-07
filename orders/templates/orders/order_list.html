@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+<!-- {% extends 'base.html' %}
 
 {% block content %}
 
@@ -274,17 +274,20 @@ body.non-superuser-theme .export-btn i {
             Add Order
         </a>
 
+        {% if request.user.is_superuser %}
         <a href="{% url 'export_orders_excel' %}"
    class="export-btn">
     <i class="fa fa-file-excel"></i>
     Export Excel
 </a>
+        {% endif %}
 
     </div>
 
 
     <!-- FILTER SECTION -->
 
+    {% if request.user.is_superuser %}
     <div class="filter-card">
 
         <form method="GET">
@@ -424,6 +427,43 @@ body.non-superuser-theme .export-btn i {
                 </div>
 
 
+                <!-- CATEGORY FILTER -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Category
+                    </label>
+
+                    <select
+                        name="category"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Categories
+                        </option>
+
+                        {% for category in categories %}
+
+                            <option
+                                value="{{ category.id }}"
+                                {% if selected_category == category.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ category.name }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
                 <!-- BUTTONS -->
 
                 <div class="col-md-3 d-flex align-items-end gap-2">
@@ -451,6 +491,7 @@ body.non-superuser-theme .export-btn i {
         </form>
 
     </div>
+    {% endif %}
 
 
     <!-- ORDER TABLE -->
@@ -763,6 +804,8 @@ body.non-superuser-theme .export-btn i {
 <!-- ACTIONS -->
 <td>
 
+    {% if request.user.is_superuser %}
+
     <!-- EDIT -->
     <a
         href="{% url 'edit_order' order.id %}"
@@ -780,6 +823,12 @@ body.non-superuser-theme .export-btn i {
     >
         <i class="fa fa-trash"></i>
     </a>
+
+    {% else %}
+
+        -
+
+    {% endif %}
 
 </td>
 
